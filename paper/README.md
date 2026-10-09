@@ -2,7 +2,7 @@
 
 | File | Content |
 |---|---|
-| `artigo2.tex` | LaTeX source (single file). Bibliography with `biblatex`, `backend=bibtex`. |
+| `artigo2.tex` | LaTeX source (single file), a copy of `main.tex` from the Overleaf repository `rfcustodio/Banegas-Second-Family-of-Irreducible-Pentanomials-` with `backend=bibtex`; Overleaf is the master copy. Bibliography with `biblatex`, `backend=bibtex`. |
 | `refs.bib` | Bibliography entries (only the cited ones are printed). |
 | `artigo2.pdf` | Compiled paper (12 pages). |
 | `fig_gain.pdf` | Figure 2: greedy count minus closed form; made by `generator/make_figures.py` from `data/paar150.txt`. |

@@ -47,9 +47,8 @@
 \newcommand{\ours}{\textsuperscript{\textcolor{cblue}{$\blacklozenge$}}}
 \SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
 
-\title{\textbf{Banegas' Second Family of Irreducible Pentanomials:}\\[2pt]
-\textbf{a Closed-Form Reduction with $3m-c-3$ XOR Gates}}
-\author{Marcos Tomaszewski \and Ricardo Felipe Custódio\\[4pt]
+\title{\textbf{Efficient Closed-Form Reduction for Banegas’ Second Family of Pentanomials}}
+\author{Marcos Tomaszewski \and Ricardo Custódio \and Gustavo Banegas \and Daniel Panario \\[4pt]
 \small Laboratório de Segurança em Computação (LabSEC)\\
 \small Departamento de Informática e Estatística, Universidade Federal de Santa Catarina\\
 \small Florianópolis, SC, Brazil}
@@ -59,30 +58,24 @@
 \maketitle
 
 \begin{abstract}
-In a polynomial basis, the cost of multiplying in $\Ftm$ is the cost of a carry-less
-product plus the cost of reducing it modulo the defining polynomial, and only the
-second part depends on the choice of the polynomial. Searching all irreducible
-pentanomials of small degree with a greedy XOR counter, Banegas found two families,
-$x^{2b+c}+x^{b+c}+x^b+x^c+1$ and $x^{b+2c}+x^{b+c}+x^b+x^c+1$. The first was analysed
-by Banegas, Custódio and Panario, who proved a reduction cost of $3m-2$ XORs; the
-second was left as future work. This paper completes that programme. For
-$f=x^{b+2c}+x^{b+c}+x^b+x^c+1$, $m=b+2c$, $b>c\ge1$, we derive a closed form for the
-quotient of the division by $f$ in terms of ``comb'' sums of stride $3c$, and turn it into
-an explicit reduction program with at most $3m-c-3$ XORs and depth at most
-$\lfloor (m-2)/3c\rfloor+4$, valid for every $b$ and $c$. The resulting multiplier uses
-$m^2+m-c-2$ XORs. Since $c$ may be as large as $(m-1)/3$, the cost approaches $\tfrac83 m$.
-We verified the program symbolically for all $14\,850$ members with $m\le300$. It is
-never worse than the greedy count on the $3\,541$ generic members with $m\le150$, is
-strictly better on $1\,271$ of them, and for $b<2c$ it improves the greedy count by
-exactly $2c-b$. Over the degrees $5\le m\le1100$, the family has irreducible members in
-$720$ degrees, including $288$ degrees without irreducible trinomials; wherever both
-families exist, the second one is cheaper in $403$ of $405$ degrees, by $7.3\%$ on
-average. At the NIST degrees $163$ and $571$ its best members reduce with $440$ and
-$1528$ XORs, against $487$ and $1711$ for the first family and $571$ and $2003$
-reported for the NIST pentanomials.
 
-\medskip\noindent\textbf{Keywords:} binary fields, irreducible pentanomials, modular
-reduction, XOR count, bit-parallel multipliers, polynomial basis.
+In polynomial-basis arithmetic over \(\mathbb{F}_{2^m}\), the choice of the defining irreducible polynomial directly affects the cost of modular reduction and, consequently, the implementation cost of field multiplication. Using a greedy XOR-counting heuristic, Banegas identified two families of low-cost pentanomials. The first family was subsequently analysed by Banegas, Custódio, and Panario, whereas the second family,
+\[
+f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1,
+\qquad b>c\ge1,
+\]
+was left as an open direction because of its more involved reduction structure.
+
+In this work, we provide a formal analysis of this second family. For \(m=b+2c\), we derive a closed-form expression for the quotient arising in polynomial reduction, expressed through comb sums of stride \(3c\), and use it to construct an explicit reduction circuit requiring at most \(3m-c-3\) XOR gates, with depth at most
+\[
+\left\lfloor\frac{m-2}{3c}\right\rfloor+4.
+\]
+Combined with a schoolbook polynomial multiplier, the construction yields a bit-parallel multiplier using \(m^2\) AND gates and \(m^2+m-c-2\) XOR gates, of which \((m-1)^2\) are spent on the product and \(3m-c-3\) on the reduction. For admissible parameters with \(c\) close to \(m/3\), the reduction bound approaches \(8m/3\) XOR gates.
+
+We symbolically verified the reduction construction for all 14,850 members with \(m\le300\). An irreducibility census for \(5\le m\le1100\) found members of the second family in 720 degrees, including 288 degrees for which no irreducible trinomial exists. Among the 405 degrees containing irreducible members of both Banegas families, the best member of the second family has a lower reduction bound in 403. At the NIST binary-field degrees 163 and 571, the best members found in the second family require 440 and 1,528 XOR gates, respectively, compared with the reported counts of 571 and 2,003 for the corresponding NIST pentanomials; at
+degree 283, the remaining NIST pentanomial degree, the second family has no irreducible member.
+
+\medskip\noindent\textbf{Keywords:} binary finite fields; irreducible pentanomials; modular reduction; XOR circuit complexity; bit-parallel multipliers; polynomial basis
 \end{abstract}
 
 % ==================================================================
@@ -163,7 +156,7 @@ Results marked \ours{} are new; every other result is cited.
 \section{Background}\label{sec:background}
 % ==================================================================
 
-Everything in this section is from the literature.
+We recall the notation and known results used in the rest of the paper.
 
 \subsection{Reduction and its cost}
 
