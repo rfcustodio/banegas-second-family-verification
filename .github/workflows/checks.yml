@@ -1,0 +1,19 @@
+name: checks
+
+# Runs the verification of every statement of the paper on each push and pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  quick-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run all quick checks
+        run: ./run_quick_checks.sh
+      - name: Independent suite (Algorithm 1)
+        run: python3 independent/second_family.py
