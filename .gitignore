@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.run.xml
+*-blx.bib
+*.bcf
+*.toc
+# compiled C helper
+generator/xorred
+xorred
