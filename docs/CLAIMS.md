@@ -1,74 +1,111 @@
 # Claims of the paper and how each one is verified
 
-Numbering follows `paper/artigo2.pdf`. "Proof" means the argument is in the paper;
-the scripts check the statement independently of the proof. "Both suites" means the
-number is reproduced by the authors' code (`generator/`, `checks/`) and by the separate
-re-implementation in `independent/`.
+Numbering follows `paper/main.pdf` (IEEE Access version). "Proof" means the argument is
+in the paper; the scripts check the statement independently of the proof.
 
-Ranges: symbolic checks run over **all** members `b > c >= 1` with `m <= 300` when
-called with `--mmax 300` (default `m <= 120`); random tests use field products of
-random elements.
+There are three levels of checks:
 
-## Definitions and structural results
+* **quick**: `./run_quick_checks.sh` (standard library only, about 1 minute), on small
+  degrees (default `m <= 120`; `make check-full` uses `m <= 300`);
+* **full**: `make verify-all`, which runs `verification/run_all.sh` (gcc, Python 3,
+  `python-sat`, about 15 minutes) over **all** 201,117 members with `m <= 1100`, the range
+  reported in the paper, and compares the output with `verification/expected_output.txt`;
+* **independent**: `independent/`, a second implementation written from the text alone.
 
-| Item | Statement (short) | Kind | Verified by | Range / result |
+Symbolic checks compare each output of a program with the corresponding row of the
+reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
+
+## Section III: the second family
+
+| Item | Statement (short) | Kind | Verified by | Result |
 |---|---|---|---|---|
-| Def. 1 | `f_{b,c} = x^(b+2c)+x^(b+c)+x^b+x^c+1`, `m = b+2c` | definition | - | - |
-| Prop. 2 (i) | `x^m ≡ (x^b+1)(x^c+1) mod f` | proof + check | `checks/verify_statements.py` | all 14,850 members `m <= 300`: PASS |
-| Prop. 2 (ii) | `(x^c+1) f = x^(b+3c)+x^b+x^(2c)+1`; `x^b(x^(3c)+1) ≡ (x^c+1)^2` | proof + check | `checks/verify_statements.py` | PASS |
-| Prop. 2 (iii) | `c <= floor((m-1)/3)`, `b ≡ m mod 2` | proof + check | `checks/verify_statements.py` | PASS |
-| Prop. 2 (iv) | `gcd(b,c) = g > 1` implies `f(x) = G(x^g)` | proof + check | `checks/verify_statements.py` | PASS |
-| Prop. 2 (v) | `b = 2c` gives the equally spaced pentanomial | proof + check | `checks/verify_statements.py` | PASS |
-| Lemma 3 | division identities (2) and (3) | proof (standard) + check | `checks/verify_statements.py` (random products vs long division) | 32,835 products: PASS |
-| Def. 4 | comb sums `C_t` | definition | - | - |
-| Thm. 5 | closed forms (5) for `q_j`, (6) for `U_k`, (7) for `r_i` | proof + symbolic check | `checks/verify_statements.py` compares (5)-(6) with the recurrence (4), and (7) with the rows of the reduction matrix | all members `m <= 300`: PASS |
+| Def. 1 | `f_{b,c} = x^(b+2c)+x^(b+c)+x^b+x^c+1`, `m = b+2c`, `n = m-2` | definition | - | - |
+| Prop. 2 (i)-(v) | `x^m ≡ (x^b+1)(x^c+1)`; `(x^c+1) f = x^(b+3c)+x^b+x^(2c)+1`; `c <= floor((m-1)/3)`, `b ≡ m mod 2`; `f = G(x^γ)`; `b = 2c` equally spaced | proof + check | quick: `checks/verify_statements.py` | all members `m <= 300`: PASS |
+| Def. 3 | special members: base polynomial `G` of degree `κ <= 7` (`b/c` in `{3/2, 2, 3, 4, 5}`) | definition | - | - |
+| Prop. 4 (i) | reduction splits into `γ` strips modulo `G`; `Red(f) <= (γ-1) R1(G) + R2(G)` | proof + check | full: `verification/alg1verify.c` (strip check), `verification/compose_strips.py`, `verification/compose_sat.py` | PASS |
+| Prop. 4 (ii) | Algorithm 1 never mixes strips; `3κ-c'-3` gates on the last strip, `3κ-c'` on the others | proof + check | full: `verification/alg1verify.c` | all 201,117 members: PASS |
+| Eq. (2) | strip bound `3m-c-3-(γ-1)δ1(G)-δ2(G)` | algebra | - | - |
+| Table 2 | optimal `R2`, `R1` for the five base polynomials and the bounds `7m/4-1`, `12m/5-2`, `5m/2-1`, `18m/7-2` | SAT proof + composition | full: `verification/exact_small.py` (`R2`), `verification/exact_base.py` (`R1`: a program with `R1` gates, none with `R1-1`), `verification/compose_sat.py` (composed over 183 and 157 members up to `m = 1100`) | all optimal; 0 failures |
+| Text | greedy sweep over the 163 reduced pairs with `4 <= κ <= 40`: only the five base polynomials beat the closed form | computation | full: `verification/greedy.c strip 200 40`; `generator/strips.py` | reproduced |
+| Text | `Red(f_{6,1}) = 19`, `Red(f_{5,2}) = 21` | SAT proof | full: `verification/exact_small.py` | reproduced |
 
-## Main result and its consequences
+## Section IV: closed form for the quotient
 
-| Item | Statement (short) | Kind | Verified by | Range / result |
+| Item | Statement (short) | Kind | Verified by | Result |
 |---|---|---|---|---|
-| Thm. 6 | Algorithm 1 is correct and uses at most `3m-c-3` XORs | proof + symbolic check | `generator/fam2.py` (via `checks/verify_statements.py`); `independent/second_family.py` | all 14,850 members `m <= 300`: PASS (both suites); exactly `3m-c-3` on generic members |
-| Prop. 7 | depth at most `floor(n/3c)+4` | proof + check | `checks/verify_statements.py`; `independent/second_family.py` | PASS |
-| Prop. 7 (text) | measured depth equals `floor(n/3c)+3` in 97% of the 14,748 pairs `7 <= m < 300` | measurement | `checks/verify_statements.py --mmax 300` (printed below the Prop. 7 line) | 14,285 / 14,748 |
-| Cor. 8 | multiplier with `m^2+m-c-2` XORs | identity + check | `checks/verify_statements.py` (schoolbook product followed by Cor. 10, random field products) | PASS |
-| Ex. 9 | `f_{6,5}`: irreducible, 40 XORs, `dXOR = 54`, `CX = 44` | computation | `checks/verify_statements.py`; `independent/second_family.py` | PASS |
-| Cor. 10 | word-level formula `C, Q, U, R` | proof + random check | `checks/verify_statements.py`; `generator/wordlevel.py` | PASS |
-| Prop. 11 | low-depth variant: gate bound and depth `<= s+4` | proof + symbolic check | `generator/lowdepth.py --all 260`; `independent/second_family.py` | 11,048 members `m < 260`: 0 violations |
-| Prop. 11 (text) | `m = 571, c = 22`: chain 1688 gates / depth 11, doubling 2474 / depth 7 | computation | `generator/lowdepth.py 527 22`, `generator/fam2.py 527 22` | reproduced (both suites) |
+| Lemma 5 | division identities (3) and (4) | proof + check | quick: `checks/verify_statements.py` (random products against long division) | PASS |
+| Def. 6 | comb sums `C_t` | definition | - | - |
+| Thm. 7 | closed forms (6) for `q_j`, (7) for `U_k`, (8) for `r_i` | proof + symbolic check | quick: `checks/verify_statements.py` | all members `m <= 300`: PASS |
+| Fig. 1 | `C_1` and `U_2` for `b = 11`, `c = 2` | example | by hand: `U_2 = C_0 + C_4 + h_13` | correct |
 
-## Comparison with the greedy count (Section 7)
+## Section V: the closed-form program (Algorithm 1)
+
+| Item | Statement (short) | Kind | Verified by | Result |
+|---|---|---|---|---|
+| Thm. 8 | Algorithm 1 is correct and uses at most `3m-c-3` XORs | proof + symbolic check | quick: `checks/verify_statements.py`; full: `verification/alg1verify.c`; independent: `independent/second_family.py` | all 201,117 members `m <= 1100`: exactly `3m-c-3` |
+| Thm. 8 (proof) | coincident operands occur only for `b = 2c` | computation | full: `verification/alg1verify.c` | 274 special members, 0 generic |
+| Prop. 9 | depth at most `floor(n/(3c))+4`, at most 5 when `b <= 4c+1` | proof + check | quick and full | PASS |
+| Prop. 9 (text) | measured depth `floor(n/(3c))+3` in 97% of the 14,748 pairs `7 <= m < 300` | measurement | full: `verification/alg1verify.c`; quick: `checks/verify_statements.py --mmax 300` | 14,358 / 14,748 (14,285 in `generator/fam2.py`, which reuses the coincident values of the 73 equally spaced members) |
+| Cor. 10 | multiplier with `m^2+m-c-2` XORs | identity + check | quick: `checks/verify_statements.py` | PASS |
+| Ex. 11, Table 3 | `f_{6,5}`: irreducible, 40 XORs, `dXOR = 54`, `CX = 44` | computation | quick; full (`greedy one`) | PASS |
+
+## Section VI: the chain construction (Algorithm 2)
+
+| Item | Statement (short) | Kind | Verified by | Result |
+|---|---|---|---|---|
+| Lemma 12 | `E_t = h_t + P_(t+2c)`, `P_k = h_(k-c) + E_(k+c)`, `P_k = E_(k-c) + E_k`; boundary values | proof + check | quick: `checks/verify_chain.py` | PASS |
+| Thm. 13 | Algorithm 2 is correct with exactly `3m-3-N(b,c)` XORs; closed formula for `N`; larger / equal / smaller than `3m-c-3` for `b < 2c` / `2c <= b <= 4c` / `b >= 4c+1`; `<= 8m/3+c-3` | proof + symbolic check | quick: `checks/verify_chain.py` (`m <= 120`); full: `algorithm2/alg2verify.c` | all 201,117 members `m <= 1100`: PASS; improved in 100,284 |
+| Text | multiplier `m^2+m-2-N(b,c)` | algebra | - | - |
+| Text | `f_{6,1}`: 19, `f_{5,1}`: 16, `f_{7,1}`, `f_{8,1}`, `f_{9,1}`: 22, 24, 27 | computation | quick: `checks/verify_chain.py` | PASS |
+| Ex. 14 | `f_{8,1}`: 12 gates before the outputs, 24 in total | computation | quick: `checks/verify_chain.py`; `python3 algorithm2/alg2prog.py 8 1 p` | PASS |
+| Prop. 15 | depth at most `2 floor((n-c)/(3c))+6`; measured at most `+5` | proof + check | quick and full | max excess `-1` |
+| Text | `m = 571`, `c = 22`: 1534 gates, depth 20 (Algorithm 1: 1688, depth 11) | computation | quick: `checks/verify_chain.py`; full | PASS |
+| Text | MaxSAT: each chain is optimal within the identity family, except chains with three indices (`b < 2c`) | MaxSAT | `algorithm2/chaincheck.py` (all chain lengths `<= 1100`; several minutes, not in `run_all.sh`) | 0 mismatches |
+
+## Section VII: word level and low depth
+
+| Item | Statement (short) | Kind | Verified by | Result |
+|---|---|---|---|---|
+| Cor. 16 | word-level formula for `C, Q, U, R` | proof + random check | quick: `checks/verify_statements.py`; `generator/wordlevel.py`; full: `verification/alg1verify.c` | PASS |
+| Text | `ν+5` shift-and-XOR operations, at most six when `b <= 4c+1` | counting | - | - |
+| Prop. 17 | low-depth variant: gate bound and depth `<= ν+4` | proof + symbolic check | quick: `generator/lowdepth.py --all 160`; full: `verification/alg1verify.c` (all `m <= 1100`) | 0 violations |
+| Text | `m = 571, c = 22`: doubling 2474 gates, depth 7 (+786, about 47%) | computation | full: `verification/alg1verify.c 571 571` | reproduced |
+
+## Section VIII: comparison with the greedy count
 
 | Item | Statement (short) | Verified by | Result |
 |---|---|---|---|
-| Obs. 12 | 3,674 pairs, 3,541 generic (`5 <= m <= 150`) | `checks/analyze_paar150.py` (from `data/paar150.txt`); `independent/observacao12.py` (recomputes the greedy counts) | reproduced (both suites) |
-| Obs. 12 (a) | closed form never longer than the greedy values on generic members | same | reproduced |
-| Obs. 12 (b) | 879 members with `b < 2c`: `CX = 2m+3c-3`, gain `2c-b` | same | reproduced (both suites) |
-| Obs. 12 (c) | 1,312 members with `2c < b < 6c`: `CX = 3m-c-3` | same | reproduced (both suites) |
-| Obs. 12 (d) | `b >= 6c`: greedy worse in 392 of 1,350, by up to 112 | same | reproduced (both suites) |
-| Obs. 12 (text) | effect of random tie-breaking | `checks/analyze_paar150.py` | **corrected**: the first draft said "changed the outcome in only one case"; the data show 212 generic members improved (all with `b >= 6c`, by at most 12 XORs), and only one of them reaches `3m-c-3`. The sentence in `paper/artigo2.tex` was fixed accordingly. |
-| Obs. 12 (text) | special members: greedy can be shorter, e.g. `12m/5-2` when `b = 3c` | `checks/analyze_paar150.py` | reproduced (30 of 30 members with `b = 3c`) |
+| Obs. 18 | 3,674 pairs, 3,541 generic (`5 <= m <= 150`) | quick: `checks/analyze_paar150.py`; full: `verification/greedy.c` + `analyze_greedy.py`; independent: `independent/observacao12.py` | reproduced |
+| Obs. 18 (a)-(d) | never longer than greedy; 879 with `b < 2c` (`CX = 2m+3c-3`); 1,312 with `2c < b < 6c` (equal); 392 of 1,350 worse for `b >= 6c`, up to 112 | same | reproduced |
+| Obs. 18 (text) | random tie-breaking improved 212 generic members by at most 12 (an independent rerun gives 213 and 13), all with `b >= 6c`, closing the gap once | same | reproduced (the two figures come from different random seeds) |
+| Obs. 18 (text) | special members: greedy values of `R1`, `R2`; `12m/5-2` when `b = 3c` | same | reproduced |
 | Fig. 2 | `CX - (3m-c-3)` versus `b/c` | `generator/make_figures.py` from `data/paar150.txt` | regenerated |
-| Small degrees | `f_{5,2}`, `f_{4,3}`: Boyar-Peralta finds 22 and 24 (= closed form), greedy 22 and 26; `f_{3,2}`: 16 vs greedy 17 | `python3 generator/smallm.py 9 7 5 2 10`, `... 10 7 4 3 10`, `... 7 5 3 2 10` (needs `numpy`; a few minutes) | reproduced in the original run |
-| Table 2 | 8 members at the NIST degrees: irreducibility, `dXOR`, `CX`, `3m-c-3`, depth | `checks/reproduce_tables.py`; `independent/second_family.py` (gate count and depth) | all entries reproduced |
+| Table 4 | 8 members at the NIST degrees: `dXOR`, `CX`, `3m-c-3`, depth, `3m-3-N` | quick: `checks/reproduce_tables.py`, `checks/verify_chain.py`; full | all entries reproduced |
+| Text | Boyar and Peralta: `f_{5,2}`, `f_{4,3}`, `f_{3,2}` give 22, 24, 16 | full: `verification/boyar_peralta.py` | reproduced |
+| Table 5 | exact minima (SAT), best bound, heuristic column (greedy with 500 random runs, Boyar and Peralta) | full: `verification/exact_small.py`, `verification/heuristic_small.py` | all entries reproduced |
 
-## Comparison with other polynomials (Section 8)
+## Section IX: comparison with the first family and other polynomials
 
 | Item | Statement (short) | Verified by | Result |
 |---|---|---|---|
 | Table 1 | literature values | citations in the paper | not computational |
-| Table 3 | census for `5 <= m <= 1100` | `checks/compare_censuses.py` (authors' census, and comparison with the independent census member by member); `independent/table3_summary.py` | all entries reproduced; both censuses identical |
-| Table 4 | best known costs at the NIST degrees | `checks/reproduce_tables.py` | reproduced; NIST pentanomial values are the Conta-XOR counts of Banegas' thesis, recomputed |
-| Fig. 3 | cost per bit by degree (no-trinomial degrees) | `generator/make_figures.py` from `data/census.json` | regenerated |
-| Text | 25 degrees `≡ 0 mod 8` with members; `x^48+...` 126 XORs; `x^144+...` 384 XORs; `m = 155` exception (371 vs 411); savings 22.9% / 23.7% / 9.7% / 10.7% | `checks/reproduce_tables.py` | reproduced |
+| Table 6 | census for `5 <= m <= 1100` with both constructions | quick: `checks/compare_censuses.py` (and the member-by-member comparison with the independent census); full: `verification/census.c`, `analyze_census.py`, `algorithm2/census_alg2.py` | all entries reproduced; both censuses identical |
+| Text | mean cost per bit 2.70 (2.77 with Theorem 8 alone); 379 degrees improved, 160 without trinomials, up to 11.1% (`m = 975`: 2921 to 2598); mean saving 9.7% (7.3%) | quick: `checks/compare_censuses.py` | reproduced |
+| Text | `m = 5` and `m = 155` depend on special members (10 vs 11; 370 vs 371, best generic 411) | quick: `checks/compare_censuses.py` | reproduced |
+| Text | 25 degrees `≡ 0 mod 8` with members; 40, 126 and 384 XORs | quick: `checks/reproduce_tables.py` | reproduced |
+| Fig. 3 | cost per bit by degree (no-trinomial degrees), both constructions | `generator/make_figures.py` from `data/census_alg2.json` | regenerated |
+| Prop. 19 | irreducible special members: `f_{2,1}(x^(5^i))`, `f_{3,1}(x^(31^i))`, `f_{4,1}(x^(3^i 7^j))` | proof + check | quick: `checks/reproduce_tables.py` (the special members found by the census are exactly those predicted) | PASS |
+| Table 7 | the 15 irreducible special members with `5 <= m <= 1100`: closed form, strip bound, best generic member | quick: `checks/reproduce_tables.py`; `generator/strips.py --special 1100` | all entries reproduced |
+| Table 8 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7% | quick: `checks/reproduce_tables.py` | reproduced |
 
 ## Abstract
 
-Every number in the abstract appears in one of the rows above (Thm. 6, Prop. 7,
-Cor. 8, Obs. 12, Table 3, Table 4).
+Every number in the abstract appears in one of the rows above (Theorems 8 and 13,
+Proposition 9, Table 2, Table 6, Table 8, and the size of the verification).
 
 ## Not verified by code
 
 * The proofs themselves (they are checked by reading; the scripts test the statements).
 * Literature values in Table 1 and the description of related work.
-* Statements about what the greedy heuristic "misses" in the Discussion, which are
-  interpretations of the measurements above.
+* Interpretations in the text, such as why the five base polynomials admit short strip
+  programs or what the greedy heuristic misses.

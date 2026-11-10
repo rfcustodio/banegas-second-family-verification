@@ -6,11 +6,12 @@ All files are plain text (or JSON) and can be regenerated with the programs in
 
 | File | Format (one record per line) | Produced by | Used for |
 |---|---|---|---|
-| `paar150.txt` | `m a b c dXOR CX depth_CX RG depth_RG`, with `a = b + c`. `dXOR` is the direct count (sum of row weights minus one), `CX` the Conta-XOR count with lexicographic tie-breaking, `RG` the best of `CX` and 20 greedy runs with random tie-breaking (seed 5 or 6), and the depths are XOR depths. One line per member `b > c >= 1`, `5 <= m <= 150` (3,674 lines). | `python3 -c "..."` listing the pairs (see below), then `xorred list 20 5 < pairs` | Observation 12, Figure 2 (`checks/analyze_paar150.py`) |
-| `fam2_irr.txt` | `m b c` for every irreducible `x^(b+2c)+x^(b+c)+x^b+x^c+1`, `5 <= m <= 1100` (1,508 lines). | `xorred fam2 5 1100` | Table 3, Table 4, Figure 3, Section 8 |
-| `fam1_irr.txt` | `m b c` for every irreducible `x^(2b+c)+x^(b+c)+x^b+x^c+1` (first family, BCP), `5 <= m <= 1100` (755 lines). | `xorred fam1 5 1100` | Table 3, Table 4, Figure 3 |
-| `tri.txt` | `m k`: smallest `k <= m/2` with `x^m+x^k+1` irreducible, for the degrees `2 <= m <= 1100` that have one. Degrees absent from the file have no irreducible trinomial. | `xorred tri 2 1100` | Table 3, Figure 3 |
-| `census.json` | `{"F2": {m: [cost, b, c]}, "F1": {m: [cost, b, c]}, "T": [m, ...]}`: best member per degree of each family (cost by Theorem 6, by BCP's `3m-2` or `12m/5-1`, and `7m/4-1` for equally spaced members), and the list of degrees with trinomials. | derived from the three files above | Figure 3 |
+| `paar150.txt` | `m a b c dXOR CX depth_CX RG depth_RG`, with `a = b + c`. `dXOR` is the direct count (sum of row weights minus one), `CX` the Conta-XOR count with lexicographic tie-breaking, `RG` the best of `CX` and 20 greedy runs with random tie-breaking (seed 5 or 6), and the depths are XOR depths. One line per member `b > c >= 1`, `5 <= m <= 150` (3,674 lines). | `python3 -c "..."` listing the pairs (see below), then `xorred list 20 5 < pairs` | Observation 18, Figure 2 (`checks/analyze_paar150.py`) |
+| `fam2_irr.txt` | `m b c` for every irreducible `x^(b+2c)+x^(b+c)+x^b+x^c+1`, `5 <= m <= 1100` (1,508 lines). | `xorred fam2 5 1100` | Table 6, Table 8, Figure 3, Section IX |
+| `fam1_irr.txt` | `m b c` for every irreducible `x^(2b+c)+x^(b+c)+x^b+x^c+1` (first family, BCP), `5 <= m <= 1100` (755 lines). | `xorred fam1 5 1100` | Table 6, Table 8, Figure 3 |
+| `tri.txt` | `m k`: smallest `k <= m/2` with `x^m+x^k+1` irreducible, for the degrees `2 <= m <= 1100` that have one. Degrees absent from the file have no irreducible trinomial. | `xorred tri 2 1100` | Table 6, Figure 3 |
+| `census_alg2.json` | Like `census.json`, with the best member per degree under both constructions (`F2`, Theorems 8 and 13 and the strip bound for special members), under Theorem 8 alone (`F2_alg1`), and the best generic member (`F2gen`). | `algorithm2/census_alg2.py` | Table 6, Figure 3, Section IX |
+| `census.json` | `{"F2": {m: [cost, b, c]}, "F1": {m: [cost, b, c]}, "T": [m, ...]}`: best member per degree of each family (cost by Theorem 8, by BCP's `3m-2` or `12m/5-1`, and `7m/4-1` for equally spaced members), and the list of degrees with trinomials. | derived from the three files above | earlier version of Figure 3; `verification/analyze_census.py` |
 
 The list of pairs for `paar150.txt` was generated with
 

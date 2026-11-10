@@ -1,4 +1,4 @@
-"""Reducao em nivel de palavra para f = x^{b+2c} + x^{b+c} + x^b + x^c + 1 (Corolario 10).
+"""Reducao em nivel de palavra para f = x^{b+2c} + x^{b+c} + x^b + x^c + 1 (Corolario 16).
 Uso: python3 wordlevel.py b c   (testa contra a divisao polinomial)"""
 import sys, random
 def reduz(D, b, c):

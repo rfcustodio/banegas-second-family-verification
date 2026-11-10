@@ -1,0 +1,186 @@
+== Algorithm 1, depth, low-depth variant, strips, word level, coincidences (m <= 1100)
+SUMMARY m=[4,1100] pairs=201117 failures=0 pairs(m<=300 in range)=14850 depth==delta+3 for 7<=m<300: 14358/14748 maxExcess=4
+COINCIDENCES generic=0 special=274 (special not equally spaced=0)
+HIST depth-delta: 0:0 1:0 2:1097 3:199656 4:364 5:0 6:0 7:0
+INFO 571-member: chain gates=1688 depth=11 | doubling gates=2474 depth=7 s=4 maxteeth=9
+== Irreducibility census (5 <= m <= 1100)
+irreducible second family: 1508
+degrees second/first: 720 502
+both: 405
+second cheaper: 405 worse: [] tie: []
+mean saving over cheaper: 0.0733
+old (closed form + equally spaced) cheaper: 403 [5, 155]
+degrees without trinomial: 502
+covered second/first: 288 229
+second only: 112 both: 176 first only: 53 neither: 161
+mean cost/bit best generic over all 720 (best generic) 713 2.7729
+mean cost/bit best generic over noT generic 288 2.7714
+mean cost/bit best (incl special) all: 2.7624
+census.json F2 degrees equal: True F1 degrees equal: True T equal (5..1100): True
+F2 cost mismatches vs closed+eqsp: [] 0
+F1 cost mismatches: [] 0
+m=0 mod 8 with second-family member: 25
+(16, 6, 5) True cost 40 best at degree (40, 6, 5)
+(48, 18, 15) True cost 126 best at degree (126, 18, 15)
+(144, 54, 45) True cost 384 best at degree (384, 54, 45)
+NIST 163 F2 (440, 71, 46) F1 (487, 74, 15) tri 0
+NIST 233 F2 (621, 83, 75) F1 (697, 95, 43) tri 74
+NIST 283 F2 None F1 (847, 123, 37) tri 0
+NIST 409 F2 (1109, 179, 115) F1 None tri 87
+NIST 571 F2 (1528, 207, 182) F1 (1711, 218, 135) tri 0
+special irreducible: 15
+  5 3 1 (3, 1) 1 11 10 None tri
+  6 4 1 (4, 1) 1 14 14 None tri
+  18 12 3 (4, 1) 3 48 44 None tri
+  20 10 5 (2, 1) 5 52 34 54 tri
+  42 28 7 (4, 1) 7 116 104 None tri
+  54 36 9 (4, 1) 9 150 134 154 tri
+  100 50 25 (2, 1) 25 272 174 282 tri
+  126 84 21 (4, 1) 21 354 314 None tri
+  155 93 31 (3, 1) 31 431 370 411 tri
+  162 108 27 (4, 1) 27 456 404 472 tri
+  294 196 49 (4, 1) 49 830 734 None tri
+  378 252 63 (4, 1) 63 1068 944 1096 tri
+  486 324 81 (4, 1) 81 1374 1214 1394 tri
+  500 250 125 (2, 1) 125 1372 874 1388 tri
+  882 588 147 (4, 1) 147 2496 2204 None tri
+== Greedy (Conta-XOR) for m <= 150, 20 randomized runs
+pairs 3674
+dXOR/CX mismatches vs paar150.txt: 0 []
+generic 3541
+(a) closed form more expensive than lexicographic or random: 0 []
+(a) vs data random column: 0
+(b) b<2c: 879 all CX=2m+3c-3: True
+(c) 2c<b<6c: 1312 all CX=closed: True
+(d) b>=6c: 1350 CX>closed: 392 max diff: 112 any CX<closed: False
+random improved (mine): 213 all b>=6c: True max improvement: 13 closed gap eliminated: 1
+random improved (data): 212 all b>=6c: True max: 12 gap eliminated: 1
+max gain b<2c: (48, (148, 50, 49, 538, 440, 440, 392))
+(3, 1) lex==bound: 30 / 30 rand==bound: 8 min(lex,rand)<bound: 0 sample [(1, 10, 10, 10, 11), (2, 22, 22, 22, 25), (3, 34, 34, 34, 39), (4, 46, 46, 46, 53)]
+(4, 1) lex==bound: 25 / 25 rand==bound: 4 min(lex,rand)<bound: 0 sample [(1, 14, 14, 14, 14), (2, 30, 30, 30, 31), (3, 46, 46, 46, 48), (4, 62, 62, 62, 65)]
+(5, 1) lex==bound: 21 / 21 rand==bound: 13 min(lex,rand)<bound: 0 sample [(1, 17, 17, 17, 17), (2, 36, 36, 36, 37), (3, 55, 55, 55, 57), (4, 74, 74, 74, 77)]
+(3, 2) lex==bound: 0 / 21 rand==bound: 2 min(lex,rand)<bound: 0 sample [(1, 17, 16, 16, 16), (2, 36, 34, 34, 35), (3, 55, 53, 52, 54), (4, 74, 71, 70, 73)]
+(2, 1) lex==bound: 36 / 36 rand==bound: 36 min(lex,rand)<bound: 0 sample [(2, 13, 13, 13, 19), (3, 20, 20, 20, 30), (4, 27, 27, 27, 41), (5, 34, 34, 34, 52)]
+b=3c: CX==12m/5-2: True [(5, 10), (10, 22), (15, 34), (20, 46), (25, 58), (30, 70)]
+== Example 11 (Table 3), NIST-degree members (Tables 4 and 8): dXOR, Conta-XOR and depth
+m=16 dXOR=54 CX=44 bestRandom=-1
+m=163 dXOR=649 CX=461 bestRandom=-1
+m=233 dXOR=866 CX=688 bestRandom=-1
+m=233 dXOR=1687 CX=680 bestRandom=-1
+m=409 dXOR=1642 CX=1160 bestRandom=-1
+m=409 dXOR=1823 CX=1152 bestRandom=-1
+m=571 dXOR=2145 CX=1685 bestRandom=-1
+m=571 dXOR=2531 CX=1604 bestRandom=-1
+m=571 dXOR=6297 CX=1688 bestRandom=-1
+m=163 dXOR=665 CX=571 bestRandom=-1
+m=283 dXOR=1159 CX=862 bestRandom=-1
+m=571 dXOR=2302 CX=2003 bestRandom=-1
+m=233 dXOR=537 CX=464 bestRandom=-1
+m=409 dXOR=902 CX=816 bestRandom=-1
+163 71 46 4
+233 83 75 4
+233 201 16 7
+409 179 115 4
+409 265 72 4
+571 207 182 4
+571 359 106 4
+571 527 22 11
+== Base polynomials: greedy strip programs, sweep over 4 <= kappa <= 40 (Section III; the optimal values of Table 2 are checked by SAT below)
+163
+k=4 (2,1) R2=6 closedG=8 R1=7 3k-c'=11 SHORTER
+k=5 (3,1) R2=10 closedG=11 R1=12 3k-c'=14 SHORTER
+k=6 (4,1) R2=14 closedG=14 R1=16 3k-c'=17 SHORTER
+k=7 (5,1) R2=17 closedG=17 R1=19 3k-c'=20 SHORTER
+k=7 (3,2) R2=16 closedG=16 R1=18 3k-c'=19 SHORTER
+composed and checked: 992 failures: 0
+== Boyar and Peralta heuristic
+f_{5,2} m= 9 BP runs: [22, 22, 22, 22, 22, 22, 22, 22, 22, 22] best 22 closed 22
+f_{4,3} m= 10 BP runs: [24, 25, 25, 25, 26, 26, 25, 26, 26, 26] best 24 closed 24
+f_{3,2} m= 7 BP runs: [16, 16, 16, 16, 16, 16, 16, 16, 16, 16] best 16 closed 16
+== Chain construction (Algorithm 2, Theorem 13) for m <= 1100, census with both constructions
+INFO b=527 c=22 gates=1534 depth=20
+SUMMARY m=[4,1100] pairs=201117 failures=0 improved=100284 worse=50142 max(depth-bound)=-1
+71 46 (True, 461, 461, 5)
+83 75 (True, 688, 688, 5)
+201 16 (True, 632, 632, 12)
+179 115 (True, 1160, 1160, 5)
+265 72 (True, 1152, 1152, 6)
+207 182 (True, 1685, 1685, 5)
+359 106 (True, 1604, 1604, 6)
+527 22 (True, 1534, 1534, 20)
+8 1 (True, 24, 24, 6)
+6 1 (True, 19, 19, 5)
+5 1 (True, 16, 16, 4)
+OLD degrees 720 both 405 cheaper 405 mean saving 0.0733 max saving 0.1304 min 0.0007
+  mean cost/bit best generic all 713: 2.7729; noT 288: 2.7714; best incl special 2.7624
+  mean saving noT both: 0.0733
+  NIST 163 (440, 71, 46)
+  NIST 233 (621, 83, 75)
+  NIST 409 (1109, 179, 115)
+  NIST 571 (1528, 207, 182)
+NEW degrees 720 both 405 cheaper 405 mean saving 0.0965 max saving 0.1364 min 0.0027
+  mean cost/bit best generic all 713: 2.7032; noT 288: 2.7037; best incl special 2.6948
+  mean saving noT both: 0.0973
+  NIST 163 (440, 71, 46)
+  NIST 233 (621, 83, 75)
+  NIST 409 (1109, 179, 115)
+  NIST 571 (1528, 207, 182)
+degrees improved 379 of 720 ; noT improved 160
+max rel [(0.10752145381120647, 663, (1981, 653, 5), (1768, 653, 5)), (0.10825688073394496, 183, (545, 181, 1), (486, 181, 1)), (0.10917721518987342, 212, (632, 210, 1), (563, 210, 1)), (0.11044776119402985, 783, (2345, 781, 1), (2086, 781, 1)), (0.11057856898322492, 975, (2921, 973, 1), (2598, 973, 1))]
+mean rel over improved 0.0447
+best member uses alg2 in 387
+(16, 6, 5) (40, 6, 5) (40, 6, 5)
+(48, 18, 15) (126, 18, 15) (126, 18, 15)
+(144, 54, 45) (384, 54, 45) (384, 54, 45)
+irreducible members improved 748 of 1508
+spec deg 20 generic old (54, 14, 3) new (51, 18, 1)
+spec deg 54 generic old (154, 44, 5) new (144, 44, 5)
+spec deg 100 generic old (282, 70, 15) new (269, 86, 7)
+spec deg 155 generic old (411, 53, 51) new (411, 53, 51)
+spec deg 162 generic old (472, 140, 11) new (439, 140, 11)
+spec deg 378 generic old (1096, 308, 35) new (1026, 308, 35)
+spec deg 486 generic old (1394, 364, 61) new (1333, 364, 61)
+spec deg 500 generic old (1388, 282, 109) new (1342, 438, 31)
+(10, 3, 1) (11, 2, 1) (370, 93, 31) (371, 62, 31)
+== Exact minima with SAT (Tables 2 and 5), composition of the optimal strip programs, heuristic column of Table 5
+f_(2,1) m=4: program with 6 gates: exists (0.0s)
+f_(2,1) m=4: program with 5 gates: impossible (0.0s)
+f_(3,1) m=5: program with 10 gates: exists (0.0s)
+f_(3,1) m=5: program with 9 gates: impossible (0.0s)
+f_(4,1) m=6: program with 14 gates: exists (0.0s)
+f_(4,1) m=6: program with 13 gates: impossible (0.0s)
+f_(5,1) m=7: program with 16 gates: exists (0.1s)
+f_(5,1) m=7: program with 15 gates: impossible (0.2s)
+f_(3,2) m=7: program with 16 gates: exists (0.0s)
+f_(3,2) m=7: program with 15 gates: impossible (0.3s)
+f_(6,1) m=8: program with 19 gates: exists (0.2s)
+f_(6,1) m=8: program with 18 gates: impossible (2.5s)
+f_(5,2) m=9: program with 21 gates: exists (0.8s)
+f_(5,2) m=9: program with 20 gates: impossible (15.8s)
+f_(7,1) m=9: program with 22 gates: exists (0.9s)
+f_(8,1) m=10: program with 24 gates: exists (11.4s)
+f_(7,2) m=11: program with 27 gates: exists (4.0s)
+f_(9,1) m=11: program with 27 gates: exists (1.5s)
+G=f_(2,1) R1 with 7 gates: SAT (0.0s)
+G=f_(2,1) R1 with 6 gates: UNSAT (0.0s)
+G=f_(3,1) R1 with 12 gates: SAT (0.0s)
+G=f_(3,1) R1 with 11 gates: UNSAT (0.0s)
+G=f_(4,1) R1 with 15 gates: SAT (0.2s)
+G=f_(4,1) R1 with 14 gates: UNSAT (0.4s)
+G=f_(5,1) R1 with 18 gates: SAT (2.5s)
+G=f_(5,1) R1 with 17 gates: UNSAT (28.8s)
+G=f_(3,2) R1 with 18 gates: SAT (0.0s)
+G=f_(3,2) R1 with 17 gates: UNSAT (22.2s)
+f_(4,1): composed 183 members (m<=1100), failures 0; bound 15*gamma-1
+f_(5,1): composed 157 members (m<=1100), failures 0; bound 18*gamma-2
+f_(2,1) m=4: greedy 6, Boyar-Peralta 6, heuristic 6, closed form 8
+f_(3,1) m=5: greedy 10, Boyar-Peralta 10, heuristic 10, closed form 11
+f_(4,1) m=6: greedy 14, Boyar-Peralta 14, heuristic 14, closed form 14
+f_(5,1) m=7: greedy 17, Boyar-Peralta 16, heuristic 16, closed form 17
+f_(3,2) m=7: greedy 16, Boyar-Peralta 16, heuristic 16, closed form 16
+f_(6,1) m=8: greedy 20, Boyar-Peralta 20, heuristic 20, closed form 20
+f_(5,2) m=9: greedy 22, Boyar-Peralta 22, heuristic 22, closed form 22
+f_(7,1) m=9: greedy 24, Boyar-Peralta 23, heuristic 23, closed form 23
+f_(8,1) m=10: greedy 28, Boyar-Peralta 26, heuristic 26, closed form 26
+f_(7,2) m=11: greedy 28, Boyar-Peralta 28, heuristic 28, closed form 28
+f_(9,1) m=11: greedy 30, Boyar-Peralta 29, heuristic 29, closed form 29

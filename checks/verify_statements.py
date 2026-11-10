@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Checks, statement by statement, the mathematical claims of the paper
-"Banegas' Second Family of Irreducible Pentanomials: a Closed-Form Reduction with
-3m - c - 3 XOR Gates" (paper/artigo2.tex).
+"Efficient Closed-Form Reduction for Banegas' Second Family of Pentanomials"
+(paper/main.tex) about Algorithm 1 (Sections III to V and VII).
 
 Every check is self-contained (plain Python 3, no third-party packages) except the
-checks of Theorem 6, Proposition 7 and Example 9, which run the authors' generator in
-generator/fam2.py.  Numbering follows the compiled paper (paper/artigo2.pdf).
+checks of Theorem 8, Proposition 9 and Example 11, which run the authors' generator in
+generator/fam2.py.  Numbering follows the compiled paper (paper/main.pdf).
+The chain construction (Section VI) is checked by checks/verify_chain.py.
 
 Usage:
   python3 checks/verify_statements.py            # default range m <= 120 (about 1-2 min)
@@ -84,7 +85,7 @@ def check_prop2(mmax):
         if not (i_ok and ii_ok and iii_ok and iv_ok and v_ok): bad.append((m, b, c))
     report('Proposition 2 (i)-(v)', not bad, f'{n} members with m <= {mmax}, failures: {bad[:5]}')
 
-# ----------------------------------------------------------------- Lemma 3 (numeric)
+# ----------------------------------------------------------------- Lemma 5 (numeric)
 def check_lemma3(mmax, trials=5):
     rng = random.Random(3); n = 0; bad = []
     for m, b, c in members(mmax):
@@ -96,9 +97,9 @@ def check_lemma3(mmax, trials=5):
             ok = all(d(m + j) == (q(j) ^ sum(q(j + m - e) for e in S) % 2) for j in range(m - 1)) and \
                  all((R >> i) & 1 == (d(i) ^ sum(q(i - e) for e in S + [0]) % 2) for i in range(m))
             if not ok: bad.append((m, b, c)); break
-    report('Lemma 3 (division identities, eqs. 2-3)', not bad, f'{n} random products, failures: {bad[:5]}')
+    report('Lemma 5 (division identities, eqs. 3-4)', not bad, f'{n} random products, failures: {bad[:5]}')
 
-# ----------------------------------------------------------------- Theorem 5 (symbolic)
+# ----------------------------------------------------------------- Theorem 7 (symbolic)
 def check_thm5(mmax):
     """q_j as linear forms in h (bitmask over h-indices) obtained from recurrence (4),
     compared with the closed forms (5)-(7)."""
@@ -130,9 +131,9 @@ def check_thm5(mmax):
             ok &= form == rows[i]
         if ok: n_ok += 1
         else: bad.append((m, b, c))
-    report('Theorem 5 (closed-form quotient, eqs. 5-7)', not bad, f'{n_ok} members with m <= {mmax}, failures: {bad[:5]}')
+    report('Theorem 7 (closed-form quotient, eqs. 6-8)', not bad, f'{n_ok} members with m <= {mmax}, failures: {bad[:5]}')
 
-# ----------------------------------------------------------------- Theorem 6, Prop. 7 (generator)
+# ----------------------------------------------------------------- Theorem 8, Prop. 9 (generator)
 def check_thm6_prop7(mmax):
     from fam2 import program, check
     n = 0; bad6 = []; bad7 = []; plus3 = tot3 = 0
@@ -143,12 +144,13 @@ def check_thm6_prop7(mmax):
         if d > (m - 2) // (3 * c) + 4: bad7.append((m, b, c))
         if 7 <= m < 300:
             tot3 += 1; plus3 += d == (m - 2) // (3 * c) + 3
-    report('Theorem 6 (Algorithm 1 correct, <= 3m-c-3 XORs)', not bad6, f'{n} members, failures: {bad6[:5]}')
-    report('Proposition 7 (depth <= floor(n/3c)+4)', not bad7, f'{n} members, failures: {bad7[:5]}')
+    report('Theorem 8 (Algorithm 1 correct, <= 3m-c-3 XORs)', not bad6, f'{n} members, failures: {bad6[:5]}')
+    report('Proposition 9 (depth <= floor(n/3c)+4)', not bad7, f'{n} members, failures: {bad7[:5]}')
     print(f'       measured depth == floor(n/3c)+3 in {plus3} of {tot3} members with 7 <= m < min(300, mmax+1) '
-          f'(paper, with --mmax 300: 14,285 of 14,748, i.e. 97%)')
+          f'(paper: 97%; with --mmax 300 this script gives 14,285 of 14,748 and verification/alg1verify.c 14,358; '
+          f'the 73 differences are the equally spaced members b = 2c, where generator/fam2.py reuses coincident values)')
 
-# ----------------------------------------------------------------- Corollary 10 and Corollary 8
+# ----------------------------------------------------------------- Corollary 16 and Corollary 10
 def word_reduce(D, b, c):
     m = b + 2 * c; n = m - 2; mask = (1 << m) - 1
     L, H = D & mask, D >> m
@@ -167,12 +169,12 @@ def check_cor10_cor8(mmax, trials=5):
             A, B = rng.getrandbits(m), rng.getrandbits(m)
             D = pmul(A, B); n += 1                    # schoolbook carry-less product
             if word_reduce(D, b, c) != pdivmod(D, f)[1]: bad.append((m, b, c)); break
-    report('Corollary 10 (word-level reduction) + multiplier of Corollary 8', not bad,
+    report('Corollary 16 (word-level reduction) + multiplier of Corollary 10', not bad,
            f'{n} random field products, failures: {bad[:5]}')
     ident = all((m - 1) ** 2 + 3 * m - c - 3 == m * m + m - c - 2 for m, b, c in members(mmax))
-    report('Corollary 8 (XOR count identity (m-1)^2+3m-c-3 = m^2+m-c-2)', ident, 'algebraic identity checked')
+    report('Corollary 10 (XOR count identity (m-1)^2+3m-c-3 = m^2+m-c-2)', ident, 'algebraic identity checked')
 
-# ----------------------------------------------------------------- Example 9
+# ----------------------------------------------------------------- Example 11
 def check_example9():
     from fam2 import program, check
     from contaxor import irredutivel, matriz_reducao, conta_xor
@@ -182,7 +184,7 @@ def check_example9():
     dx = sum(bin(r).count('1') - 1 for r in rows)
     L, nn = matriz_reducao(f); cx = conta_xor(L, nn)[0]
     ok = irredutivel(f) and check(b, c, P, out) and len(P.gates) == 40 and dx == 54 and cx == 44
-    report('Example 9 (f_{6,5}: irreducible, 40 XORs, dXOR 54, CX 44)', ok,
+    report('Example 11 (f_{6,5}: irreducible, 40 XORs, dXOR 54, CX 44)', ok,
            f'irreducible={irredutivel(f)}, gates={len(P.gates)}, dXOR={dx}, CX={cx}')
 
 if __name__ == '__main__':

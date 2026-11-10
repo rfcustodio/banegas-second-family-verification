@@ -13,3 +13,14 @@ __pycache__/
 # compiled C helper
 generator/xorred
 xorred
+# verification/ by-products
+verification/alg1verify
+verification/alg2verify
+verification/census
+verification/greedy
+verification/sec.txt
+verification/fst.txt
+verification/tri.txt
+verification/g150.txt
+verification/output.txt
+verification/census_verified.json

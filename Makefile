@@ -1,24 +1,30 @@
+SHELL := /bin/bash
 # Shortcuts for the co-authors. Run from the repository root.
 PY ?= python3
 
-.PHONY: check check-full figures paper data clean
+.PHONY: check check-full verify-all figures paper data clean
 
 check:            ## fast checks of every statement (about 15 s)
 	./run_quick_checks.sh
 
-check-full:       ## the same checks over the full range of the paper (m <= 300, about 3 min)
+check-full:       ## the same checks over a larger range (m <= 300, about 3 min)
 	$(PY) checks/verify_statements.py --mmax 300
+	$(PY) checks/verify_chain.py --mmax 300
 	$(PY) checks/reproduce_tables.py
 	$(PY) checks/analyze_paar150.py
 	$(PY) checks/compare_censuses.py
 	$(PY) generator/lowdepth.py --all 260
 
-figures:          ## regenerate Figures 2 and 3 (needs numpy and matplotlib)
+verify-all:       ## complete verification up to m = 1100, as in the paper (gcc, python-sat; about 15 min)
+	sh verification/run_all.sh > verification/output.txt
+	diff <(grep -v '([0-9.]*s)' verification/output.txt) <(grep -v '([0-9.]*s)' verification/expected_output.txt) && echo "verification output matches expected_output.txt"
+
+figures:          ## regenerate Figures 2 and 3 (needs matplotlib)
 	$(PY) generator/make_figures.py
 
-paper:            ## compile paper/artigo2.pdf (needs LaTeX with biblatex)
-	cd paper && pdflatex -interaction=nonstopmode artigo2 && bibtex artigo2 && \
-	pdflatex -interaction=nonstopmode artigo2 && pdflatex -interaction=nonstopmode artigo2
+paper:            ## compile paper/main.pdf
+	cd paper && pdflatex -interaction=nonstopmode main && bibtex main && \
+	pdflatex -interaction=nonstopmode main && pdflatex -interaction=nonstopmode main
 
 data:             ## regenerate data/ from scratch (needs a C compiler; about 20 min)
 	gcc -O2 -o xorred generator/xorred.c
@@ -31,5 +37,6 @@ data:             ## regenerate data/ from scratch (needs a C compiler; about 20
 	@echo "Note: the original data/paar150.txt used seeds 5 and 6 on two halves; only the RG columns may differ."
 
 clean:            ## remove LaTeX and build by-products
-	cd paper && rm -f *.aux *.bbl *.blg *.log *.out *.run.xml *-blx.bib *.bcf
+	cd paper && rm -f *.aux *.blg *.log *.out *.run.xml *-blx.bib *.bcf
 	rm -f xorred
+	cd verification && rm -f alg1verify alg2verify census greedy sec.txt fst.txt tri.txt g150.txt output.txt census_verified.json

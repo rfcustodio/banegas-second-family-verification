@@ -7,7 +7,7 @@ keep the paper and the evidence for it in step.
 
 ### Read and check the paper
 
-1. Read `paper/artigo2.pdf`.
+1. Read `paper/main.pdf`.
 2. Run `./run_quick_checks.sh` (or `make check`). Every line should say `PASS`/`ok`.
 3. For any statement you doubt, look it up in [CLAIMS.md](CLAIMS.md) and run the script
    listed there. Every script prints the value it computed next to the value printed in
@@ -38,23 +38,36 @@ Request (tab *Actions*); a green mark means they passed.
 
 Every number of the paper is guarded by a script. If you change one:
 
-1. edit `paper/artigo2.tex`;
+1. edit `paper/main.tex` (the master copy is on Overleaf);
 2. update the expected value in the script listed in [CLAIMS.md](CLAIMS.md)
    (the expected values are written next to the word `paper` in each script);
 3. update the corresponding line of `CLAIMS.md`;
 4. run `./run_quick_checks.sh`.
 
-### Rebuild the paper
+### Run the complete verification
 
-Requires a LaTeX installation with `biblatex` (TeX Live or MacTeX).
+`./run_quick_checks.sh` covers every statement on small degrees in seconds. The paper
+reports checks up to `m = 1100`; to rerun them (gcc, Python 3, `pip install python-sat`,
+about 15 minutes):
 
 ```bash
-make paper        # = cd paper && pdflatex artigo2 && bibtex artigo2 && pdflatex artigo2 && pdflatex artigo2
+make verify-all   # runs verification/run_all.sh and compares with expected_output.txt
+```
+
+Only the running times printed by the SAT scripts may differ from the expected output.
+The same job runs on GitHub Actions after every push.
+
+### Rebuild the paper
+
+Requires a LaTeX installation (TeX Live or MacTeX).
+
+```bash
+make paper        # = cd paper && pdflatex main && bibtex main && pdflatex main && pdflatex main
 ```
 
 ### Regenerate the figures
 
-Requires `numpy` and `matplotlib` (`pip install numpy matplotlib`).
+Requires `matplotlib` (`pip install matplotlib`).
 
 ```bash
 make figures      # writes paper/fig_gain.pdf and paper/fig_census.pdf from data/
@@ -75,8 +88,7 @@ worth an Issue.
 ## Conventions
 
 * The paper is written in English, without em dashes.
-* Results that are new in the paper are marked with a blue diamond in the PDF; results
-  from the literature are always cited.
+* Results from the literature are always cited.
 * Scripts in `checks/` use only the Python standard library, so that anyone can run them
   without installing anything.
 * Do not edit `independent/` to make it agree with `generator/`: the value of the

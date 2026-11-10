@@ -1,7 +1,7 @@
 # A guided tour of the mathematics
 
 This page explains the main result of the paper with one small example that you can
-run. It follows the order of the paper (Sections 3 to 6) and points to the code that
+run. It follows the order of the paper (Sections III to VIII) and points to the code that
 implements each step. No previous knowledge of the code is needed.
 
 **Running example:** `b = 9`, `c = 4`, so
@@ -26,7 +26,7 @@ The reduction must output the 17 bits `r_0, ..., r_16` of `R = D mod f`. Each `r
 XOR of some of the 33 input bits; which ones is fixed by `f` (the *reduction matrix*).
 The question is how few 2-input XOR gates suffice.
 
-## Step 1. Long division, written bit by bit (Lemma 3)
+## Step 1. Long division, written bit by bit (Lemma 5)
 
 Write `D = Q·f + R`. The quotient `Q = q_0 + ... + q_15 x^15` has 16 bits. Comparing
 coefficients gives two facts:
@@ -49,7 +49,7 @@ terms cancel in pairs. This is what makes the recurrence of Step 1 solvable in c
 form: shifting the high part by `3c` can be undone at the price of two low terms.
 Checked by `check_prop2`.
 
-## Step 3. Comb sums and the closed-form quotient (Theorem 5)
+## Step 3. Comb sums and the closed-form quotient (Theorem 7)
 
 Define the **comb sums**: add the high coefficients whose indices differ by multiples of
 `3c = 12`,
@@ -60,7 +60,7 @@ In the example only four comb sums have more than one term:
 
     C_0 = h_0 + h_12    C_1 = h_1 + h_13    C_2 = h_2 + h_14    C_3 = h_3 + h_15
 
-and `C_t = h_t` for `t ≥ 4`. Theorem 5 says that the quotient is simply
+and `C_t = h_t` for `t ≥ 4`. Theorem 7 says that the quotient is simply
 
     q_j = C_j + C_(j+c) + h_(j+b+c)                       (equation 5)
 
@@ -73,7 +73,7 @@ and that `U = (1 + x^c)·Q`, the polynomial that appears in the remainder, is
 Each `U_k` is the sum of **two comb sums and at most one extra bit**. `check_thm5`
 verifies (5), (6) and (7) symbolically for every member up to the chosen degree.
 
-## Step 4. The program and its cost (Algorithm 1, Theorem 6)
+## Step 4. The program and its cost (Algorithm 1, Theorem 8)
 
 Now compute each piece once and reuse it. In the example:
 
@@ -94,7 +94,7 @@ saying which inputs `d_j` it adds). At the end the 17 output forms are compared 
 17 rows of the reduction matrix of `f`; if they are equal, the program is correct for
 **all** inputs. This is why the checks are exact and not statistical.
 
-## Step 5. Depth and the word-level version (Proposition 7, Corollary 10, Proposition 11)
+## Step 5. Depth and the word-level version (Proposition 9, Corollary 16, Proposition 17)
 
 * **Depth.** The comb sums are chains of length about `m/(3c)`; everything else adds at
   most 4 levels. In the example the depth is 4.
@@ -111,7 +111,7 @@ saying which inputs `d_j` it adds). At the end the 17 output forms are compared 
 * **Low depth.** Computing the comb sums by doubling gives logarithmic depth at the cost
   of a few more gates (`generator/lowdepth.py`).
 
-## Step 6. How this compares with the greedy count (Section 7)
+## Step 6. How this compares with the greedy count (Section VIII)
 
 The greedy counter of the thesis (Conta-XOR) finds the same `3m − c − 3` when
 `2c < b < 6c`, as in our example (44). When `b < 2c` it needs exactly `2c − b` more
@@ -123,3 +123,30 @@ python3 generator/contaxor.py 163 117 71 46   # 461 = 440 + (2·46 − 71)
 ```
 
 The full comparison over 3,541 members is reproduced by `checks/analyze_paar150.py`.
+
+## Step 7. A shorter program: the chain construction (Section VI)
+
+`3m − c − 3` is not optimal. Write `E_t = C_t + C_(t+c)` and `P_k = C_(k−c) + C_(k+c)`.
+Lemma 12 gives `E_t = h_t + P_(t+2c)`, `P_k = h_(k−c) + E_(k+c)` and
+`P_k = E_(k−c) + E_k`, so these sums can be built from each other at one gate each,
+without computing any comb sum. Algorithm 2 does this and needs exactly
+`3m − 3 − N(b,c)` gates (Theorem 13), with `N(b,c) = #{1 ≤ u ≤ b+c−1 : ⌊u/c⌋ ≡ 2 (mod 3)}`.
+It is shorter than `3m − c − 3` exactly when `b ≥ 4c + 1`. In our example
+(`b = 9`, `c = 4`) it is not (`b < 4c + 1`), but for `b = 8`, `c = 1` it gives 24 gates
+instead of 26 (Example 14):
+
+```bash
+python3 algorithm2/alg2prog.py 8 1 p     # prints (correct, gates, 3m-3-N, depth) and the program
+python3 algorithm2/alg2prog.py 527 22    # 1534 gates, against 1688 for Algorithm 1
+```
+
+The price is depth: about twice that of Algorithm 1 (Proposition 15).
+
+## Step 8. Special members (Definition 3, Proposition 4)
+
+If `γ = gcd(b, c) > 1`, then `f(x) = G(x^γ)` with `G = f_(b/γ, c/γ)`, and reduction modulo
+`f` splits into `γ` independent reductions modulo `G`, one per *strip* of indices congruent
+modulo `γ`. For five small base polynomials (`b/c = 3/2, 2, 3, 4, 5`) the strip programs
+are much shorter than the closed form; their optimal lengths (Table 2) were proved with a
+SAT solver (`verification/exact_base.py`) and composed over all strips up to `m = 1100`
+(`verification/compose_sat.py`).

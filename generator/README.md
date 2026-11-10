@@ -5,14 +5,15 @@ Run them from the repository root, e.g. `python3 generator/fam2.py 71 46`.
 
 | File | What it does | Paper | Example |
 |---|---|---|---|
-| `fam2.py` | **Algorithm 1.** Builds the reduction program for `f_{b,c}` and verifies it symbolically against the reduction matrix (correct for all inputs). Prints gate count, depth, correctness and `3m − c − 3`. | Thm. 6, Prop. 7, Ex. 9 | `python3 generator/fam2.py 71 46` |
-| `lowdepth.py` | Low-depth variant: comb sums by doubling. `--all M` checks the gate and depth bounds of Prop. 11 for every member with `m < M`. | Prop. 11 | `python3 generator/lowdepth.py 527 22` |
-| `wordlevel.py` | Word-level reduction (shifts and XORs on whole bit vectors), tested on 10,000 random products. | Cor. 10 | `python3 generator/wordlevel.py 207 182` |
-| `contaxor.py` | Conta-XOR, the greedy counter of Banegas' thesis, for any polynomial; prints irreducibility, `dXOR`, the greedy count and depth, and verifies the program by simulation. Options: `-r K` adds `K` runs with random tie-breaking, `-p` prints the program. | baseline `CX` (Sec. 7, Tables 2, 4) | `python3 generator/contaxor.py 163 117 71 46 -r 20` |
+| `fam2.py` | **Algorithm 1.** Builds the reduction program for `f_{b,c}` and verifies it symbolically against the reduction matrix (correct for all inputs). Prints gate count, depth, correctness and `3m − c − 3`. | Thm. 8, Prop. 9, Ex. 11 | `python3 generator/fam2.py 71 46` |
+| `lowdepth.py` | Low-depth variant: comb sums by doubling. `--all M` checks the gate and depth bounds of Prop. 17 for every member with `m < M`. | Prop. 17 | `python3 generator/lowdepth.py 527 22` |
+| `wordlevel.py` | Word-level reduction (shifts and XORs on whole bit vectors), tested on 10,000 random products. | Cor. 16 | `python3 generator/wordlevel.py 207 182` |
+| `contaxor.py` | Conta-XOR, the greedy counter of Banegas' thesis, for any polynomial; prints irreducibility, `dXOR`, the greedy count and depth, and verifies the program by simulation. Options: `-r K` adds `K` runs with random tie-breaking, `-p` prints the program. | baseline `CX` (Sec. VIII, Tables 4, 8) | `python3 generator/contaxor.py 163 117 71 46 -r 20` |
 | `xorred.c` | Fast C version of the greedy counter and of the irreducibility test; also produces the censuses. See the modes below. | `data/` | see below |
-| `smallm.py` | Small degrees: greedy count, greedy over all tie-breaking sequences, and the Boyar–Peralta heuristic (with cancellations). Needs `numpy`. Arguments: `m a b c runs`. | Sec. 7 "Small degrees" | `python3 generator/smallm.py 10 7 4 3 10` |
-| `sat.py` | SAT question "is there a program with `k` gates?". Needs `python-sat`. Exploratory; not used for any statement of the paper. | - | `python3 generator/sat.py 7 5 3 2 15` |
-| `make_figures.py` | Regenerates Figures 2 and 3 into `paper/` from `data/`. Needs `numpy`, `matplotlib`. | Figs. 2, 3 | `python3 generator/make_figures.py` |
+| `smallm.py` | Small degrees: greedy count, greedy over all tie-breaking sequences, and the Boyar-Peralta heuristic (with cancellations). Needs `numpy`. Arguments: `m a b c runs`. | Sec. VIII | `python3 generator/smallm.py 10 7 4 3 10` |
+| `strips.py` | Strip programs for special members (Proposition 4): greedy search of the two strip reductions modulo `G`, composition over the strips and symbolic check, sweep over the reduced pairs with `4 <= kappa <= KMAX`; `--special MMAX` prints Table 7. | Prop. 4, Table 7 | `python3 generator/strips.py --special 1100` |
+| `sat.py` | Early SAT experiment ("is there a program with `k` gates?"). Needs `python-sat`. Superseded by `verification/slp_sat.py`, which produces Tables 2 and 5. | - | `python3 generator/sat.py 7 5 3 2 15` |
+| `make_figures.py` | Regenerates Figures 2 and 3 into `paper/` from `data/paar150.txt` and `data/census_alg2.json`. Needs `matplotlib`. | Figs. 2, 3 | `python3 generator/make_figures.py` |
 
 ## `xorred.c` modes
 
@@ -26,3 +27,6 @@ gcc -O2 -o xorred generator/xorred.c
 ```
 
 Output columns of `one` and `list`: `m a b c dXOR CX depth_CX RG depth_RG`.
+
+The chain construction (Algorithm 2) is in `../algorithm2/`, and the complete verification
+up to `m = 1100`, including the SAT models, is in `../verification/`.

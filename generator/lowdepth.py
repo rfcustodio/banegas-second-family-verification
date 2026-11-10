@@ -1,10 +1,10 @@
-"""Low-depth variant of Algorithm 1 (Proposition 11): the chain of comb sums is replaced
-by the doubling of Corollary 10.  Same symbolic representation and verification as
+"""Low-depth variant of Algorithm 1 (Proposition 17): the chain of comb sums is replaced
+by the doubling of Corollary 16.  Same symbolic representation and verification as
 fam2.py.
 
 Usage:
   python3 generator/lowdepth.py b c        # one member
-  python3 generator/lowdepth.py --all 260  # all members with m < 260, checks Prop. 11
+  python3 generator/lowdepth.py --all 260  # all members with m < 260, checks Prop. 17
 """
 import sys
 from fam2 import Prog, reduction_rows
@@ -59,7 +59,7 @@ if __name__ == '__main__':
                 d = max(P.depth[o] for o in out)
                 if not ok or len(P.gates) > predicted_gates(b, c) or d > doubling_steps(b, c) + 4:
                     bad += 1; print('VIOLATION', m, b, c, ok, len(P.gates), d)
-        print(f'Proposition 11: {tot} members with m < {M}, violations: {bad}')
+        print(f'Proposition 17: {tot} members with m < {M}, violations: {bad}')
     else:
         b, c = int(sys.argv[1]), int(sys.argv[2]); m = b + 2 * c
         P, out = program_lowdepth(b, c)

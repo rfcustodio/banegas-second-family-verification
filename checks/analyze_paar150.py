@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recomputes every number of Observation 12 and Figure 2 from the raw greedy data
+"""Recomputes every number of Observation 18 and Figure 2 from the raw greedy data
 data/paar150.txt (produced by generator/xorred.c, see data/README.md).
 
 Columns of data/paar150.txt:  m  a  b  c  dXOR  CX  depth(CX)  RG  depth(RG)
