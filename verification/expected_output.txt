@@ -196,19 +196,22 @@ second family cheaper than every other family in 288 of 288 degrees: 5.6% to 33.
 covered by the four families: 484; by the second family only: 15 [69, 306, 339, 381]
 class x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1: irreducible members in degrees without trinomials: 0
 NIST degrees (typeI, typeII): {163: (487, 665), 283: (847, 1021), 571: (None, 2149)}
-== Full multiplier and squaring at degrees 163 and 571 (Section IX-D, Table 10)
+== Full multiplier and squaring at degrees 163 and 571, every irreducible member of both families (Section IX-E, Table 10)
 Karatsuba product m=163: correct=True XOR=12001 AND=6203
 Karatsuba product m=571: correct=True XOR=90703 AND=47916
-m=163 second  reduction   440 schoolbook   26684 Karatsuba  12441 squaring  173
-m=163 first   reduction   487 schoolbook   26731 Karatsuba  12488 squaring  199
-m=163 NIST    reduction   571 schoolbook   26815 Karatsuba  12572 squaring  246
-m=571 second  reduction  1528 schoolbook  326428 Karatsuba  92231 squaring  649
-m=571 first   reduction  1711 schoolbook  326611 Karatsuba  92414 squaring  679
-m=571 NIST    reduction  2003 schoolbook  326903 Karatsuba  92706 squaring  861
-m=163 saving vs first: reduction 9.7%  Karatsuba multiplier 0.38%  squaring 13.1%
-m=163 saving vs NIST: reduction 22.9%  Karatsuba multiplier 1.04%  squaring 29.7%
-m=571 saving vs first: reduction 10.7%  Karatsuba multiplier 0.20%  squaring 4.4%
-m=571 saving vs NIST: reduction 23.7%  Karatsuba multiplier 0.51%  squaring 24.6%
+m=163 second (71,46)    reduction   440 schoolbook   26684 Karatsuba  12441 squaring  173 (best of 20 randomized runs: 173)
+m=163 first  (74,15)    reduction   487 schoolbook   26731 Karatsuba  12488 squaring  199 (best of 20 randomized runs: 199)
+m=163 first  (63,37)    reduction   487 schoolbook   26731 Karatsuba  12488 squaring  162 (best of 20 randomized runs: 162)
+m=163 NIST              reduction   571 schoolbook   26815 Karatsuba  12572 squaring  246 (best of 20 randomized runs: 246)
+m=571 second (207,182)  reduction  1528 schoolbook  326428 Karatsuba  92231 squaring  649 (best of 20 randomized runs: 649)
+m=571 second (359,106)  reduction  1604 schoolbook  326504 Karatsuba  92307 squaring  570 (best of 20 randomized runs: 549)
+m=571 second (527,22)   reduction  1534 schoolbook  326434 Karatsuba  92237 squaring  570 (best of 20 randomized runs: 570)
+m=571 first  (218,135)  reduction  1711 schoolbook  326611 Karatsuba  92414 squaring  679 (best of 20 randomized runs: 679)
+m=571 NIST              reduction  2003 schoolbook  326903 Karatsuba  92706 squaring  861 (best of 20 randomized runs: 861)
+m=163 reduction, best second vs first: 9.7%  vs NIST: 22.9%; Karatsuba multiplier vs first: 0.38%  vs NIST: 1.04%
+m=163 squaring, minimized separately in each family: second 173, first 162, NIST 246; second relative to first: +6.8% gates; second vs NIST: 29.7%; first vs NIST: 34.1%
+m=571 reduction, best second vs first: 10.7%  vs NIST: 23.7%; Karatsuba multiplier vs first: 0.20%  vs NIST: 0.51%
+m=571 squaring, minimized separately in each family: second 570, first 679, NIST 861; second relative to first: -16.1% gates; second vs NIST: 33.8%; first vs NIST: 21.1%
 == Checks added in response to the review (Lemma 19 hypothesis, eq. (9), special members versus trinomials, word-level steps)
 [1] members 4<=m<=1100: 201117; with a zero row of R': 0
 [2] reciprocal identity and quotient, m<=200: failures 0

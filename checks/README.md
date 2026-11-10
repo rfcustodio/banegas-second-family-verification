@@ -12,7 +12,7 @@ automated tests.
 | `reproduce_tables.py` | Every entry of Tables 4, 8 and 9, Proposition 20 against the census, and the numbers quoted in Section IX. | 30 s |
 | `analyze_paar150.py` | Every number of Observation 18 and the content of Figure 2, from `data/paar150.txt`. | 1 s |
 | `compare_other_families.py` | Table 7 and Section IX-C: comparison with type I, type II and general pentanomials, from the census files in `data/` (type II greedy counts from `data/other_families.json`). | 1 s |
-| `compare_multiplier.py` | Table 10 and Section IX-D (full multiplier and squaring at degrees 163 and 571), from `data/multiplier.json`. | 1 s |
+| `compare_multiplier.py` | Table 10 and Section IX-E (full multiplier and squaring at degrees 163 and 571, every irreducible member of both families; squaring minimized separately in each family), from `data/multiplier.json`. | 1 s |
 | `review_checks.py` | Checks added in v22 after the review: every row of `R'` is nonzero (hypothesis of Lemma 19), the reciprocal identity (9) and the quotient read from it, the special members at `m = 20, 100, 500` against the trinomial cost `2m-2`, irreducible trinomials in the 15 degrees of Table 8, and the word-level steps against the feedback stages of Zhou and Zhang. Argument `MMAX` (default 1100, quick checks 300). | 20 s (300), 45 s (1100) |
 | `compare_censuses.py` | Compares, polynomial by polynomial, the authors' census (`data/`) with the independent census (`independent/censo_table3_dados.json`), then recomputes Table 6 and the census numbers of Section IX with both constructions. | 1 s |
 
