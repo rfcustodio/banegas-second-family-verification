@@ -1541,6 +1541,16 @@ terms, and the ordering of intermediate XOR operations becomes increasingly
 relevant. The curves extending toward larger ratios correspond to fixed small
 values of $c$, such as $c=1$ and $c=2$, with increasing $m$.
 
+The same regularities hold beyond the range of \cref{obs:greedy}. We ran the
+greedy algorithm, with lexicographic tie-breaking, on all $11\,175$ members with
+$151\le m\le300$ and on all members of degrees $500$, $800$ and $1100$. For every
+generic member, the closed form was never more expensive; the greedy count was
+exactly $2m+3c-3$ when $b<2c$ and exactly $3m-c-3$ when $2c<b<6c$. For $b\ge6c$,
+the greedy algorithm needed more gates in $598$ of the $4\,163$ members with
+$151\le m\le300$ and in $36$ of the $299$ members of the three larger degrees, by
+up to $248$ and $994$ XOR gates, respectively. The fraction of such members
+decreases as $m$ grows, but the excess, when it occurs, becomes larger.
+
 The same comparison can be made for the polynomials reported in Banegas' thesis.
 \Cref{tab:thesis} lists the irreducible members of the second family at the NIST
 field degrees, including those reported in \cite[Tab.~17]{Banegas2015}.

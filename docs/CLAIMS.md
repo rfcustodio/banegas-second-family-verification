@@ -79,6 +79,7 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Obs. 18 (a)-(d) | never longer than greedy; 879 with `b < 2c` (`CX = 2m+3c-3`); 1,312 with `2c < b < 6c` (equal); 392 of 1,350 worse for `b >= 6c`, up to 112 | same | reproduced |
 | Obs. 18 (text) | random tie-breaking improved 212 generic members by at most 12 (an independent rerun gives 213 and 13), all with `b >= 6c`, closing the gap once | same | reproduced (the two figures come from different random seeds) |
 | Obs. 18 (text) | special members: greedy values of `R1`, `R2`; `12m/5-2` when `b = 3c` | same | reproduced |
+| Text after Fig. 2 | the same regularities for all 11,175 members with `151 <= m <= 300` and for `m = 500, 800, 1100`; for `b >= 6c` the greedy count is larger in 598 of 4,163 and 36 of 299 members, by up to 248 and 994 | quick: `verification/analyze_greedy_beyond150.py` (from `data/greedy_beyond150.txt`); regeneration: `make greedy-beyond150` | reproduced |
 | Fig. 2 | `CX - (3m-c-3)` versus `b/c` | `generator/make_figures.py` from `data/paar150.txt` | regenerated |
 | Table 4 | 8 members at the NIST degrees: `dXOR`, `CX`, `3m-c-3`, depth, `3m-3-N` | quick: `checks/reproduce_tables.py`, `checks/verify_chain.py`; full | all entries reproduced |
 | Text | Boyar and Peralta: `f_{5,2}`, `f_{4,3}`, `f_{3,2}` give 22, 24, 16 | full: `verification/boyar_peralta.py` | reproduced |
