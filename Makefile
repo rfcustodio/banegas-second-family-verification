@@ -22,7 +22,7 @@ verify-all:       ## complete verification up to m = 1100, as in the paper (gcc,
 sat-proofs:       ## build CaDiCaL and drat-trim at the recorded commits, regenerate and check the 12 DRAT certificates (about 5 min)
 	rm -rf build-sat && mkdir build-sat
 	cd build-sat && git clone -q https://github.com/arminbiere/cadical.git && cd cadical && git checkout -q c607304 && ./configure > /dev/null && $(MAKE) -s > /dev/null
-	cd build-sat && git clone -q https://github.com/marijnheule/drat-trim.git && cd drat-trim && git checkout -q 2e3b2dc && $(MAKE) -s > /dev/null
+	cd build-sat && git clone -q https://github.com/marijnheule/drat-trim.git && cd drat-trim && git checkout -q 2e3b2dc && gcc -O2 -std=c99 -D_DEFAULT_SOURCE -o drat-trim drat-trim.c
 	CADICAL=$(CURDIR)/build-sat/cadical/build/cadical sh verification/check_sat_proofs.sh build-sat/none $(CURDIR)/build-sat/drat-trim/drat-trim
 
 greedy-beyond150: ## regenerate data/greedy_beyond150.txt (greedy beyond m = 150; about 4 min) and check it
