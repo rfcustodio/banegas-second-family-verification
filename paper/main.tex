@@ -83,24 +83,24 @@ Engineering Research Council of Canada (NSERC) under Grant RGPIN-2024-05342.}
 
 \begin{abstract}
 In polynomial-basis arithmetic over \(\F_{2^m}\), the defining irreducible polynomial
-determines the cost of modular reduction and hence of field multiplication. Using a greedy XOR-counting heuristic, Banegas identified two families of
-pentanomials with low reduction cost. The first family has since been analyzed, but the
-second one,
-\(f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1\) with \(b>c\ge1\), was left open because its
-reduction has a less transparent structure. This paper closes that gap. For \(m=b+2c\), we
-derive a closed form for the quotient of the polynomial division, written in terms of comb
-sums of stride \(3c\), and turn it into an explicit reduction circuit with at most
-\(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). A second construction splits the reduction into \(c\) independent chains and
-uses \(3m-3-N(b,c)\) XOR gates, where \(N(b,c)\approx(m-c)/3\); it is shorter whenever
-\(b\ge4c+1\). Both constructions approach \(8m/3\) gates, at opposite ends of the
-range of \(c\). Members built from five small base pentanomials split into independent
-strips; composing strip programs that a SAT solver proves optimal for the base
-polynomials gives even shorter circuits. We
-verified both constructions symbolically for all 201,117 members with \(m\le1100\). An
-irreducibility census for \(5\le m\le1100\) found irreducible members in 720 degrees, 288 of
-which have no irreducible trinomial. Wherever both families have irreducible members, in 405
-degrees, the reduction bounds of the second family are lower, by \(9.7\%\) on average. At the NIST degrees 163
-and 571, the best members need 440 and 1,528 XOR gates for the reduction, against 571 and 2,003 for the NIST pentanomials.
+determines the cost of modular reduction. Using a greedy XOR-counting heuristic, Banegas
+identified two families of pentanomials with low reduction cost. The first has since been
+analyzed, but the second,
+\(f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1\) with \(b>c\ge1\), was left open. This paper
+closes that gap. For \(m=b+2c\), we derive a closed form for the quotient of the polynomial
+division, in terms of comb sums of stride \(3c\), and turn it into a reduction circuit with
+at most \(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). A second
+construction splits the reduction into \(c\) independent chains and uses \(3m-3-N(b,c)\)
+XOR gates, where \(N(b,c)\approx(m-c)/3\); it is shorter whenever \(b\ge4c+1\). Both
+approach \(8m/3\) gates, at opposite ends of the range of \(c\). Members built from five
+small base pentanomials split into independent strips, and strip programs proved optimal
+by a SAT solver give even shorter circuits. We verified both constructions symbolically
+for all 201,117 members with \(m\le1100\). An irreducibility census for \(5\le m\le1100\)
+found irreducible members in 720 degrees, 288 of which have no irreducible trinomial. In
+the 405 degrees where both families have irreducible members, the reduction bounds of the
+second family are lower, by \(9.7\%\) on average. At the NIST degrees 163 and 571, the best
+members need 440 and 1,528 XOR gates for the reduction, against 571 and 2,003 for the NIST
+pentanomials.
 \end{abstract}
 
 \begin{keywords}
@@ -221,9 +221,9 @@ with a SAT solver (\cref{thm:chain,tab:exact}).
 operations and a gate-level variant of lower depth (\cref{sec:word}).
 
 \item We compare the proposed reduction with the
-greedy Conta-XOR algorithm. For generic members of the family, the closed-form
-construction is never more expensive, accounts for the counts reported by
-Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
+greedy Conta-XOR algorithm. For the generic members in the evaluated range, the
+closed-form construction is never more expensive; it accounts for the counts
+reported by Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
 (\cref{sec:greedy}).
 
 \item We perform an irreducibility census for degrees
@@ -383,8 +383,9 @@ Let $b>c\ge1$ be integers and set $m=b+2c$. The pentanomials
 \[
   f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1
 \]
-form \emph{Banegas' second family}. Throughout the paper, $n=m-2$ denotes the
-degree of the polynomial $H$ in \eqref{eq:split}.
+form \emph{Banegas' second family}. Throughout the paper, $n=m-2$ denotes an
+upper bound on the degree of the polynomial $H$ in \eqref{eq:split}, that is,
+the index of its highest coefficient $h_n$.
 \end{definition}
 
 The restriction $b>c$, adopted in \cite{Banegas2015}, ensures that the five
@@ -1726,8 +1727,11 @@ symbolically against the reduction matrix, and by a DRAT certificate of
 unsatisfiability for one gate less, produced by CaDiCaL~3.0.1 and checked with
 drat-trim; a program with fewer gates can always be padded with unused gates, so
 this rules out every shorter program. Values without such a certificate are
-marked as upper bounds. The programs, the CNF instances and the certificates are
-in the repository given at the end of the paper.
+marked as upper bounds. The programs and the CNF instances are in the repository
+given at the end of the paper. The certificates, about $46$~MB compressed, are
+distributed as a release asset of the same repository; their SHA-256 hashes are
+recorded with the CNF instances, and a script checks them with drat-trim or
+regenerates them.
 \Cref{tab:exact} summarizes the results. For the base polynomials of
 \cref{def:special}, the values of \cref{tab:base} are optimal. For every small
 generic member we could solve, however, the optimum lies at least one gate below
@@ -1779,9 +1783,14 @@ smallest at the two ends of the range of $c$, where it approaches $\tfrac83m$,
 and largest near $b=4c$, where it is about $\tfrac{17}6m$. Special members can
 do better (\cref{tab:base}), but they exist only in degrees divisible by $4$,
 $5$, $6$ or $7$, and they are irreducible only in the few degrees described by
-\cref{prop:specirr}. For a given field degree, the best choice is the
-irreducible member that minimizes $\min\{3m-c-3,\,3m-3-N(b,c)\}$, and it usually
-has $c$ either close to $m/3$ or very small.
+\cref{prop:specirr}. For a given field degree, the best choice under the
+constructions considered here is the irreducible member with the smallest
+available reduction cost, including the strip bound \eqref{eq:specialbound}
+whenever it applies. At $m=20$, for instance, the best generic member $f_{18,1}$
+needs $51$ XOR gates, whereas the special member $f_{10,5}$ needs $34$
+(\cref{tab:specirr}). Among generic members, this amounts to minimizing
+$\min\{3m-c-3,\,3m-3-N(b,c)\}$, and the minimizer usually has $c$ either close
+to $m/3$ or very small.
 
 For Banegas' first family, the corresponding bound is $3m-2$, independently of
 $b$ and $c$, except for the case $m=5c$. Thus, when comparing the
@@ -2064,17 +2073,34 @@ each size, takes the cheapest of the schoolbook product, the Karatsuba split and
 Bernstein's refined split \cite{Bernstein2009}; it needs $12\,001$ XOR and
 $6\,203$ AND gates for $m=163$, and $90\,703$ XOR and $47\,916$ AND gates for
 $m=571$. The absolute saving of the reduction carries over to the multiplier
-unchanged, but in relative terms it becomes small: about $1\%$ against the NIST
-pentanomials with Karatsuba, and less with the schoolbook product. Squaring is
-different. The square of a polynomial over $\F_2$ costs no gates before the
-reduction, so the reduction of a polynomial with only even-degree terms is the
-whole cost of a squaring. Squarings dominate inversion by the method of Itoh and
-Tsujii \cite{ItohTsujii1988}, and a general bit-parallel squaring for low-weight
-moduli is given in \cite{NiehuesCP2018}. For squaring, we compare the greedy counts of the
-reduction matrices restricted to the even inputs, the same measure for every
-polynomial: the second family saves $13.1\%$ and $4.4\%$ against the first
-family, and $29.7\%$ and $24.6\%$ against the NIST pentanomials, at degrees
-$163$ and $571$.
+unchanged, but in relative terms it becomes small: with Karatsuba, the best
+member of the second family saves $1.04\%$ and $0.51\%$ against the NIST
+pentanomials at degrees $163$ and $571$, and less with the schoolbook product.
+
+Squaring is different. The square of a polynomial over $\F_2$ costs no gates
+before the reduction, so the reduction of a polynomial with only even-degree
+terms is the whole cost of a squaring. Squarings dominate inversion by the
+method of Itoh and Tsujii \cite{ItohTsujii1988}, and a general bit-parallel
+squaring for low-weight moduli is given in \cite{NiehuesCP2018}. For squaring,
+we use the greedy count of the reduction matrix restricted to the even inputs,
+with lexicographic tie-breaking, the same measure for every polynomial. The
+modulus with the smallest bound for the reduction of a product need not be the
+one with the smallest squaring count, so \cref{tab:mult} lists every irreducible
+member of the two families at these degrees and the squaring comparison is made
+separately. At degree $163$, the only irreducible member of the second family
+needs $173$ XOR gates. The first family has two irreducible members with the
+same reduction bound $3m-2$, and one of them, $x^{163}+x^{100}+x^{63}+x^{37}+1$,
+needs only $162$, so here the second family needs $6.8\%$ more gates than the
+first; both are below the $246$ gates of the NIST pentanomial, by $29.7\%$ and
+$34.1\%$. At degree $571$ the order is reversed: two members of the second
+family, with $c=106$ and $c=22$, need $570$ XOR gates, against $679$ for the
+only member of the first family and $861$ for the NIST pentanomial, a saving of
+$16.1\%$ and $33.8\%$. Neither of them is the member with the smallest reduction
+bound, $f_{207,182}$, which needs $649$. The squaring cost therefore depends on
+the modulus and not only on the family, and neither family is better at both
+degrees. These counts are heuristic upper bounds, not proven minima: with $20$
+randomized runs per polynomial, one of them improves, the member with $c=106$,
+to $549$.
 
 
 \begin{table}[t]
@@ -2111,23 +2137,29 @@ $m$ & NIST & trinomial & first family & second family\\
 \begin{table}[t]
 \centering\small
 \caption{XOR gates of a full multiplier and of a squaring at degrees $163$ and
-$571$, for the best member of each family and for the NIST pentanomial.
-Multiplier: product plus reduction, with the schoolbook product or with the
-recursive Karatsuba multiplier described in the text. Squaring: greedy count of
-the reduction of a square.}
+$571$, for every irreducible member of the two families, identified by $(b,c)$,
+and for the NIST pentanomial. Reduction: the better of \cref{thm:main,thm:chain}
+for the second family, $3m-2$ for the first family \cite{BCP2019}, greedy count
+for the NIST pentanomial. Multiplier: product plus reduction, with the
+schoolbook product or with the recursive Karatsuba multiplier described in the
+text. Squaring: greedy count of the reduction of a square, with lexicographic
+tie-breaking. The lowest value of each column and degree is in bold.}
 \label{tab:mult}
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{@{}r l r r r r@{}}
 \toprule
 $m$ & polynomial & reduction & schoolb. & Karatsuba & square\\
 \midrule
-163 & second family & \textbf{440} & \textbf{26\,684} & \textbf{12\,441} & \textbf{173}\\
-    & first family  & 487 & 26\,731 & 12\,488 & 199\\
-    & NIST          & 571 & 26\,815 & 12\,572 & 246\\
+163 & second $(71,46)$ & \textbf{440} & \textbf{26\,684} & \textbf{12\,441} & 173\\
+    & first $(74,15)$  & 487 & 26\,731 & 12\,488 & 199\\
+    & first $(63,37)$  & 487 & 26\,731 & 12\,488 & \textbf{162}\\
+    & NIST             & 571 & 26\,815 & 12\,572 & 246\\
 \midrule
-571 & second family & \textbf{1\,528} & \textbf{326\,428} & \textbf{92\,231} & \textbf{649}\\
-    & first family  & 1\,711 & 326\,611 & 92\,414 & 679\\
-    & NIST          & 2\,003 & 326\,903 & 92\,706 & 861\\
+571 & second $(207,182)$ & \textbf{1\,528} & \textbf{326\,428} & \textbf{92\,231} & 649\\
+    & second $(359,106)$ & 1\,604 & 326\,504 & 92\,307 & \textbf{570}\\
+    & second $(527,22)$  & 1\,534 & 326\,434 & 92\,237 & \textbf{570}\\
+    & first $(218,135)$  & 1\,711 & 326\,611 & 92\,414 & 679\\
+    & NIST               & 2\,003 & 326\,903 & 92\,706 & 861\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2173,9 +2205,15 @@ the algebraic result can be adapted to different implementation models. These
 comparisons concern reduction costs and do not, by themselves, establish an
 advantage in overall hardware area, energy consumption or software execution
 time; the best modulus depends on the architecture and on the operation
-\cite{Scott2007}. In a full multiplier the saving is small in relative terms, about $1\%$
-with a Karatsuba product (\cref{tab:mult}); it matters most where the reduction
-dominates, as in squaring and therefore in inversion.
+\cite{Scott2007}. In a full multiplier the saving is small in relative terms,
+between $0.5\%$ and $1.0\%$ against the NIST pentanomials with a Karatsuba
+product (\cref{tab:mult}). The reduction matters most where it dominates, as in
+squaring and therefore in inversion, but there the best modulus is not always
+the one with the smallest reduction bound, and neither family is uniformly
+better: by the greedy count, a member of the first family has the cheapest
+squaring at degree $163$ and two members of the second family at degree $571$.
+The gain in inversion therefore depends on the modulus and on the sequence of
+operations, not only on the family.
 
 Several questions remain open. The chain construction matches the best programs
 found with a SAT solver for the small members with $c=1$, but for members
@@ -2196,12 +2234,12 @@ Mastrovito-type multipliers \cite{Mastrovito1989,ReyhaniHasan2004}, and
 evaluating the resulting circuits under realistic area and delay constraints
 would help determine their practical advantages.
 
-The generators for both reduction algorithms, the symbolic verification code, the SAT models, the
-optimal programs with their DRAT certificates, the irreducibility census and the scripts used to produce the experimental results
-are available at
-\url{https://github.com/rfcustodio/banegas-second-family-verification}. These
-materials support independent verification and reproduction of the reported
-results.
+The generators for both reduction algorithms, the symbolic verification code,
+the SAT models, the optimal programs, the irreducibility census and the scripts
+used to produce the experimental results are available at
+\url{https://github.com/rfcustodio/banegas-second-family-verification}. The DRAT
+certificates are a release asset of the same repository. These materials support
+independent verification and reproduction of the reported results.
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}

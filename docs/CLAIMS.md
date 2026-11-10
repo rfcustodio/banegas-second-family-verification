@@ -1,6 +1,6 @@
 # Claims of the paper and how each one is verified
 
-Numbering follows `paper/main.pdf` (IEEE Access version, v22). All costs compared are costs of explicit constructions or greedy counts, that is, upper bounds on `Red(f)`. "Proof" means the argument is
+Numbering follows `paper/main.pdf` (IEEE Access version, v25). All costs compared are costs of explicit constructions or greedy counts, that is, upper bounds on `Red(f)`. "Proof" means the argument is
 in the paper; the scripts check the statement independently of the proof.
 
 There are three levels of checks:
@@ -19,7 +19,7 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 
 | Item | Statement (short) | Kind | Verified by | Result |
 |---|---|---|---|---|
-| Def. 1 | `f_{b,c} = x^(b+2c)+x^(b+c)+x^b+x^c+1`, `m = b+2c`, `n = m-2` | definition | - | - |
+| Def. 1 | `f_{b,c} = x^(b+2c)+x^(b+c)+x^b+x^c+1`, `m = b+2c`, `n = m-2` (upper bound on the degree of `H`) | definition | - | - |
 | Prop. 2 (i)-(v) | `x^m ≡ (x^b+1)(x^c+1)`; `(x^c+1) f = x^(b+3c)+x^b+x^(2c)+1`; `c <= floor((m-1)/3)`, `b ≡ m mod 2`; `f = G(x^γ)`; `b = 2c` equally spaced | proof + check | quick: `checks/verify_statements.py` | all members `m <= 300`: PASS |
 | Def. 3 | special members: base polynomial `G` of degree `κ <= 7` (`b/c` in `{3/2, 2, 3, 4, 5}`) | definition | - | - |
 | Prop. 4 (i) | reduction splits into `γ` strips modulo `G`; `Red(f) <= (γ-1) R1(G) + R2(G)` | proof + check | full: `verification/alg1verify.c` (strip check), `verification/compose_strips.py`, `verification/compose_sat.py` | PASS |
@@ -105,7 +105,7 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Section IX-C | second family has the lower bound in all 288 degrees where it has members (5.6% to 33.2%, mean 11.7%); 484 degrees covered by the four families, 15 only by the second; no member of `x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1` in these degrees | same | reproduced |
 | Table 8 | the 15 irreducible special members with `5 <= m <= 1100`: closed form, strip bound, best generic member | quick: `checks/reproduce_tables.py`; `generator/strips.py --special 1100` | all entries reproduced |
 | Section IX-E (text) | all 15 degrees of Table 8 have irreducible trinomials; the trinomial cost `2m-2` is lower in 12 of them; at `m = 20, 100, 500` the equally spaced members need 34, 174, 874 against 38, 198, 998 | quick and full: `checks/review_checks.py` | PASS |
-| Table 10 | full multiplier (schoolbook and recursive Karatsuba product) and squaring at 163 and 571; Karatsuba product 12,001 / 90,703 XOR and 6,203 / 47,916 AND; squaring savings 13.1%, 4.4% (first family) and 29.7%, 24.6% (NIST); about 1% for the Karatsuba multiplier | quick: `checks/compare_multiplier.py`; full: `verification/multiplier.py` (`karatsuba.py`, `greedy sq`) | reproduced |
+| Table 10 | full multiplier (schoolbook and recursive Karatsuba product) and squaring at 163 and 571, for every irreducible member of the two families and the NIST pentanomial; Karatsuba product 12,001 / 90,703 XOR and 6,203 / 47,916 AND; Karatsuba multiplier saving against NIST 1.04% / 0.51%; squaring minimized separately in each family: 173 (second), 162 (first), 246 (NIST) at 163, so the second family needs 6.8% more gates than the first; 570 (second, `c = 106` and `c = 22`), 679 (first), 861 (NIST) at 571, savings 16.1% and 33.8%; 649 for `f_{207,182}`; with 20 randomized runs only the member with `c = 106` improves, to 549 | quick: `checks/compare_multiplier.py`; full: `verification/multiplier.py` (`karatsuba.py`, `greedy sq`) | reproduced |
 | Table 9 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7%; type I and type II members at the NIST degrees (text) | quick: `checks/reproduce_tables.py` | reproduced |
 
 ## Abstract

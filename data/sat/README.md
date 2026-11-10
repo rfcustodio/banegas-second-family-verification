@@ -21,7 +21,8 @@ Certificates: CaDiCaL 3.0.1 (github.com/arminbiere/cadical, commit `c607304`) wi
 
 * `python3 checks/verify_sat_programs.py` (standard library, 1 s): evaluates every program
   symbolically against the reduction matrix, checks the gate counts against the paper and the
-  CNF hashes. Part of `./run_quick_checks.sh`.
+  CNF hashes. Part of `./run_quick_checks.sh`. The line "DRAT s VERIFIED" that it prints is the
+  verdict recorded in `evidence.json`; this script does not run drat-trim.
 * `verification/check_sat_proofs.sh PROOF_DIR DRAT_TRIM` (about 2 min): checks the 12 DRAT
   proofs. The proofs (46 MB compressed, up to 113 MB each uncompressed) are not in git; take
   them from the release asset `sat-proofs-v22.tar`, or let the script regenerate them with

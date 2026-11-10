@@ -46,7 +46,7 @@ echo "== Other pentanomial families (Section IX-C, Table 7)"
 ./census esp 5 1100 > esp.txt
 ./census pmin 5 1100 > pmin.txt
 python3 other_families.py
-echo "== Full multiplier and squaring at degrees 163 and 571 (Section IX-D, Table 10)"
+echo "== Full multiplier and squaring at degrees 163 and 571, every irreducible member of both families (Section IX-E, Table 10)"
 python3 multiplier.py
 echo "== Checks added in response to the review (Lemma 19 hypothesis, eq. (9), special members versus trinomials, word-level steps)"
 python3 ../checks/review_checks.py
