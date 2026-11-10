@@ -118,11 +118,12 @@ Both run automatically on GitHub after every push (tab **Actions**).
 |---|---|---|
 | Proposition 2, Lemma 5, Theorems 7 and 8, Proposition 9, Corollaries 10 and 16, Example 11 | `python3 checks/verify_statements.py` | 10 s |
 | Lemma 12, Theorem 13, Example 14, Proposition 15 (chain construction) | `python3 checks/verify_chain.py` | 3 s |
-| Tables 4, 8 and 9, Proposition 19, numbers of Section IX | `python3 checks/reproduce_tables.py` | 30 s |
+| Tables 4, 8 and 9, Proposition 20, numbers of Section IX | `python3 checks/reproduce_tables.py` | 30 s |
 | Observation 18 and Figure 2 (comparison with Conta-XOR) | `python3 checks/analyze_paar150.py` | 1 s |
 | Table 6 (census up to degree 1100) and agreement of the two censuses | `python3 checks/compare_censuses.py` | 1 s |
 | Table 7 (type I, type II and general pentanomials) | `python3 checks/compare_other_families.py` | 1 s |
 | Table 10 (full multiplier and squaring) | `python3 checks/compare_multiplier.py` (recomputed by `python3 verification/multiplier.py`, 2 min) | 1 s |
+| Lemma 19, equation (9), special members versus trinomials, word-level steps (added after the review) | `python3 checks/review_checks.py` | 45 s |
 | Table 2 and Table 5 (SAT) | `cd verification && python3 exact_small.py && python3 exact_base.py && python3 compose_sat.py && python3 heuristic_small.py` | 2 min |
 | Proposition 17 (low-depth variant) | `python3 generator/lowdepth.py --all 260` | 45 s |
 | One particular polynomial, e.g. `b = 71, c = 46` | `python3 generator/fam2.py 71 46` (Algorithm 1), `python3 algorithm2/alg2prog.py 71 46` (Algorithm 2) | instant |

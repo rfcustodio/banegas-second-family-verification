@@ -209,3 +209,12 @@ m=163 saving vs first: reduction 9.7%  Karatsuba multiplier 0.38%  squaring 13.1
 m=163 saving vs NIST: reduction 22.9%  Karatsuba multiplier 1.04%  squaring 29.7%
 m=571 saving vs first: reduction 10.7%  Karatsuba multiplier 0.20%  squaring 4.4%
 m=571 saving vs NIST: reduction 23.7%  Karatsuba multiplier 0.51%  squaring 24.6%
+== Checks added in response to the review (Lemma 19 hypothesis, eq. (9), special members versus trinomials, word-level steps)
+[1] members 4<=m<=1100: 201117; with a zero row of R': 0
+[2] reciprocal identity and quotient, m<=200: failures 0
+[3] degrees of Table 8 without irreducible trinomial: []
+    m=20: 7m/4-1=34  2m-2=38
+    m=100: 7m/4-1=174  2m-2=198
+    m=500: 7m/4-1=874  2m-2=998
+[4] ceil(log2(m/c)) - nu over members 5<=m<=1100: {1: 99943, 2: 101173}
+ALL OK

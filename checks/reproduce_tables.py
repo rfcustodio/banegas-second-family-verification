@@ -58,18 +58,18 @@ expect('degrees = 0 mod 8 with a second-family member', len({m for m, b, c in F2
 for m, b, c, cost in ((48, 18, 15, 126), (144, 54, 45, 384)):
     P, out = program(b, c)
     expect(f'x^{m}+x^{b+c}+x^{b}+x^{c}+1: irreducible, gates', (irredutivel(poly(m, b + c, b, c, 0)), len(P.gates), check(b, c, P, out)), (True, cost, True))
-print('\nTable 8 (irreducible special members) and Proposition 19')
+print('\nTable 8 (irreducible special members) and Proposition 20')
 from math import gcd
 BASE = {(2, 1): (6, 7), (3, 1): (10, 12), (4, 1): (14, 15), (5, 1): (16, 18), (3, 2): (16, 18)}
 Nc = lambda b, c: c * ((b + c) // (3 * c)) + max(0, (b + c) % (3 * c) - 2 * c)
 spec = [(m, b, c) for m, b, c in F2all if (b // gcd(b, c), c // gcd(b, c)) in BASE]
-def predicted(m, b, c):          # Proposition 19
+def predicted(m, b, c):          # Proposition 20
     g = gcd(b, c); base = (b // g, c // g)
     pf = {p for p in range(2, g + 1) if g % p == 0 and all(p % q for q in range(2, p))}
     return (base == (2, 1) and pf <= {5}) or (base == (3, 1) and pf <= {31}) or (base == (4, 1) and pf <= {3, 7})
 allspec = [(g * (bp + 2 * cp), g * bp, g * cp) for (bp, cp) in BASE for g in range(1, 1101 // (bp + 2 * cp) + 1)
            if 5 <= g * (bp + 2 * cp) <= 1100]
-expect('special members in the census = members predicted by Proposition 19',
+expect('special members in the census = members predicted by Proposition 20',
        sorted(spec) == sorted(x for x in allspec if predicted(*x)), True)
 T7 = {5: (11, 10, None), 6: (14, 14, None), 18: (48, 44, None), 20: (52, 34, 51), 42: (116, 104, None), 54: (150, 134, 144),
       100: (272, 174, 269), 126: (354, 314, None), 155: (431, 370, 411), 162: (456, 404, 439), 294: (830, 734, None),

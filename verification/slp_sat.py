@@ -7,10 +7,13 @@ from pysat.formula import IDPool
 from pysat.card import CardEnc, EncType
 from pysat.solvers import Cadical153
 
-def decide(targets, n, K, timeout=None):
+def encode(targets, n, K):
+    """CNF for 'a program with K XOR gates computes the targets'. Returns (clauses,
+    pool, T), with T the sorted distinct targets of weight >= 2. Variables: ('a',i,p) and
+    ('b',i,p) select the operands of gate i among the n inputs and the earlier gates
+    (p < n + i, A index < B index); ('x',i,t) is bit t of the value of gate i;
+    ('o',j,i) says that target j is gate i."""
     T = sorted({t for t in targets if bin(t).count('1') >= 2})
-    if not T: return True
-    if K < len(T): return False
     pool = IDPool(); cl = []
     X = lambda i, t: pool.id(('x', i, t))
     A = lambda i, p: pool.id(('a', i, p))
@@ -20,9 +23,6 @@ def decide(targets, n, K, timeout=None):
         for sel in (A, B):
             lits = [sel(i, p) for p in range(S)]
             cl += CardEnc.equals(lits=lits, bound=1, vpool=pool, encoding=EncType.seqcounter).clauses
-        for p in range(S):
-            for q in range(p + 1):
-                cl.append([-A(i, q if False else p), -B(i, q)]) if False else None
         # A index < B index
         for p in range(S):
             for q in range(0, p + 1):
@@ -46,7 +46,23 @@ def decide(targets, n, K, timeout=None):
         for i in range(K):
             for t in range(n):
                 cl.append([-os_[i], X(i, t) if (tv >> t) & 1 else -X(i, t)])
-    # symmetry breaking: every gate is used (by a later gate or an output) -- optional skip
+    return cl, pool, T
+
+def decode(model, pool, n, K):
+    """Operand pairs (p, q) of the K gates from a satisfying assignment."""
+    pos = set(l for l in model if l > 0); prog = []
+    for i in range(K):
+        S = n + i
+        pa = [p for p in range(S) if pool.id(('a', i, p)) in pos][0]
+        pb = [p for p in range(S) if pool.id(('b', i, p)) in pos][0]
+        prog.append((pa, pb))
+    return prog
+
+def decide(targets, n, K, timeout=None):
+    T = sorted({t for t in targets if bin(t).count('1') >= 2})
+    if not T: return True
+    if K < len(T): return False
+    cl, pool, T = encode(targets, n, K)
     with Cadical153(bootstrap_with=cl) as s:
         return s.solve()
 

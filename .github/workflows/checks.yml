@@ -30,3 +30,12 @@ jobs:
         run: pip install python-sat
       - name: Run verification/run_all.sh and compare with expected_output.txt
         run: make verify-all
+
+  sat-certificates:
+    # Regenerates the 12 DRAT proofs of the SAT optimality claims (Tables 2 and 5)
+    # with CaDiCaL at the recorded commit and checks them with drat-trim (about 5 minutes).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the tools, regenerate and check the certificates
+        run: make sat-proofs

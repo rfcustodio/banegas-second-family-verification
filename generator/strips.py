@@ -117,7 +117,7 @@ def main():
 
 
 # ---------------------------------------------------------------------------
-# Table 8: irreducible special members (Proposition 19) and their costs.
+# Table 8: irreducible special members (Proposition 20) and their costs.
 
 def mulmod(a, b, f):
     r, fb = 0, f.bit_length()
