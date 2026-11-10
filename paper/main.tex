@@ -1720,6 +1720,14 @@ gates and leaves a circuit for $R'$. Hence $\Red(f)\ge m+\Red(R')$.
 
 The hypothesis $\ell_i\ne0$ matters: for a modulus whose reduction matrix had a
 zero high row, the corresponding output would cost no gate.
+The programs were found with CaDiCaL~1.5.3 through PySAT. Each value stated as
+optimal in \cref{tab:base,tab:exact} is backed by the program itself, checked
+symbolically against the reduction matrix, and by a DRAT certificate of
+unsatisfiability for one gate less, produced by CaDiCaL~3.0.1 and checked with
+drat-trim; a program with fewer gates can always be padded with unused gates, so
+this rules out every shorter program. Values without such a certificate are
+marked as upper bounds. The programs, the CNF instances and the certificates are
+in the repository given at the end of the paper.
 \Cref{tab:exact} summarizes the results. For the base polynomials of
 \cref{def:special}, the values of \cref{tab:base} are optimal. For every small
 generic member we could solve, however, the optimum lies at least one gate below
@@ -2189,7 +2197,7 @@ evaluating the resulting circuits under realistic area and delay constraints
 would help determine their practical advantages.
 
 The generators for both reduction algorithms, the symbolic verification code, the SAT models, the
-irreducibility census and the scripts used to produce the experimental results
+optimal programs with their DRAT certificates, the irreducibility census and the scripts used to produce the experimental results
 are available at
 \url{https://github.com/rfcustodio/banegas-second-family-verification}. These
 materials support independent verification and reproduction of the reported

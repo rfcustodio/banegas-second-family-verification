@@ -1,0 +1,367 @@
+{
+ "tools": {
+  "pysat": "1.9.dev21",
+  "pysat solver": "Cadical153 (CaDiCaL 1.5.3)",
+  "standalone CaDiCaL": "3.0.1",
+  "drat-trim": "github.com/marijnheule/drat-trim"
+ },
+ "encoding": "verification/slp_sat.py, function encode",
+ "instances": [
+  {
+   "name": "f_2_1",
+   "table": "Table 5 and Table 2 (R2)",
+   "low inputs": 4,
+   "high inputs": 3,
+   "distinct targets": 2,
+   "claimed gates": 6,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 5,
+   "cnf": {
+    "file": "f_2_1_K5.cnf.gz",
+    "variables": 21,
+    "clauses": 56,
+    "sha256 (uncompressed)": "aa69110d085cb364e1f82ddcdf3bb5ffbfbb7e5db6359b2878246e04c49557d0"
+   },
+   "proof": {
+    "file": "f_2_1_K5.drat.xz",
+    "bytes (uncompressed)": 86,
+    "sha256 (uncompressed)": "db8465ee391dfcce32e294e65e9de3746bcb34a9192c1984ccd22c31a9ef5e91"
+   },
+   "cadical (s)": 0.0,
+   "drat-trim (s)": 0.1,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_3_1",
+   "table": "Table 5 and Table 2 (R2)",
+   "low inputs": 5,
+   "high inputs": 4,
+   "distinct targets": 5,
+   "claimed gates": 10,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 9,
+   "cnf": {
+    "file": "f_3_1_K9.cnf.gz",
+    "variables": 148,
+    "clauses": 555,
+    "sha256 (uncompressed)": "961137069c1c6c94261e5b3dc422d29b1289f28b635fa5ef28b7b9983720c296"
+   },
+   "proof": {
+    "file": "f_3_1_K9.drat.xz",
+    "bytes (uncompressed)": 708,
+    "sha256 (uncompressed)": "45de6da3cdeea9f5ab2e9e13940e27802513c26ba7a82d96a242bbec941cea58"
+   },
+   "cadical (s)": 0.0,
+   "drat-trim (s)": 0.1,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_4_1",
+   "table": "Table 5 and Table 2 (R2)",
+   "low inputs": 6,
+   "high inputs": 5,
+   "distinct targets": 6,
+   "claimed gates": 14,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 13,
+   "cnf": {
+    "file": "f_4_1_K13.cnf.gz",
+    "variables": 357,
+    "clauses": 1686,
+    "sha256 (uncompressed)": "74bda3996eff2dba47e4dcf891b13988ebc036460d1fcbda2886cf50beb072a1"
+   },
+   "proof": {
+    "file": "f_4_1_K13.drat.xz",
+    "bytes (uncompressed)": 139913,
+    "sha256 (uncompressed)": "02fcd8ab54332c54ea5f64f0074b09883a5136fef86fce4b75288a2bbd36f269"
+   },
+   "cadical (s)": 0.0,
+   "drat-trim (s)": 0.1,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_5_1",
+   "table": "Table 5 and Table 2 (R2)",
+   "low inputs": 7,
+   "high inputs": 6,
+   "distinct targets": 7,
+   "claimed gates": 16,
+   "optimality claimed": true,
+   "solve K (s)": 0.1,
+   "program check": "PASS",
+   "UNSAT at": 15,
+   "cnf": {
+    "file": "f_5_1_K15.cnf.gz",
+    "variables": 488,
+    "clauses": 2611,
+    "sha256 (uncompressed)": "9c2c48d102e819e23215124525e061e8051ff42af21ba1dbcd22a004444e757a"
+   },
+   "proof": {
+    "file": "f_5_1_K15.drat.xz",
+    "bytes (uncompressed)": 1274637,
+    "sha256 (uncompressed)": "da38ee743c15d72f286b61508983c062883c2673d80eea29c79daa6fd201bf76"
+   },
+   "cadical (s)": 0.2,
+   "drat-trim (s)": 0.3,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_3_2",
+   "table": "Table 5 and Table 2 (R2)",
+   "low inputs": 7,
+   "high inputs": 6,
+   "distinct targets": 7,
+   "claimed gates": 16,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 15,
+   "cnf": {
+    "file": "f_3_2_K15.cnf.gz",
+    "variables": 488,
+    "clauses": 2611,
+    "sha256 (uncompressed)": "31fa88adeb6147e52e526d40323cee50320cabceba7d29eabf2f01f93c20a4e3"
+   },
+   "proof": {
+    "file": "f_3_2_K15.drat.xz",
+    "bytes (uncompressed)": 1697548,
+    "sha256 (uncompressed)": "6eedabe5c57bf7958f5f593d98193645472353666401aebd1de7c678582bb001"
+   },
+   "cadical (s)": 0.3,
+   "drat-trim (s)": 0.3,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_6_1",
+   "table": "Table 5",
+   "low inputs": 8,
+   "high inputs": 7,
+   "distinct targets": 8,
+   "claimed gates": 19,
+   "optimality claimed": true,
+   "solve K (s)": 0.2,
+   "program check": "PASS",
+   "UNSAT at": 18,
+   "cnf": {
+    "file": "f_6_1_K18.cnf.gz",
+    "variables": 730,
+    "clauses": 4478,
+    "sha256 (uncompressed)": "fb2f4a696a3550ab570a4dd21b34172f9b7f6f54d562003bbecc823388463378"
+   },
+   "proof": {
+    "file": "f_6_1_K18.drat.xz",
+    "bytes (uncompressed)": 14185195,
+    "sha256 (uncompressed)": "d54ac86ff8ae1e3ac65d4e8c57015e3b989fb300a677a78f25e63cc3002cfd96"
+   },
+   "cadical (s)": 2.8,
+   "drat-trim (s)": 2.2,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_5_2",
+   "table": "Table 5",
+   "low inputs": 9,
+   "high inputs": 8,
+   "distinct targets": 9,
+   "claimed gates": 21,
+   "optimality claimed": true,
+   "solve K (s)": 0.9,
+   "program check": "PASS",
+   "UNSAT at": 20,
+   "cnf": {
+    "file": "f_5_2_K20.cnf.gz",
+    "variables": 913,
+    "clauses": 6169,
+    "sha256 (uncompressed)": "53ffb885481f7927c515823b5928a6db532a8cf2850540cfed1dc6e49c8b78dd"
+   },
+   "proof": {
+    "file": "f_5_2_K20.drat.xz",
+    "bytes (uncompressed)": 75859257,
+    "sha256 (uncompressed)": "3a74bf14bd08fb17620c30c26d062b36c90d63c3ecd033b46aed13bf57245ddf"
+   },
+   "cadical (s)": 18.7,
+   "drat-trim (s)": 19.7,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "f_7_1",
+   "table": "Table 5",
+   "low inputs": 9,
+   "high inputs": 8,
+   "distinct targets": 9,
+   "claimed gates": 22,
+   "optimality claimed": false,
+   "solve K (s)": 0.8,
+   "program check": "PASS"
+  },
+  {
+   "name": "f_8_1",
+   "table": "Table 5",
+   "low inputs": 10,
+   "high inputs": 9,
+   "distinct targets": 10,
+   "claimed gates": 24,
+   "optimality claimed": false,
+   "solve K (s)": 10.6,
+   "program check": "PASS"
+  },
+  {
+   "name": "f_7_2",
+   "table": "Table 5",
+   "low inputs": 11,
+   "high inputs": 10,
+   "distinct targets": 11,
+   "claimed gates": 27,
+   "optimality claimed": false,
+   "solve K (s)": 3.7,
+   "program check": "PASS"
+  },
+  {
+   "name": "f_9_1",
+   "table": "Table 5",
+   "low inputs": 11,
+   "high inputs": 10,
+   "distinct targets": 11,
+   "claimed gates": 27,
+   "optimality claimed": false,
+   "solve K (s)": 1.3,
+   "program check": "PASS"
+  },
+  {
+   "name": "R1_f_2_1",
+   "table": "Table 2 (R1)",
+   "low inputs": 4,
+   "high inputs": 4,
+   "distinct targets": 3,
+   "claimed gates": 7,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 6,
+   "cnf": {
+    "file": "R1_f_2_1_K6.cnf.gz",
+    "variables": 62,
+    "clauses": 206,
+    "sha256 (uncompressed)": "f70c6d9af55e7fbabd32aebe19c39280e9408be25a3ed6051953a2c65c1bd197"
+   },
+   "proof": {
+    "file": "R1_f_2_1_K6.drat.xz",
+    "bytes (uncompressed)": 79,
+    "sha256 (uncompressed)": "6f82483aba9a34aa42d4eae9ff444d3920d27ce9eac255b747c6add85b3006ca"
+   },
+   "cadical (s)": 0.0,
+   "drat-trim (s)": 0.1,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "R1_f_3_1",
+   "table": "Table 2 (R1)",
+   "low inputs": 5,
+   "high inputs": 5,
+   "distinct targets": 5,
+   "claimed gates": 12,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 11,
+   "cnf": {
+    "file": "R1_f_3_1_K11.cnf.gz",
+    "variables": 288,
+    "clauses": 1309,
+    "sha256 (uncompressed)": "b1313c75239c55dd6e344098c664b191dc130aa03bb2dc01d178c33feb394899"
+   },
+   "proof": {
+    "file": "R1_f_3_1_K11.drat.xz",
+    "bytes (uncompressed)": 70566,
+    "sha256 (uncompressed)": "37e07620f2ad58f6ab5cccce591e782b8de7820e77a5f90680e7411ece96483c"
+   },
+   "cadical (s)": 0.0,
+   "drat-trim (s)": 0.1,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "R1_f_4_1",
+   "table": "Table 2 (R1)",
+   "low inputs": 6,
+   "high inputs": 6,
+   "distinct targets": 6,
+   "claimed gates": 15,
+   "optimality claimed": true,
+   "solve K (s)": 0.2,
+   "program check": "PASS",
+   "UNSAT at": 14,
+   "cnf": {
+    "file": "R1_f_4_1_K14.cnf.gz",
+    "variables": 480,
+    "clauses": 2562,
+    "sha256 (uncompressed)": "5b1ff42e2270a8b95f4f49af8a3c33bc82e8a3ad724761958e3b0eb362d8f9b9"
+   },
+   "proof": {
+    "file": "R1_f_4_1_K14.drat.xz",
+    "bytes (uncompressed)": 2208799,
+    "sha256 (uncompressed)": "dd2d264868016e2060a3ba4a841bfb05bddb14c321f8114b9fe29d1bd789c892"
+   },
+   "cadical (s)": 0.4,
+   "drat-trim (s)": 0.3,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "R1_f_5_1",
+   "table": "Table 2 (R1)",
+   "low inputs": 7,
+   "high inputs": 7,
+   "distinct targets": 7,
+   "claimed gates": 18,
+   "optimality claimed": true,
+   "solve K (s)": 2.4,
+   "program check": "PASS",
+   "UNSAT at": 17,
+   "cnf": {
+    "file": "R1_f_5_1_K17.cnf.gz",
+    "variables": 720,
+    "clauses": 4407,
+    "sha256 (uncompressed)": "9b50eca777347e64b559fda78ca2d96a0078ab3fbb264f4103becc461892c273"
+   },
+   "proof": {
+    "file": "R1_f_5_1_K17.drat.xz",
+    "bytes (uncompressed)": 113446766,
+    "sha256 (uncompressed)": "980c2bd9f6ec0b4052393c52fee0c99af33fcb0394e489332f34b4012ea87388"
+   },
+   "cadical (s)": 30.0,
+   "drat-trim (s)": 34.0,
+   "drat-trim": "s VERIFIED"
+  },
+  {
+   "name": "R1_f_3_2",
+   "table": "Table 2 (R1)",
+   "low inputs": 7,
+   "high inputs": 7,
+   "distinct targets": 7,
+   "claimed gates": 18,
+   "optimality claimed": true,
+   "solve K (s)": 0.0,
+   "program check": "PASS",
+   "UNSAT at": 17,
+   "cnf": {
+    "file": "R1_f_3_2_K17.cnf.gz",
+    "variables": 720,
+    "clauses": 4407,
+    "sha256 (uncompressed)": "314ade9548007aadab679dd9ae1031fa55140d0e0def66e5c15c9d6f198608b8"
+   },
+   "proof": {
+    "file": "R1_f_3_2_K17.drat.xz",
+    "bytes (uncompressed)": 91793719,
+    "sha256 (uncompressed)": "b05e5d2b6c9ae44ebe4dfa1a525ccdbe89a3470b329a0402b4243f0c55eaa4b8"
+   },
+   "cadical (s)": 22.0,
+   "drat-trim (s)": 23.7,
+   "drat-trim": "s VERIFIED"
+  }
+ ]
+}

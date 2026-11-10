@@ -26,8 +26,9 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Prop. 4 (ii) | Algorithm 1 never mixes strips; `3κ-c'-3` gates on the last strip, `3κ-c'` on the others | proof + check | full: `verification/alg1verify.c` | all 201,117 members: PASS |
 | Eq. (2) | strip bound `3m-c-3-(γ-1)δ1(G)-δ2(G)` | algebra | - | - |
 | Table 2 | optimal `R2`, `R1` for the five base polynomials and the bounds `7m/4-1`, `12m/5-2`, `5m/2-1`, `18m/7-2` | SAT proof + composition | full: `verification/exact_small.py` (`R2`), `verification/exact_base.py` (`R1`: a program with `R1` gates, none with `R1-1`), `verification/compose_sat.py` (composed over 183 and 157 members up to `m = 1100`) | all optimal; 0 failures |
+| Tables 2 and 5 (evidence) | for each value stated as optimal: the program (checked symbolically) and a DRAT certificate that one gate less is impossible; values marked `<=` have a program only | programs + DRAT | quick: `checks/verify_sat_programs.py` (16 programs, 12 CNF hashes); `make sat-proofs` and CI job `sat-certificates` (regenerate the 12 proofs with CaDiCaL 3.0.1 and check them with drat-trim); files in `data/sat/` | 16 programs PASS; 12 certificates VERIFIED |
 | Text | greedy sweep over the 163 reduced pairs with `4 <= κ <= 40`: only the five base polynomials beat the closed form | computation | full: `verification/greedy.c strip 200 40`; `generator/strips.py` | reproduced |
-| Text | `Red(f_{6,1}) = 19`, `Red(f_{5,2}) = 21` | SAT proof | full: `verification/exact_small.py` | reproduced |
+| Text | `Red(f_{6,1}) = 19`, `Red(f_{5,2}) = 21` | SAT proof + DRAT certificate | full: `verification/exact_small.py`; quick: `checks/verify_sat_programs.py`; certificates: `make sat-proofs` | reproduced; certified |
 
 ## Section IV: closed form for the quotient
 

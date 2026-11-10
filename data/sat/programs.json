@@ -1,0 +1,402 @@
+{
+ "f_2_1": {
+  "inputs": "d0..d6 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d4 ^ d5",
+   "t1 = d4 ^ d6"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t0",
+   "r1 = d1 ^ t1",
+   "r2 = d2 ^ d4",
+   "r3 = d3 ^ d4"
+  ],
+  "total XOR gates": 6
+ },
+ "f_3_1": {
+  "inputs": "d0..d8 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d5 ^ d7",
+   "t1 = d8 ^ t0",
+   "t2 = d6 ^ d8",
+   "t3 = d5 ^ t2",
+   "t4 = d6 ^ t1"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t3",
+   "r1 = d1 ^ t1",
+   "r2 = d2 ^ t2",
+   "r3 = d3 ^ t4",
+   "r4 = d4 ^ t0"
+  ],
+  "total XOR gates": 10
+ },
+ "f_4_1": {
+  "inputs": "d0..d10 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d6 ^ d7",
+   "t1 = d6 ^ d9",
+   "t2 = d8 ^ t1",
+   "t3 = d8 ^ d10",
+   "t4 = d10 ^ t0",
+   "t5 = d9 ^ t4",
+   "t6 = t1 ^ t4",
+   "t7 = d10 ^ t2"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t5",
+   "r1 = d1 ^ t2",
+   "r2 = d2 ^ t6",
+   "r3 = d3 ^ t3",
+   "r4 = d4 ^ t4",
+   "r5 = d5 ^ t7"
+  ],
+  "total XOR gates": 14
+ },
+ "f_5_1": {
+  "inputs": "d0..d12 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d7 ^ d10",
+   "t1 = d8 ^ t0",
+   "t2 = d10 ^ d12",
+   "t3 = d11 ^ t1",
+   "t4 = d9 ^ t0",
+   "t5 = d9 ^ d12",
+   "t6 = d7 ^ t3",
+   "t7 = d11 ^ t5",
+   "t8 = t0 ^ t5"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t3",
+   "r1 = d1 ^ t8",
+   "r2 = d2 ^ t6",
+   "r3 = d3 ^ t7",
+   "r4 = d4 ^ t2",
+   "r5 = d5 ^ t1",
+   "r6 = d6 ^ t4"
+  ],
+  "total XOR gates": 16
+ },
+ "f_3_2": {
+  "inputs": "d0..d12 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d7 ^ d8",
+   "t1 = d9 ^ t0",
+   "t2 = d8 ^ d10",
+   "t3 = d7 ^ d12",
+   "t4 = d11 ^ t3",
+   "t5 = d10 ^ t4",
+   "t6 = t0 ^ t4",
+   "t7 = d9 ^ t3",
+   "t8 = d9 ^ t2"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t7",
+   "r1 = d1 ^ t2",
+   "r2 = d2 ^ t4",
+   "r3 = d3 ^ t1",
+   "r4 = d4 ^ t8",
+   "r5 = d5 ^ t5",
+   "r6 = d6 ^ t6"
+  ],
+  "total XOR gates": 16
+ },
+ "f_6_1": {
+  "inputs": "d0..d14 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d12 ^ d14",
+   "t1 = d11 ^ t0",
+   "t2 = d12 ^ d13",
+   "t3 = d10 ^ t2",
+   "t4 = t1 ^ t2",
+   "t5 = d8 ^ t3",
+   "t6 = d9 ^ t1",
+   "t7 = t1 ^ t5",
+   "t8 = d14 ^ t7",
+   "t9 = d8 ^ t6",
+   "t10 = d13 ^ t9"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t9",
+   "r1 = d1 ^ t7",
+   "r2 = d2 ^ t6",
+   "r3 = d3 ^ t3",
+   "r4 = d4 ^ t4",
+   "r5 = d5 ^ t0",
+   "r6 = d6 ^ t10",
+   "r7 = d7 ^ t8"
+  ],
+  "total XOR gates": 19
+ },
+ "f_5_2": {
+  "inputs": "d0..d16 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d10 ^ d16",
+   "t1 = d14 ^ t0",
+   "t2 = d12 ^ t0",
+   "t3 = d15 ^ t1",
+   "t4 = d11 ^ d15",
+   "t5 = d13 ^ t2",
+   "t6 = d11 ^ d13",
+   "t7 = d9 ^ t4",
+   "t8 = d16 ^ t7",
+   "t9 = t6 ^ t8",
+   "t10 = d14 ^ t9",
+   "t11 = d12 ^ t7"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t8",
+   "r1 = d1 ^ t2",
+   "r2 = d2 ^ t9",
+   "r3 = d3 ^ t1",
+   "r4 = d4 ^ t4",
+   "r5 = d5 ^ t11",
+   "r6 = d6 ^ t5",
+   "r7 = d7 ^ t10",
+   "r8 = d8 ^ t3"
+  ],
+  "total XOR gates": 21
+ },
+ "f_7_1": {
+  "inputs": "d0..d16 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d12 ^ d15",
+   "t1 = d14 ^ t0",
+   "t2 = d14 ^ d16",
+   "t3 = d9 ^ t1",
+   "t4 = d13 ^ t2",
+   "t5 = d11 ^ t4",
+   "t6 = t1 ^ t4",
+   "t7 = d11 ^ t3",
+   "t8 = d16 ^ t7",
+   "t9 = d10 ^ t6",
+   "t10 = d9 ^ t9",
+   "t11 = d15 ^ t10",
+   "t12 = d12 ^ t6"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t10",
+   "r1 = d1 ^ t7",
+   "r2 = d2 ^ t9",
+   "r3 = d3 ^ t5",
+   "r4 = d4 ^ t1",
+   "r5 = d5 ^ t12",
+   "r6 = d6 ^ t2",
+   "r7 = d7 ^ t11",
+   "r8 = d8 ^ t8"
+  ],
+  "total XOR gates": 22
+ },
+ "f_8_1": {
+  "inputs": "d0..d18 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d16 ^ d18",
+   "t1 = d15 ^ t0",
+   "t2 = d13 ^ t1",
+   "t3 = d16 ^ d17",
+   "t4 = d14 ^ t3",
+   "t5 = d12 ^ t2",
+   "t6 = d10 ^ t5",
+   "t7 = d18 ^ t6",
+   "t8 = d13 ^ t4",
+   "t9 = d11 ^ t8",
+   "t10 = t1 ^ t3",
+   "t11 = t5 ^ t8",
+   "t12 = d10 ^ t9",
+   "t13 = d17 ^ t12"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t12",
+   "r1 = d1 ^ t6",
+   "r2 = d2 ^ t9",
+   "r3 = d3 ^ t11",
+   "r4 = d4 ^ t2",
+   "r5 = d5 ^ t4",
+   "r6 = d6 ^ t10",
+   "r7 = d7 ^ t0",
+   "r8 = d8 ^ t13",
+   "r9 = d9 ^ t7"
+  ],
+  "total XOR gates": 24
+ },
+ "f_7_2": {
+  "inputs": "d0..d20 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d13 ^ d19",
+   "t1 = d17 ^ t0",
+   "t2 = d14 ^ d20",
+   "t3 = d11 ^ t1",
+   "t4 = d18 ^ t2",
+   "t5 = d20 ^ t3",
+   "t6 = d12 ^ t4",
+   "t7 = d17 ^ t6",
+   "t8 = d12 ^ d16",
+   "t9 = d18 ^ t8",
+   "t10 = d15 ^ t0",
+   "t11 = d16 ^ t3",
+   "t12 = t5 ^ t10",
+   "t13 = d19 ^ t9",
+   "t14 = d18 ^ t12",
+   "t15 = d15 ^ d19"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t5",
+   "r1 = d1 ^ t6",
+   "r2 = d2 ^ t12",
+   "r3 = d3 ^ t9",
+   "r4 = d4 ^ t1",
+   "r5 = d5 ^ t4",
+   "r6 = d6 ^ t15",
+   "r7 = d7 ^ t11",
+   "r8 = d8 ^ t7",
+   "r9 = d9 ^ t14",
+   "r10 = d10 ^ t13"
+  ],
+  "total XOR gates": 27
+ },
+ "f_9_1": {
+  "inputs": "d0..d20 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d17 ^ d20",
+   "t1 = d18 ^ t0",
+   "t2 = d15 ^ t1",
+   "t3 = d19 ^ t0",
+   "t4 = d14 ^ t2",
+   "t5 = d12 ^ t4",
+   "t6 = d11 ^ t5",
+   "t7 = d16 ^ t3",
+   "t8 = d18 ^ d20",
+   "t9 = t1 ^ t7",
+   "t10 = d14 ^ t7",
+   "t11 = d19 ^ t6",
+   "t12 = d13 ^ t10",
+   "t13 = d11 ^ t12",
+   "t14 = d20 ^ t13",
+   "t15 = t4 ^ t12"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t6",
+   "r1 = d1 ^ t13",
+   "r2 = d2 ^ t5",
+   "r3 = d3 ^ t15",
+   "r4 = d4 ^ t10",
+   "r5 = d5 ^ t2",
+   "r6 = d6 ^ t9",
+   "r7 = d7 ^ t3",
+   "r8 = d8 ^ t8",
+   "r9 = d9 ^ t11",
+   "r10 = d10 ^ t14"
+  ],
+  "total XOR gates": 27
+ },
+ "R1_f_2_1": {
+  "inputs": "d0..d7 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d4 ^ d6",
+   "t1 = d4 ^ d5",
+   "t2 = d4 ^ d7"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t1",
+   "r1 = d1 ^ t0",
+   "r2 = d2 ^ t2",
+   "r3 = d3 ^ d4"
+  ],
+  "total XOR gates": 7
+ },
+ "R1_f_3_1": {
+  "inputs": "d0..d9 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d6 ^ d8",
+   "t1 = d5 ^ d7",
+   "t2 = d5 ^ t0",
+   "t3 = d9 ^ t0",
+   "t4 = t1 ^ t3",
+   "t5 = d6 ^ t4",
+   "t6 = d8 ^ t5"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t2",
+   "r1 = d1 ^ t5",
+   "r2 = d2 ^ t3",
+   "r3 = d3 ^ t4",
+   "r4 = d4 ^ t6"
+  ],
+  "total XOR gates": 12
+ },
+ "R1_f_4_1": {
+  "inputs": "d0..d11 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d6 ^ d9",
+   "t1 = d11 ^ t0",
+   "t2 = d7 ^ d10",
+   "t3 = d9 ^ t2",
+   "t4 = t0 ^ t3",
+   "t5 = d8 ^ t0",
+   "t6 = t1 ^ t2",
+   "t7 = d10 ^ t5",
+   "t8 = t1 ^ t7"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t6",
+   "r1 = d1 ^ t5",
+   "r2 = d2 ^ t3",
+   "r3 = d3 ^ t8",
+   "r4 = d4 ^ t4",
+   "r5 = d5 ^ t7"
+  ],
+  "total XOR gates": 15
+ },
+ "R1_f_5_1": {
+  "inputs": "d0..d13 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d10 ^ d13",
+   "t1 = d8 ^ t0",
+   "t2 = d11 ^ t1",
+   "t3 = d7 ^ d10",
+   "t4 = d12 ^ t0",
+   "t5 = d11 ^ t3",
+   "t6 = d9 ^ t3",
+   "t7 = d12 ^ t6",
+   "t8 = t5 ^ t7",
+   "t9 = d7 ^ t1",
+   "t10 = d8 ^ t5"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t10",
+   "r1 = d1 ^ t7",
+   "r2 = d2 ^ t2",
+   "r3 = d3 ^ t8",
+   "r4 = d4 ^ t4",
+   "r5 = d5 ^ t9",
+   "r6 = d6 ^ t6"
+  ],
+  "total XOR gates": 18
+ },
+ "R1_f_3_2": {
+  "inputs": "d0..d13 (coefficients of the dividend)",
+  "gates": [
+   "t0 = d7 ^ d8",
+   "t1 = d7 ^ d12",
+   "t2 = d13 ^ t1",
+   "t3 = d9 ^ t2",
+   "t4 = d11 ^ t2",
+   "t5 = d9 ^ t0",
+   "t6 = d8 ^ d10",
+   "t7 = d9 ^ t6",
+   "t8 = t0 ^ t4",
+   "t9 = d10 ^ t4",
+   "t10 = d13 ^ t6"
+  ],
+  "outputs": [
+   "r0 = d0 ^ t3",
+   "r1 = d1 ^ t10",
+   "r2 = d2 ^ t4",
+   "r3 = d3 ^ t5",
+   "r4 = d4 ^ t7",
+   "r5 = d5 ^ t9",
+   "r6 = d6 ^ t8"
+  ],
+  "total XOR gates": 18
+ }
+}
