@@ -82,26 +82,25 @@ Engineering Research Council of Canada (NSERC) under Grant RGPIN-2024-05342.}
 \corresp{Corresponding author: Marcos Tomaszewski (e-mail: marcos.tomaszewski@posgrad.ufsc.br).}
 
 \begin{abstract}
-In polynomial-basis arithmetic over \(\F_{2^m}\), the irreducible polynomial that defines the
-field determines the cost of modular reduction and, with it, the cost of field
-multiplication. Using a greedy XOR-counting heuristic, Banegas identified two families of
+In polynomial-basis arithmetic over \(\F_{2^m}\), the defining irreducible polynomial
+determines the cost of modular reduction and hence of field multiplication. Using a greedy XOR-counting heuristic, Banegas identified two families of
 pentanomials with low reduction cost. The first family has since been analyzed, but the
 second one,
 \(f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1\) with \(b>c\ge1\), was left open because its
 reduction has a less transparent structure. This paper closes that gap. For \(m=b+2c\), we
 derive a closed form for the quotient of the polynomial division, written in terms of comb
 sums of stride \(3c\), and turn it into an explicit reduction circuit with at most
-\(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). This circuit is not
-optimal. A second construction splits the reduction into \(c\) independent chains and
+\(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). A second construction splits the reduction into \(c\) independent chains and
 uses \(3m-3-N(b,c)\) XOR gates, where \(N(b,c)\approx(m-c)/3\); it is shorter whenever
 \(b\ge4c+1\). Both constructions approach \(8m/3\) gates, at opposite ends of the
 range of \(c\). Members built from five small base pentanomials split into independent
-strips and admit even shorter programs, proved optimal with a SAT solver. We
+strips; composing strip programs that a SAT solver proves optimal for the base
+polynomials gives even shorter circuits. We
 verified both constructions symbolically for all 201,117 members with \(m\le1100\). An
 irreducibility census for \(5\le m\le1100\) found irreducible members in 720 degrees, 288 of
 which have no irreducible trinomial. Wherever both families have irreducible members, in 405
-degrees, the second family is cheaper, by \(9.7\%\) on average. At the NIST degrees 163
-and 571, the best members need 440 and 1,528 XOR gates, against 571 and 2,003 for the NIST pentanomials.
+degrees, the reduction bounds of the second family are lower, by \(9.7\%\) on average. At the NIST degrees 163
+and 571, the best members need 440 and 1,528 XOR gates for the reduction, against 571 and 2,003 for the NIST pentanomials.
 \end{abstract}
 
 \begin{keywords}
@@ -290,7 +289,11 @@ its occurrences with a temporary variable. Boyar and Peralta
 \cite{BoyarPeralta2010} introduced a heuristic that also exploits cancellations
 arising from the identity $v\xor v=0$. Further improvements have been proposed,
 particularly for the linear layers of block ciphers
-\cite{Kranz2017,Banik2019,TanPeyrin2020, Xiang2020,SunYangLi2025}. Exact
+\cite{Kranz2017,Banik2019,TanPeyrin2020, Xiang2020,SunYangLi2025}.
+General reduction methods also exist for any low-weight modulus, including a
+fast reduction used for squaring \cite{NiehuesCP2018} and a reduction with
+logarithmic feedback depth for every monic modulus \cite{ZhouZhang2026}; the
+present work instead exploits the structure of one family. Exact
 optimization using SAT solvers is possible for small instances
 \cite{FuhsSK2010,Stoffelen2016}, but becomes impractical for the field degrees
 considered in this work.
@@ -476,8 +479,11 @@ A similar identity holds for Banegas' first family:
 \[
   (x^b+1)f=x^{3b+c}+x^{2b}+x^c+1.
 \]
-The difference lies in the spacing between the leading exponents. For the first
-family, the corresponding stride is $3b$, which exceeds the field degree
+Both families are regions of one expression: with
+$F_{u,v}=x^{2u+v}+x^{u+v}+x^u+x^v+1$, the first family is $F_{u,v}$ with $u>v$
+and the second is $f_{b,c}=F_{c,b}$, with $u<v$. Exchanging the parameters does
+not carry the earlier analysis over, because the spacing between the leading
+exponents changes. For the first family, the corresponding stride is $3b$, which exceeds the field degree
 $m=2b+c$. For the second family, the stride is $3c<m$. Consequently, reduction
 in the second family may involve several successive applications of the same
 relation, particularly when $b$ is large relative to $c$.
@@ -559,9 +565,12 @@ uses $3\kappa-c'$ gates.
 \end{proof}
 
 \Cref{rem:strips}(ii) says that the closed form for $f$ is the closed form for
-$G$ applied once per strip. Any saving over $3m-c-3$ must therefore come from a
-strip, that is, from a reduction modulo $G$ that is shorter than the closed
-form. Writing
+$G$ applied once per strip. For a program that respects this decomposition, any
+saving over $3m-c-3$ must therefore come from a strip, that is, from a reduction
+modulo $G$ that is shorter than the closed form. We do not claim that
+$\Red(f)$ is additive over the strips: a circuit that mixes strips could in
+principle be shorter, and optimality of the strip programs does not by itself
+imply optimality of their composition. Writing
 \begin{align*}
   \delta_1(G)&=(3\kappa-c')-R_1(G),\\
   \delta_2(G)&=(3\kappa-c'-3)-R_2(G),
@@ -588,7 +597,10 @@ $12\gamma-2=\tfrac{12}5m-2$, and for $f_{4,1}$ it is $15\gamma-1=\tfrac52m-1$.
 \caption{Optimal strip programs for the five base polynomials of
 \cref{def:special}, compared with the closed form, and the resulting bound
 \eqref{eq:specialbound} for $f=G(x^\gamma)$. Optimality of every value of
-$R_1(G)$ and $R_2(G)$ was proved with a SAT solver.}
+$R_1(G)$ and $R_2(G)$ was proved with a SAT solver. The base polynomials
+$f_{5,1}$ and $f_{3,2}$, and all their stretched copies, are reducible
+(\cref{prop:specirr}); their programs reduce in a quotient ring, not in a
+field.}
 \label{tab:base}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}c c c c c c l@{}}
@@ -809,10 +821,27 @@ which proves \eqref{eq:rU}.
 \end{proof}
 
 The closed-form expression separates the computation into comb sums, quotient
-coefficients and remainder coefficients. The term $C_j+C_{j+c}$ in
-\eqref{eq:qclosed} corresponds to the inverse of $1+y^c+y^{2c}$. The remaining
-term, $h_{j+b+c}$, accounts for the additional shift in \eqref{eq:rec}.
-Higher-order corrections vanish because their indices exceed $n$.
+coefficients and remainder coefficients. It also has a compact reading in terms
+of the reciprocal polynomial
+\[
+  f^*(y)=y^mf(y^{-1})=1+y^c+y^{2c}+y^{b+c}+y^m.
+\]
+Write $P^*(y)=y^kP(y^{-1})$ for a polynomial $P$ of degree at most $k$, with
+$k=n$ for $H$ and $Q$. Reversing $D=Qf+R$ shows that $Q^*\equiv H^*\,(f^*)^{-1}
+\pmod{y^{m-1}}$, and
+\begin{equation}\label{eq:recip}
+  (f^*)^{-1}\equiv\frac{1+y^c}{1+y^{3c}}+y^{b+c}\pmod{y^{m-1}}.
+\end{equation}
+Indeed, with $A=1+y^c+y^{2c}$ and $T=y^{b+c}$, the term $y^m$ vanishes modulo
+$y^{m-1}$, and $T^2$ does too because $2(b+c)\ge m-1$, so
+$(A+T)^{-1}\equiv A^{-1}+TA^{-2}$. Over $\F_2$, $A^2=1+y^{2c}+y^{4c}$, hence
+$A^{-2}\equiv1\pmod{y^{2c}}$ and $TA^{-2}\equiv T$ because $b+3c\ge m-1$;
+finally $A^{-1}=(1+y^c)/(1+y^{3c})$. The rational term of \eqref{eq:recip}
+produces the periodic pattern of stride $3c$, that is, $C_j+C_{j+c}$ in
+\eqref{eq:qclosed}, and the monomial $y^{b+c}$ produces the isolated correction
+$h_{j+b+c}$. Inversion of power series is a general tool; what is specific to
+the second family is that the inverse collapses to this short form, and that the
+form translates into circuits with shared intermediate sums.
 
 For reduction, however, it is not necessary to compute $Q$ explicitly. By
 \cref{prop:basic}(i),
@@ -1273,6 +1302,10 @@ members with small $c$, which were the most expensive under \cref{thm:main},
 now reach the same asymptotic cost as members with $c$ close to $m/3$. For a
 fixed degree, the better of the two bounds is close to $\tfrac83m$ at both ends
 of the range of $c$ and largest, about $\tfrac{17}6m$, near $b=4c$.
+These are statements about circuits for sequences of parameters. Whether such
+regimes contain irreducible members of arbitrarily large degree is a separate
+question, which we do not settle: for members with $\gcd(b,c)=1$, the census of
+\cref{sec:comparison} provides finite evidence only.
 
 We verified \cref{alg:chain} symbolically for all $201\,117$ members with
 $m\le1100$: it computes $D\bmod f_{b,c}$ exactly and uses exactly
@@ -1413,6 +1446,19 @@ shift-and-XOR operations. This includes the selected members of degrees $163$
 and $571$ discussed in \cref{sec:comparison}. The formulation can be used after
 carry-less polynomial multiplication, for example with \texttt{PCLMULQDQ}, or in
 bitsliced implementations.
+
+Zhou and Zhang \cite{ZhouZhang2026} recently gave a general reduction for every
+monic binary modulus, in which the feedback recurrence is inverted by a product
+of Frobenius powers, with exactly $\lceil\log_2(m/\Delta_{\min})\rceil$
+sequential feedback stages, where $\Delta_{\min}$ is the distance from $m$ to the
+highest nonleading exponent. For $f_{b,c}$ this distance is $m-(b+c)=c$. The
+doubling steps of \cref{cor:word} number $\nu=\lceil\log_2((n+1)/(3c))\rceil$,
+one or two fewer for every member with $m\le1100$, because the comb sums obey
+$C_j+C_{j+3c}=h_j$, a recurrence with a single feedback term at distance $3c$
+that comes from the sparse multiple of \cref{prop:basic}(ii). Their
+work counts word operations and does not count XOR gates; the contribution here
+is specific to the second family: the closed form, the exact gate counts of
+\cref{thm:main,thm:chain} and the depth bounds.
 
 The same doubling procedure can be applied at the gate level to reduce the depth
 of the comb-sum computation.
@@ -1643,10 +1689,38 @@ searching for intermediate XOR combinations.
 \paragraph*{Exact minima for small members}
 To find out how far the closed form is from optimal, we computed exact minima
 with a SAT solver, using the encoding of \cite{Stoffelen2016}. The search is made
-feasible by a simple reduction: each low input $d_i$, $i<m$, appears only in the
-output $r_i$, so setting it to zero removes at least one gate, and therefore
-$\Red(f)=m+\Red(R')$, where $R'$ is the reduction matrix restricted to the high
-inputs. \Cref{tab:exact} summarizes the results. For the base polynomials of
+feasible by the following reduction to the high inputs.
+
+\begin{lemma}[Elimination of the low inputs]\label{lem:lowinputs}
+Let $f=f_{b,c}$ and let $R'$ be the reduction matrix of $f$ restricted to the
+high inputs $h_0,\dots,h_n$, so that $r_i=d_i+\ell_i(h)$ with $\ell_i$ the
+$i$th row of $R'$. Then every $\ell_i$ is nonzero, and in the model of
+\cref{sec:background},
+\[
+  \Red(f)=m+\Red(R').
+\]
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:rU}, $\ell_i=U_i+U_{i-b}$, with $U_{i-b}=0$ for $i<b$. By
+\eqref{eq:Uclosed}, $U_k$ contains $h_k$ for $0\le k<c$ and $h_{k-c}$ for
+$k\ge c$, and all its other terms have larger indices. Let $\lambda(k)$ be this
+smallest index; it is at most $m-1-c\le n$, so the term is present. For $i<b$,
+$\ell_i=U_i\ne0$. For $i\ge b$, $\lambda(i-b)\le i-b<i-c=\lambda(i)$, so
+$h_{\lambda(i-b)}$ occurs in $U_{i-b}$ but not in $U_i$, and $\ell_i\ne0$.
+
+A circuit for $R'$ followed by one gate $r_i=d_i\xor\ell_i$ per output gives
+$\Red(f)\le m+\Red(R')$. Conversely, take any circuit for the reduction map.
+Each $d_i$ occurs only in $r_i$, and $r_i\ne d_i$ because $\ell_i\ne0$, so some
+gate receives $d_i$ directly. Setting $d_i=0$ turns that gate into a copy of its
+other operand (or into the constant $0$), so it can be removed without changing
+the outputs for $d_i=0$. Doing this for $i=0,\dots,m-1$ removes at least $m$
+gates and leaves a circuit for $R'$. Hence $\Red(f)\ge m+\Red(R')$.
+\end{proof}
+
+The hypothesis $\ell_i\ne0$ matters: for a modulus whose reduction matrix had a
+zero high row, the corresponding output would cost no gate.
+\Cref{tab:exact} summarizes the results. For the base polynomials of
 \cref{def:special}, the values of \cref{tab:base} are optimal. For every small
 generic member we could solve, however, the optimum lies at least one gate below
 the closed form, and for $c=1$ the known gap grows with $b$. Neither the greedy algorithm,
@@ -1714,8 +1788,13 @@ The results are summarized in \cref{tab:census}.
 
 Whenever an irreducible trinomial exists, its known reduction cost of $2m-2$ XOR
 gates is lower than the general bounds considered here for the two pentanomial
-families. We therefore focus on the $502$ degrees in the evaluated range for
+families; the only exceptions are three special members, discussed in
+\cref{sec:specialmembers}. We therefore focus on the $502$ degrees in the evaluated range for
 which no irreducible trinomial exists.
+All costs compared in this section are costs of explicit constructions, or
+greedy counts where stated, and hence upper bounds on $\Red(f)$. A comparison
+of upper bounds does not by itself order the minima $\Red(f)$ of two families;
+it compares the best circuits known for each.
 
 For these degrees, \cref{fig:census} compares the reduction cost per bit,
 defined as the number of XOR gates divided by $m$, for the lowest-cost
@@ -1754,7 +1833,7 @@ first family \cite{BCP2019}.}
 irreducible members of the second family & $1\,508$\\
 degrees with at least one member: second family / first family & $720$ / $502$\\
 degrees with members of both families & $405$\\
-\quad of which the second family is cheaper & $405$ (mean saving $9.7\%$)\\
+\quad of which the second family has the lower bound & $405$ (mean saving $9.7\%$)\\
 degrees in which \cref{thm:chain} improves the best member & $379$\\
 degrees without irreducible trinomials & $502$\\
 \quad covered by the second family / by the first family & $288$ / $229$\\
@@ -1829,7 +1908,7 @@ members with $m\le1100$ lie in degrees that have an irreducible trinomial.
 
 \Cref{tab:others} summarizes the comparison over the $502$ degrees without
 irreducible trinomials. In each of the $288$ degrees where the second family
-has an irreducible member, its best member is cheaper than the best member of
+has an irreducible member, its best member has a lower reduction bound than the best member of
 every other family, by $5.6\%$ to $33.2\%$, with a mean of $11.7\%$. Type I
 pentanomials cover more degrees than the second family, $361$ against $288$,
 but at the cost of the first family, about $3$ XOR gates per bit. Taken
@@ -1842,7 +1921,7 @@ for example $m=69$ and $m=306$, the second family is the only one.
 $5\le m\le1100$ without irreducible trinomials. For each family: the cost used,
 the number of degrees with an irreducible member, the mean number of XOR gates
 per bit of the best member, and the degrees shared with the second family,
-where the second family is always cheaper.}
+where the bound of the second family is always lower.}
 \label{tab:others}
 \begin{tabular}{@{}l l r r r r@{}}
 \toprule
@@ -1903,10 +1982,15 @@ $35.3\%$ than the best generic member under \cref{thm:main,thm:chain}. In the ot
 member of the second family. The largest savings come from the equally spaced
 members, $G=f_{2,1}$, whose cost is $\tfrac74m-1$.
 
-All $15$ degrees also have irreducible trinomials, whose cost $2m-2$ is lower.
-For instance, at $m=155$ a trinomial needs $308$ XOR gates, against $370$ for
-$f_{93,31}$. Special members are therefore the cheapest choice within the second
-family, but not in absolute terms in these degrees.
+All $15$ degrees also have irreducible trinomials. In $12$ of them the trinomial
+cost $2m-2$ is lower; for instance, at $m=155$ a trinomial needs $308$ XOR gates,
+against $370$ for $f_{93,31}$. In the other three degrees, $m=20$, $100$ and
+$500$, the special member is an equally spaced pentanomial, whose cost
+$\tfrac74m-1$ is below $2m-2$ for every $m>4$: it needs $34$, $174$ and $874$
+XOR gates, against $38$, $198$ and $998$ for the trinomial. This advantage comes
+from the equally spaced subfamily, whose cost is already known
+(\cref{tab:known}), and it is a comparison with the reference cost $2m-2$, not
+with every possible circuit for every trinomial.
 
 \begin{table}[t]
 \centering\small
@@ -1977,7 +2061,8 @@ pentanomials with Karatsuba, and less with the schoolbook product. Squaring is
 different. The square of a polynomial over $\F_2$ costs no gates before the
 reduction, so the reduction of a polynomial with only even-degree terms is the
 whole cost of a squaring. Squarings dominate inversion by the method of Itoh and
-Tsujii \cite{ItohTsujii1988}. For squaring, we compare the greedy counts of the
+Tsujii \cite{ItohTsujii1988}, and a general bit-parallel squaring for low-weight
+moduli is given in \cite{NiehuesCP2018}. For squaring, we compare the greedy counts of the
 reduction matrices restricted to the even inputs, the same measure for every
 polynomial: the second family saves $13.1\%$ and $4.4\%$ against the first
 family, and $29.7\%$ and $24.6\%$ against the NIST pentanomials, at degrees
@@ -2071,15 +2156,16 @@ The computational results indicate that the second family provides useful
 alternatives to previously studied pentanomials. Among the degrees examined, it
 contains irreducible members in cases where the first family does not, including
 degrees for which irreducible trinomials are unavailable, and wherever it has
-members in those degrees it is cheaper than the first family and than type I
-and type II pentanomials. At degrees $163$ and
+members in those degrees its reduction bounds are lower than those of the first
+family and of type I and type II pentanomials. At degrees $163$ and
 $571$, the proposed construction gives lower XOR counts for polynomial reduction
 than the corresponding NIST pentanomials and the available members of the first
 family. The word-level formulation and the low-depth variant further show how
 the algebraic result can be adapted to different implementation models. These
 comparisons concern reduction costs and do not, by themselves, establish an
 advantage in overall hardware area, energy consumption or software execution
-time. In a full multiplier the saving is small in relative terms, about $1\%$
+time; the best modulus depends on the architecture and on the operation
+\cite{Scott2007}. In a full multiplier the saving is small in relative terms, about $1\%$
 with a Karatsuba product (\cref{tab:mult}); it matters most where the reduction
 dominates, as in squaring and therefore in inversion.
 
