@@ -3,19 +3,27 @@
 Terms used in the paper and in the code, in alphabetical order. Names used in the
 Portuguese code are given in parentheses.
 
-**Algorithm 1.** The reduction program of the paper for the second family. Implemented
-in `generator/fam2.py` and, independently, in `independent/second_family.py`.
+**Algorithm 1.** The closed-form reduction program for the second family (Theorem 8).
+Implemented in `generator/fam2.py` and, independently, in `independent/second_family.py`.
+
+**Algorithm 2 / chain construction.** The shorter program of Section VI (Theorem 13), with
+`3m − 3 − N(b,c)` gates. Implemented in `algorithm2/alg2prog.py` and checked in C by
+`algorithm2/alg2verify.c`.
+
+**Base polynomial `G`, strip.** If `γ = gcd(b, c)`, then `f(x) = G(x^γ)` with
+`G = f_(b/γ, c/γ)` of degree `κ`. The strip `ρ` is the set of indices congruent to `ρ`
+modulo `γ` (Proposition 4).
 
 **BCP family / first family.** `x^(2b+c) + x^(b+c) + x^b + x^c + 1`, studied by Banegas,
 Custódio and Panario (2019), with reduction cost `3m − 2` (and `12m/5 − 1` when `b = 2c`).
 
-**Boyar–Peralta heuristic (BP).** A literature heuristic for short XOR programs that, unlike
-the greedy algorithm, may use cancellations (`a ⊕ a = 0`). Used only for small degrees
-(`generator/smallm.py`).
+**Boyar-Peralta heuristic (BP).** A literature heuristic for short XOR programs that, unlike
+the greedy algorithm, may use cancellations (`v ⊕ v = 0`). Used only for small degrees
+(`generator/smallm.py`, `verification/boyar_peralta.py`, `verification/heuristic_small.py`).
 
 **Comb sum `C_t`.** `C_t = h_t + h_(t+3c) + h_(t+6c) + ...`, the sum of the high
 coefficients whose index is `t` plus a multiple of `3c`. The building block of
-Theorem 5.
+Theorem 7.
 
 **Conta-XOR (`CX`).** The greedy XOR counter of Banegas' thesis: repeatedly replace the
 most frequent pair of operands by a new variable. Implemented in
@@ -29,9 +37,16 @@ delay of a hardware circuit. (`profundidade`)
 **`dXOR` (direct count).** Cost of adding every output from scratch: the sum over the
 rows of the reduction matrix of (row weight − 1).
 
-**Generic / special member.** A member is *special* if `b/c` is `3/2, 2, 3, 4` or `5`;
-then `f(x) = G(x^g)` with a very short `G` and the greedy algorithm can beat the closed
-form. All others are *generic*. `b = 2c` is the equally spaced pentanomial.
+**Generic / special member.** A member is *special* if `b/c` is `3/2, 2, 3, 4` or `5`,
+that is, if its base polynomial has degree at most 7 (Definition 3); then strip programs
+beat the closed form (Table 2). All others are *generic*. `b = 2c` is the equally spaced
+pentanomial. Generic members with `b ≥ 4c + 1` are also improved, by the chain construction.
+
+**`E_t`, `P_k`, `σ(t)`, `N(b,c)`.** `E_t = C_t + C_(t+c)`, `P_k = C_(k−c) + C_(k+c)`,
+`σ(t) = ⌊(t+1)/c⌋ mod 3` and `N(b,c) = #{1 ≤ u ≤ b+c−1 : ⌊u/c⌋ ≡ 2 (mod 3)}` (Section VI).
+
+**SAT / MaxSAT.** Exact searches for the shortest XOR program (`verification/slp_sat.py`,
+Tables 2 and 5) and the MaxSAT model of one chain (`algorithm2/chain2.py`).
 
 **`h_s`.** High coefficients of the product: `h_s = d_(m+s)`, `0 ≤ s ≤ n = m − 2`.
 

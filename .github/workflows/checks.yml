@@ -17,3 +17,16 @@ jobs:
         run: ./run_quick_checks.sh
       - name: Independent suite (Algorithm 1)
         run: python3 independent/second_family.py
+
+  full-verification:
+    # Complete verification up to m = 1100, as reported in the paper (about 15 minutes).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install python-sat
+        run: pip install python-sat
+      - name: Run verification/run_all.sh and compare with expected_output.txt
+        run: make verify-all
