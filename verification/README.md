@@ -11,6 +11,7 @@ compare with `expected_output.txt`; only the running times printed by the SAT sc
 | `analyze_census.py` | All census figures for Algorithm 1 alone: Table 6, Section IX text, NIST table, special members (Table 7), comparison with `data/census.json`. |
 | `greedy.c` | Paar/Conta-XOR greedy (lexicographic and randomized ties): Observation 18, Example 11 (Table 3), the counts of Tables 4 and 8, and the strip programs of the 163 reduced pairs with `4 <= kappa <= 40` (Section III). |
 | `analyze_greedy.py` | Observation 18 statistics against `data/paar150.txt`. |
+| `greedy_beyond150.sh`, `analyze_greedy_beyond150.py` | The regularities of Observation 18 beyond `m = 150` (Section VIII, paragraph after Figure 2): greedy count for all members with `151 <= m <= 300` and for `m = 500, 800, 1100` (about 4 minutes, not part of `run_all.sh`; `make greedy-beyond150`), compared with `data/greedy_beyond150.txt`. The analysis alone runs in the quick checks. |
 | `compose_strips.py` | Composes the greedy strip programs over all strips of the 992 special members with `m <= 1100` and checks them symbolically. |
 | `boyar_peralta.py` | Boyar and Peralta heuristic for `f_{5,2}`, `f_{4,3}` and `f_{3,2}` (Section VIII). |
 | `depth_table3.py` | Depth column of Table 4 (the file name follows an earlier numbering). |

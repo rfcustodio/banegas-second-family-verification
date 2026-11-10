@@ -8,6 +8,7 @@ run python3 checks/verify_statements.py
 run python3 checks/verify_chain.py
 run python3 checks/reproduce_tables.py
 run python3 checks/analyze_paar150.py
+run python3 verification/analyze_greedy_beyond150.py
 run python3 checks/compare_censuses.py
 run python3 generator/lowdepth.py --all 160
 echo
