@@ -12,6 +12,7 @@ automated tests.
 | `reproduce_tables.py` | Every entry of Tables 4, 8 and 9, Proposition 19 against the census, and the numbers quoted in Section IX. | 30 s |
 | `analyze_paar150.py` | Every number of Observation 18 and the content of Figure 2, from `data/paar150.txt`. | 1 s |
 | `compare_other_families.py` | Table 7 and Section IX-C: comparison with type I, type II and general pentanomials, from the census files in `data/` (type II greedy counts from `data/other_families.json`). | 1 s |
+| `compare_multiplier.py` | Table 10 and Section IX-D (full multiplier and squaring at degrees 163 and 571), from `data/multiplier.json`. | 1 s |
 | `compare_censuses.py` | Compares, polynomial by polynomial, the authors' census (`data/`) with the independent census (`independent/censo_table3_dados.json`), then recomputes Table 6 and the census numbers of Section IX with both constructions. | 1 s |
 
 To run all of them: `./run_quick_checks.sh` from the repository root.

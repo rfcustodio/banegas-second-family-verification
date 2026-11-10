@@ -5,6 +5,7 @@
  *   greedy fam2 MLO MHI RUNS     all second-family members b>c>=1, MLO<=m<=MHI
  *       prints: m b c dXOR CX(lexicographic) bestRandom(RUNS runs, -1 if RUNS=0) closed
  *   greedy one RUNS m e1 ... 0   arbitrary sparse polynomial
+ *   greedy sq RUNS m e1 ... 0    the same, for the reduction of a square (only even inputs)
  *
  * Rows: row i = { j : coefficient of x^i in x^j mod f is 1 }, j = 0..2m-2.
  * Step: count pair frequencies over all rows; take the most frequent pair
@@ -27,6 +28,7 @@ static uint64_t rs = 0x9E3779B97F4A7C15ULL;
 static inline uint64_t xr(void) { rs ^= rs << 13; rs ^= rs >> 7; rs ^= rs << 17; return rs; }
 
 static int TOP = -1;
+static int EVEN = 0;   /* squaring: only even input indices are nonzero */
 static void build(int m, int *ex, int ne) {
     int top = TOP >= 0 ? TOP : 2 * m - 2;
     M = m; NR = m;
@@ -35,6 +37,7 @@ static void build(int m, int *ex, int ne) {
     for (int i = 0; i < m; i++) rlen[i] = 0;
     for (int j = 0; j <= top; j++) {
         if (j > 0) { int top = col[m - 1]; memmove(col + 1, col, m - 1); col[0] = 0; if (top) for (int t = 1; t < ne; t++) col[ex[t]] ^= 1; }
+        if (EVEN && (j & 1)) continue;
         for (int i = 0; i < m; i++) if (col[i]) {
             if (rlen[i] == rcap[i]) { rcap[i] = rcap[i] ? 2 * rcap[i] : 16; rows[i] = realloc(rows[i], sizeof(int) * rcap[i]); }
             rows[i][rlen[i]++] = j; /* ascending */
@@ -115,6 +118,7 @@ int main(int argc, char **argv) {
             printf("%d %d %d %d %d %d %d\n", m, b, c, dx, cx, br, 3 * m - c - 3); fflush(stdout);
         }
     } else {
+        if (!strcmp(argv[1], "sq")) EVEN = 1;
         int RUNS = atoi(argv[2]); int ex[8], ne = 0; for (int i = 3; i < argc; i++) ex[ne++] = atoi(argv[i]);
         int dx; build(ex[0], ex, ne); int cx = run(0, &dx); int br = -1;
         for (int k = 0; k < RUNS; k++) { build(ex[0], ex, ne); int v = run(1, NULL); if (br < 0 || v < br) br = v; }

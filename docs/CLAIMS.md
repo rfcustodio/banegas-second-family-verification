@@ -100,6 +100,7 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Table 7 | comparison with type I, type II and general pentanomials over the 502 degrees without trinomials: degrees covered, XORs per bit, shared degrees, savings | quick: `checks/compare_other_families.py`; full: `verification/census.c` (`t1`, `t2`, `esp`, `pmin`) and `verification/other_families.py` | all entries reproduced |
 | Section IX-C | second family cheaper than every other family in all 288 degrees where it has members (5.6% to 33.2%, mean 11.7%); 484 degrees covered by the four families, 15 only by the second; no member of `x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1` in these degrees | same | reproduced |
 | Table 8 | the 15 irreducible special members with `5 <= m <= 1100`: closed form, strip bound, best generic member | quick: `checks/reproduce_tables.py`; `generator/strips.py --special 1100` | all entries reproduced |
+| Table 10 | full multiplier (schoolbook and recursive Karatsuba product) and squaring at 163 and 571; Karatsuba product 12,001 / 90,703 XOR and 6,203 / 47,916 AND; squaring savings 13.1%, 4.4% (first family) and 29.7%, 24.6% (NIST); about 1% for the Karatsuba multiplier | quick: `checks/compare_multiplier.py`; full: `verification/multiplier.py` (`karatsuba.py`, `greedy sq`) | reproduced |
 | Table 9 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7%; type I and type II members at the NIST degrees (text) | quick: `checks/reproduce_tables.py` | reproduced |
 
 ## Abstract
