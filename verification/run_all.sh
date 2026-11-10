@@ -46,3 +46,5 @@ echo "== Other pentanomial families (Section IX-C, Table 7)"
 ./census esp 5 1100 > esp.txt
 ./census pmin 5 1100 > pmin.txt
 python3 other_families.py
+echo "== Full multiplier and squaring at degrees 163 and 571 (Section IX-D, Table 10)"
+python3 multiplier.py

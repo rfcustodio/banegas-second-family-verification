@@ -1964,6 +1964,26 @@ No irreducible member of the second family was found at degree $283$. At degrees
 $233$ and $409$, irreducible trinomials provide lower reduction costs than the
 pentanomials considered here.
 
+The reduction is only one part of a field multiplier, and \cref{tab:mult} puts
+these savings in context at degrees $163$ and $571$. The polynomial product does
+not depend on $f$. For it we use the schoolbook product, with $(m-1)^2$ XOR
+gates, and a recursive Karatsuba multiplier \cite{KaratsubaOfman1963} that, at
+each size, takes the cheapest of the schoolbook product, the Karatsuba split and
+Bernstein's refined split \cite{Bernstein2009}; it needs $12\,001$ XOR and
+$6\,203$ AND gates for $m=163$, and $90\,703$ XOR and $47\,916$ AND gates for
+$m=571$. The absolute saving of the reduction carries over to the multiplier
+unchanged, but in relative terms it becomes small: about $1\%$ against the NIST
+pentanomials with Karatsuba, and less with the schoolbook product. Squaring is
+different. The square of a polynomial over $\F_2$ costs no gates before the
+reduction, so the reduction of a polynomial with only even-degree terms is the
+whole cost of a squaring. Squarings dominate inversion by the method of Itoh and
+Tsujii \cite{ItohTsujii1988}. For squaring, we compare the greedy counts of the
+reduction matrices restricted to the even inputs, the same measure for every
+polynomial: the second family saves $13.1\%$ and $4.4\%$ against the first
+family, and $29.7\%$ and $24.6\%$ against the NIST pentanomials, at degrees
+$163$ and $571$.
+
+
 \begin{table}[t]
 \centering\small
 \caption{Reduction costs at the
@@ -1991,6 +2011,30 @@ $m$ & NIST & trinomial & first family & second family\\
 283 & 862 & none & \textbf{847} & none\\
 409 & 816 (trinomial) & \textbf{816} & none & 1109\\
 571 & 2003 & none & 1711 & \textbf{1528}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{XOR gates of a full multiplier and of a squaring at degrees $163$ and
+$571$, for the best member of each family and for the NIST pentanomial.
+Multiplier: product plus reduction, with the schoolbook product or with the
+recursive Karatsuba multiplier described in the text. Squaring: greedy count of
+the reduction of a square.}
+\label{tab:mult}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}r l r r r r@{}}
+\toprule
+$m$ & polynomial & reduction & schoolb. & Karatsuba & square\\
+\midrule
+163 & second family & \textbf{440} & \textbf{26\,684} & \textbf{12\,441} & \textbf{173}\\
+    & first family  & 487 & 26\,731 & 12\,488 & 199\\
+    & NIST          & 571 & 26\,815 & 12\,572 & 246\\
+\midrule
+571 & second family & \textbf{1\,528} & \textbf{326\,428} & \textbf{92\,231} & \textbf{649}\\
+    & first family  & 1\,711 & 326\,611 & 92\,414 & 679\\
+    & NIST          & 2\,003 & 326\,903 & 92\,706 & 861\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2035,7 +2079,9 @@ family. The word-level formulation and the low-depth variant further show how
 the algebraic result can be adapted to different implementation models. These
 comparisons concern reduction costs and do not, by themselves, establish an
 advantage in overall hardware area, energy consumption or software execution
-time.
+time. In a full multiplier the saving is small in relative terms, about $1\%$
+with a Karatsuba product (\cref{tab:mult}); it matters most where the reduction
+dominates, as in squaring and therefore in inversion.
 
 Several questions remain open. The chain construction matches the best programs
 found with a SAT solver for the small members with $c=1$, but for members

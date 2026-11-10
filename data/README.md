@@ -15,6 +15,7 @@ All files are plain text (or JSON) and can be regenerated with the programs in
 | `rmh_class2_irr.txt` | `m s` for every irreducible `x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1`, `(m-1)/8 <= s <= (m-1)/3`. | `verification/census esp 5 1100` | Section IX-C |
 | `pent_min.txt` | `m k3 k2 k1`: the first irreducible `x^m+x^k3+x^k2+x^k1+1` with `k3 <= m/2` (smallest `k3`, then `k2`, then `k1`). | `verification/census pmin 5 1100` | Table 7 |
 | `other_families.json` | Costs per degree without trinomials used in Table 7, for each family (type II: greedy count minimized over the irreducible members). | `verification/other_families.py` | Table 7, `checks/compare_other_families.py` |
+| `multiplier.json` | Karatsuba product counts at `m = 163, 571` and the rows of Table 10 (reduction, schoolbook and Karatsuba multiplier, squaring). | `verification/multiplier.py` | Table 10, `checks/compare_multiplier.py` |
 | `census_alg2.json` | Like `census.json`, with the best member per degree under both constructions (`F2`, Theorems 8 and 13 and the strip bound for special members), under Theorem 8 alone (`F2_alg1`), and the best generic member (`F2gen`). | `algorithm2/census_alg2.py` | Table 6, Figure 3, Section IX |
 | `census.json` | `{"F2": {m: [cost, b, c]}, "F1": {m: [cost, b, c]}, "T": [m, ...]}`: best member per degree of each family (cost by Theorem 8, by BCP's `3m-2` or `12m/5-1`, and `7m/4-1` for equally spaced members), and the list of degrees with trinomials. | derived from the three files above | earlier version of Figure 3; `verification/analyze_census.py` |
 
