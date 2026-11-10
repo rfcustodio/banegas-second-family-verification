@@ -62,7 +62,7 @@ max gain b<2c: (48, (148, 50, 49, 538, 440, 440, 392))
 (3, 2) lex==bound: 0 / 21 rand==bound: 2 min(lex,rand)<bound: 0 sample [(1, 17, 16, 16, 16), (2, 36, 34, 34, 35), (3, 55, 53, 52, 54), (4, 74, 71, 70, 73)]
 (2, 1) lex==bound: 36 / 36 rand==bound: 36 min(lex,rand)<bound: 0 sample [(2, 13, 13, 13, 19), (3, 20, 20, 20, 30), (4, 27, 27, 27, 41), (5, 34, 34, 34, 52)]
 b=3c: CX==12m/5-2: True [(5, 10), (10, 22), (15, 34), (20, 46), (25, 58), (30, 70)]
-== Example 11 (Table 3), NIST-degree members (Tables 4 and 8): dXOR, Conta-XOR and depth
+== Example 11 (Table 3), NIST-degree members (Tables 4 and 9): dXOR, Conta-XOR and depth
 m=16 dXOR=54 CX=44 bestRandom=-1
 m=163 dXOR=649 CX=461 bestRandom=-1
 m=233 dXOR=866 CX=688 bestRandom=-1
@@ -152,25 +152,25 @@ f_(4,1) m=6: program with 13 gates: impossible (0.0s)
 f_(5,1) m=7: program with 16 gates: exists (0.1s)
 f_(5,1) m=7: program with 15 gates: impossible (0.2s)
 f_(3,2) m=7: program with 16 gates: exists (0.0s)
-f_(3,2) m=7: program with 15 gates: impossible (0.3s)
+f_(3,2) m=7: program with 15 gates: impossible (0.2s)
 f_(6,1) m=8: program with 19 gates: exists (0.2s)
-f_(6,1) m=8: program with 18 gates: impossible (2.5s)
-f_(5,2) m=9: program with 21 gates: exists (0.8s)
-f_(5,2) m=9: program with 20 gates: impossible (15.8s)
+f_(6,1) m=8: program with 18 gates: impossible (2.3s)
+f_(5,2) m=9: program with 21 gates: exists (0.7s)
+f_(5,2) m=9: program with 20 gates: impossible (15.3s)
 f_(7,1) m=9: program with 22 gates: exists (0.9s)
-f_(8,1) m=10: program with 24 gates: exists (11.4s)
-f_(7,2) m=11: program with 27 gates: exists (4.0s)
-f_(9,1) m=11: program with 27 gates: exists (1.5s)
+f_(8,1) m=10: program with 24 gates: exists (11.3s)
+f_(7,2) m=11: program with 27 gates: exists (4.2s)
+f_(9,1) m=11: program with 27 gates: exists (1.4s)
 G=f_(2,1) R1 with 7 gates: SAT (0.0s)
 G=f_(2,1) R1 with 6 gates: UNSAT (0.0s)
 G=f_(3,1) R1 with 12 gates: SAT (0.0s)
 G=f_(3,1) R1 with 11 gates: UNSAT (0.0s)
 G=f_(4,1) R1 with 15 gates: SAT (0.2s)
 G=f_(4,1) R1 with 14 gates: UNSAT (0.4s)
-G=f_(5,1) R1 with 18 gates: SAT (2.5s)
-G=f_(5,1) R1 with 17 gates: UNSAT (28.8s)
+G=f_(5,1) R1 with 18 gates: SAT (2.4s)
+G=f_(5,1) R1 with 17 gates: UNSAT (29.6s)
 G=f_(3,2) R1 with 18 gates: SAT (0.0s)
-G=f_(3,2) R1 with 17 gates: UNSAT (22.2s)
+G=f_(3,2) R1 with 17 gates: UNSAT (22.8s)
 f_(4,1): composed 183 members (m<=1100), failures 0; bound 15*gamma-1
 f_(5,1): composed 157 members (m<=1100), failures 0; bound 18*gamma-2
 f_(2,1) m=4: greedy 6, Boyar-Peralta 6, heuristic 6, closed form 8
@@ -184,3 +184,15 @@ f_(7,1) m=9: greedy 24, Boyar-Peralta 23, heuristic 23, closed form 23
 f_(8,1) m=10: greedy 28, Boyar-Peralta 26, heuristic 26, closed form 26
 f_(7,2) m=11: greedy 28, Boyar-Peralta 28, heuristic 28, closed form 28
 f_(9,1) m=11: greedy 30, Boyar-Peralta 29, heuristic 29, closed form 29
+== Other pentanomial families (Section IX-C, Table 7)
+degrees without irreducible trinomials: 502
+family     degrees XOR/bit shared 2nd cheaper mean saving
+second         288    2.70                               
+first          229    2.99    176         176        9.7%
+typeI          361    2.99    204         204        9.5%
+typeII         318    3.73    183         183       27.0%
+k3<=m/2        502    3.98    288         288       32.1%
+second family cheaper than every other family in 288 of 288 degrees: 5.6% to 33.2%, mean 11.7%
+covered by the four families: 484; by the second family only: 15 [69, 306, 339, 381]
+class x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1: irreducible members in degrees without trinomials: 0
+NIST degrees (typeI, typeII): {163: (487, 665), 283: (847, 1021), 571: (None, 2149)}

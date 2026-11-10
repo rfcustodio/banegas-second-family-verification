@@ -4,6 +4,12 @@
  *   census sec MLO MHI     irreducible second-family members  x^m+x^{b+c}+x^b+x^c+1, m=b+2c, b>c>=1
  *   census fst MLO MHI     irreducible first-family members   x^m+x^{b+c}+x^b+x^c+1, m=2b+c, b>c>=1
  *   census tri MLO MHI     for each m: smallest k<=m/2 with x^m+x^k+1 irreducible (0 if none)
+ *   census t1 MLO MHI      irreducible type I pentanomials  x^m+x^{n+1}+x^n+x+1, 2<=n<=floor(m/2)-1   (prints m n)
+ *   census t2 MLO MHI      irreducible type II pentanomials x^m+x^{n+2}+x^{n+1}+x^n+1, 1<=n<=floor(m/2)-1 (prints m n)
+ *   census esp MLO MHI     irreducible x^m+x^{m-s}+x^{m-2s}+x^{m-3s}+1 (Reyhani-Masoleh and Hasan, class 2),
+ *                          (m-1)/8 <= s <= (m-1)/3                                        (prints m s)
+ *   census pmin MLO MHI    for each m: the first (k1,k2,k3), by smallest k3, then k2, then k1, k3 <= m/2, with
+ *                          x^m+x^k3+x^k2+x^k1+1 irreducible                   (prints m k3 k2 k1; 0 0 0 if none)
  *   census one m e1 e2 ... arbitrary sparse polynomial x^m + sum x^ei (must include 0)
  *
  * Test: trial division by all irreducible polynomials of degree <= min(12, m/2)
@@ -139,6 +145,18 @@ int main(int argc, char **argv) {
         } else if (!strcmp(mode, "fst")) {
             for (int c = 1; c < m; c++) { if ((m - c) % 2) continue; int b = (m - c) / 2; if (b <= c) continue;
                 int ex[5] = {m, b + c, b, c, 0}; setf(m, ex, 5); if (irreducible()) printf("%d %d %d\n", m, b, c); }
+        } else if (!strcmp(mode, "t1")) {
+            for (int n = 2; n <= m / 2 - 1; n++) { int ex[5] = {m, n + 1, n, 1, 0}; setf(m, ex, 5); if (irreducible()) printf("%d %d\n", m, n); }
+        } else if (!strcmp(mode, "t2")) {
+            for (int n = 1; n <= m / 2 - 1; n++) { int ex[5] = {m, n + 2, n + 1, n, 0}; setf(m, ex, 5); if (irreducible()) printf("%d %d\n", m, n); }
+        } else if (!strcmp(mode, "esp")) {
+            for (int s = 1; 3 * s <= m - 1; s++) { if (8 * s < m - 1) continue;
+                int ex[5] = {m, m - s, m - 2 * s, m - 3 * s, 0}; setf(m, ex, 5); if (irreducible()) printf("%d %d\n", m, s); }
+        } else if (!strcmp(mode, "pmin")) {
+            int done = 0;
+            for (int k3 = 3; 2 * k3 <= m && !done; k3++) for (int k2 = 2; k2 < k3 && !done; k2++) for (int k1 = 1; k1 < k2 && !done; k1++) {
+                int ex[5] = {m, k3, k2, k1, 0}; setf(m, ex, 5); if (irreducible()) { printf("%d %d %d %d\n", m, k3, k2, k1); done = 1; } }
+            if (!done) printf("%d 0 0 0\n", m);
         } else if (!strcmp(mode, "tri")) {
             int found = 0;
             for (int k = 1; 2 * k <= m && !found; k++) { int ex[3] = {m, k, 0}; setf(m, ex, 3); if (irreducible()) found = k; }

@@ -25,3 +25,8 @@ verification/g150.txt
 verification/output.txt
 verification/census_verified.json
 verification/greedy_beyond150.txt
+verification/t1.txt
+verification/t2.txt
+verification/esp.txt
+verification/pmin.txt
+verification/other_families.json

@@ -42,4 +42,4 @@ data:             ## regenerate data/ from scratch (needs a C compiler; about 20
 clean:            ## remove LaTeX and build by-products
 	cd paper && rm -f *.aux *.blg *.log *.out *.run.xml *-blx.bib *.bcf
 	rm -f xorred
-	cd verification && rm -f alg1verify alg2verify census greedy sec.txt fst.txt tri.txt g150.txt output.txt census_verified.json greedy_beyond150.txt
+	cd verification && rm -f alg1verify alg2verify census greedy sec.txt fst.txt tri.txt g150.txt output.txt census_verified.json greedy_beyond150.txt t1.txt t2.txt esp.txt pmin.txt other_families.json

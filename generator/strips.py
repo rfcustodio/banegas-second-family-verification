@@ -16,7 +16,7 @@ reduction modulo f splits into gamma independent reductions modulo G
      see verification/exact_base.py).
 
 Usage: python3 strips.py [KMAX] [RUNS]   (defaults: 21 and 200)
-       python3 strips.py --special MMAX    (Table 7: irreducible special
+       python3 strips.py --special MMAX    (Table 8: irreducible special
                                              members with 5 <= m <= MMAX)
 """
 import itertools, math, random, sys
@@ -117,7 +117,7 @@ def main():
 
 
 # ---------------------------------------------------------------------------
-# Table 7: irreducible special members (Proposition 19) and their costs.
+# Table 8: irreducible special members (Proposition 19) and their costs.
 
 def mulmod(a, b, f):
     r, fb = 0, f.bit_length()
