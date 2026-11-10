@@ -228,9 +228,10 @@ Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
 (\cref{sec:greedy}).
 
 \item We perform an irreducibility census for degrees
-up to $1100$, evaluate both constructions on it, characterize the irreducible special members, and compare the
-resulting polynomials with those of the first family, with irreducible
-trinomials and with the NIST pentanomials (\cref{sec:comparison}).
+up to $1100$, evaluate both constructions on it, characterize the irreducible
+special members, and compare the resulting polynomials with those of the first
+family, with type I and type II pentanomials, with irreducible trinomials and
+with the NIST pentanomials (\cref{sec:comparison}).
 
 \end{enumerate}
 
@@ -319,8 +320,11 @@ construction in \cref{sec:greedy}.
 
 Several families of irreducible polynomials admit reduction algorithms whose XOR
 costs are known in closed form. \Cref{tab:known} summarizes the results relevant
-to our comparison, including trinomials, equally spaced pentanomials, and
-Banegas' first family.
+to our comparison, including trinomials, equally spaced pentanomials, type I
+pentanomials \cite{RodriguezKoc2003,ReyhaniHasan2004,Imana2018}, general
+pentanomials with small middle exponents, and Banegas' first family. Type II
+pentanomials $x^m+x^{n+2}+x^{n+1}+x^n+1$ \cite{RodriguezKoc2003} are compared in
+\cref{sec:otherfamilies}.
 
 \begin{table*}[t]
 \centering\small
@@ -340,6 +344,14 @@ equally spaced
   & $m=4c$
   & $\tfrac74m-1$
   & \cite{HasanWangBhargava1992,Banegas2015}\\
+type I pentanomial $x^m+x^{n+1}+x^n+x+1$
+  & $2\le n\le m/2-1$
+  & $3m-2$
+  & \cite{ReyhaniHasan2004,BCP2019}\\
+pentanomial $x^m+x^{k_3}+x^{k_2}+x^{k_1}+1$
+  & $k_3\le m/2$
+  & $4m-4$
+  & \cite{ReyhaniHasan2004}\\
 Banegas' first family
   $x^{2b+c}+x^{b+c}+x^b+x^c+1$
   & $b>c$
@@ -1800,6 +1812,51 @@ in $25$ such degrees, including $x^{16}+x^{11}+x^6+x^5+1$ (\cref{ex:16}),
 $x^{48}+x^{33}+x^{18}+x^{15}+1$ and $x^{144}+x^{99}+x^{54}+x^{45}+1$, whose
 reduction costs are $40$, $126$ and $384$ XOR gates, respectively.
 
+\subsection{Comparison with other pentanomial families}\label{sec:otherfamilies}
+
+Banegas' first family is not the only family of pentanomials proposed for
+degrees without irreducible trinomials. We repeated the census for type I
+pentanomials $x^m+x^{n+1}+x^n+x+1$ and type II pentanomials
+$x^m+x^{n+2}+x^{n+1}+x^n+1$, with $n\le m/2-1$ \cite{RodriguezKoc2003}, and for
+the class $x^m+x^{m-s}+x^{m-2s}+x^{m-3s}+1$ of \cite{ReyhaniHasan2004}. Each of
+these degrees also has an irreducible pentanomial with $k_3\le m/2$, whose
+reduction costs at most $4m-4$ XOR gates (\cref{tab:known}). For type I members we use the
+bound $3m-2$ of \cref{tab:known}. For type II members we use the greedy count,
+the same measure as for the NIST pentanomials in \cref{tab:nist}, minimized over
+the irreducible members of each degree. The class of \cite{ReyhaniHasan2004}
+has no irreducible member in the degrees considered here: all its irreducible
+members with $m\le1100$ lie in degrees that have an irreducible trinomial.
+
+\Cref{tab:others} summarizes the comparison over the $502$ degrees without
+irreducible trinomials. In each of the $288$ degrees where the second family
+has an irreducible member, its best member is cheaper than the best member of
+every other family, by $5.6\%$ to $33.2\%$, with a mean of $11.7\%$. Type I
+pentanomials cover more degrees than the second family, $361$ against $288$,
+but at the cost of the first family, about $3$ XOR gates per bit. Taken
+together, the four families cover $484$ of the $502$ degrees; in $15$ of them,
+for example $m=69$ and $m=306$, the second family is the only one.
+
+\begin{table*}[t]
+\centering\small
+\caption{Comparison with other pentanomial families over the $502$ degrees
+$5\le m\le1100$ without irreducible trinomials. For each family: the cost used,
+the number of degrees with an irreducible member, the mean number of XOR gates
+per bit of the best member, and the degrees shared with the second family,
+where the second family is always cheaper.}
+\label{tab:others}
+\begin{tabular}{@{}l l r r r r@{}}
+\toprule
+Family & cost used & degrees & XORs per bit & shared degrees & mean saving\\
+\midrule
+second family (this paper) & \cref{thm:main,thm:chain}, \eqref{eq:specialbound} & $288$ & $2.70$ & & \\
+Banegas' first family & $3m-2$, $\tfrac{12}5m-1$ \cite{BCP2019} & $229$ & $2.99$ & $176$ & $9.7\%$\\
+type I & $3m-2$ \cite{ReyhaniHasan2004} & $361$ & $2.99$ & $204$ & $9.5\%$\\
+type II & greedy count & $318$ & $3.73$ & $183$ & $27.0\%$\\
+pentanomial with $k_3\le m/2$ & $4m-4$ \cite{ReyhaniHasan2004} & $502$ & $3.98$ & $288$ & $32.1\%$\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \subsection{Irreducible special members}\label{sec:specialmembers}
 
 For members with $\gamma>1$, irreducibility can be decided from the base
@@ -1900,6 +1957,9 @@ At $m=571$, the corresponding cost is $1528$ XOR gates, compared with $2003$ for
 the NIST pentanomial and $1711$ for the first family, representing reductions of
 $23.7\%$ and $10.7\%$.
 
+Type I members exist at degrees $163$ and $283$, with the same cost $3m-2$ as
+the first family, and the best type II members need $665$, $1021$ and $2149$ XOR
+gates at degrees $163$, $283$ and $571$ (greedy count).
 No irreducible member of the second family was found at degree $283$. At degrees
 $233$ and $409$, irreducible trinomials provide lower reduction costs than the
 pentanomials considered here.
@@ -1966,7 +2026,9 @@ comparisons with Conta-XOR.
 The computational results indicate that the second family provides useful
 alternatives to previously studied pentanomials. Among the degrees examined, it
 contains irreducible members in cases where the first family does not, including
-degrees for which irreducible trinomials are unavailable. At degrees $163$ and
+degrees for which irreducible trinomials are unavailable, and wherever it has
+members in those degrees it is cheaper than the first family and than type I
+and type II pentanomials. At degrees $163$ and
 $571$, the proposed construction gives lower XOR counts for polynomial reduction
 than the corresponding NIST pentanomials and the available members of the first
 family. The word-level formulation and the low-depth variant further show how

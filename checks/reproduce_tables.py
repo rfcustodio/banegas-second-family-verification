@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recomputes Table 4 and Table 8 of the paper, and the numbers quoted in the abstract
+"""Recomputes Table 4 and Table 9 of the paper, and the numbers quoted in the abstract
 and in Section IX, using the authors' generator (generator/fam2.py), the Conta-XOR
 implementation (generator/contaxor.py) and the census lists in data/.
 Usage: python3 checks/reproduce_tables.py      (about 1 minute)
@@ -38,7 +38,7 @@ for m, b, c, dx, cx, cf, dp in T2:
     expect('Algorithm 1 gates (correct)', (len(P.gates), check(b, c, P, out)), (cf, True))
     expect('Algorithm 1 depth', max(P.depth[o] for o in out), dp)
 
-print('\nTable 8 (best known costs at the NIST degrees)')
+print('\nTable 9 (best known costs at the NIST degrees)')
 nist = {163: (7, 6, 3, 571), 283: (12, 7, 5, 862), 571: (10, 5, 2, 2003)}
 for m, (a, b, c, v) in nist.items():
     f = poly(m, a, b, c, 0); L, n = matriz_reducao(f)
@@ -58,7 +58,7 @@ expect('degrees = 0 mod 8 with a second-family member', len({m for m, b, c in F2
 for m, b, c, cost in ((48, 18, 15, 126), (144, 54, 45, 384)):
     P, out = program(b, c)
     expect(f'x^{m}+x^{b+c}+x^{b}+x^{c}+1: irreducible, gates', (irredutivel(poly(m, b + c, b, c, 0)), len(P.gates), check(b, c, P, out)), (True, cost, True))
-print('\nTable 7 (irreducible special members) and Proposition 19')
+print('\nTable 8 (irreducible special members) and Proposition 19')
 from math import gcd
 BASE = {(2, 1): (6, 7), (3, 1): (10, 12), (4, 1): (14, 15), (5, 1): (16, 18), (3, 2): (16, 18)}
 Nc = lambda b, c: c * ((b + c) // (3 * c)) + max(0, (b + c) % (3 * c) - 2 * c)
@@ -80,7 +80,7 @@ for m, b, c in sorted(spec):
     gens = [min(3 * m - cc - 3, 3 * m - 3 - Nc(bb, cc)) for mm, bb, cc in F2all
             if mm == m and (bb // gcd(bb, cc), cc // gcd(bb, cc)) not in BASE]
     got[m] = (3 * m - c - 3, (g - 1) * R1 + R2, min(gens) if gens else None)
-expect('Table 7: closed form, strip bound and best generic member (15 rows)', got, T7)
+expect('Table 8: closed form, strip bound and best generic member (15 rows)', got, T7)
 pct = lambda new, old: round(100 * (old - new) / old, 1)
 expect('savings vs NIST at 163 / 571 (%)', (pct(440, 571), pct(1528, 2003)), (22.9, 23.7))
 expect('savings vs first family at 163 / 571 (%)', (pct(440, 487), pct(1528, 1711)), (9.7, 10.7))

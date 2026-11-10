@@ -9,8 +9,9 @@ automated tests.
 |---|---|---|
 | `verify_statements.py` | Proposition 2 (i)-(v); Lemma 5 (random products against long division); Theorem 7 (equations 5, 6, 7, symbolically for every member); Theorem 8 and Proposition 9 (via `generator/fam2.py`, including the measured-depth statistic of Section V); Corollary 10 (complete multiplier on random field elements); Example 11; Corollary 16. Option `--mmax M` sets the largest degree (default 120; the paper uses 300). | 10 s (default), 3 min (`--mmax 300`) |
 | `verify_chain.py` | Lemma 12, Theorem 13 (Algorithm 2 symbolically, exactly `3m-3-N(b,c)` gates), the formula and the cases of `N(b,c)`, Proposition 15, Example 14, the last column of Table 4 and the values of Section VI. Option `--mmax M` (default 120). | 3 s |
-| `reproduce_tables.py` | Every entry of Tables 4, 7 and 8, Proposition 19 against the census, and the numbers quoted in Section IX. | 30 s |
+| `reproduce_tables.py` | Every entry of Tables 4, 8 and 9, Proposition 19 against the census, and the numbers quoted in Section IX. | 30 s |
 | `analyze_paar150.py` | Every number of Observation 18 and the content of Figure 2, from `data/paar150.txt`. | 1 s |
+| `compare_other_families.py` | Table 7 and Section IX-C: comparison with type I, type II and general pentanomials, from the census files in `data/` (type II greedy counts from `data/other_families.json`). | 1 s |
 | `compare_censuses.py` | Compares, polynomial by polynomial, the authors' census (`data/`) with the independent census (`independent/censo_table3_dados.json`), then recomputes Table 6 and the census numbers of Section IX with both constructions. | 1 s |
 
 To run all of them: `./run_quick_checks.sh` from the repository root.

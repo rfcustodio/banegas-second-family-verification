@@ -16,7 +16,7 @@ python3 analyze_census.py
 echo "== Greedy (Conta-XOR) for m <= 150, 20 randomized runs"
 ./greedy fam2 5 150 20 > g150.txt
 python3 analyze_greedy.py
-echo "== Example 11 (Table 3), NIST-degree members (Tables 4 and 8): dXOR, Conta-XOR and depth"
+echo "== Example 11 (Table 3), NIST-degree members (Tables 4 and 9): dXOR, Conta-XOR and depth"
 for p in "16 11 6 5 0" "163 117 71 46 0" "233 158 83 75 0" "233 217 201 16 0" "409 294 179 115 0" \
          "409 337 265 72 0" "571 389 207 182 0" "571 465 359 106 0" "571 549 527 22 0" \
          "163 7 6 3 0" "283 12 7 5 0" "571 10 5 2 0" "233 74 0" "409 87 0"; do
@@ -40,3 +40,9 @@ python3 exact_small.py
 python3 exact_base.py
 python3 compose_sat.py
 python3 heuristic_small.py
+echo "== Other pentanomial families (Section IX-C, Table 7)"
+./census t1 5 1100 > t1.txt
+./census t2 5 1100 > t2.txt
+./census esp 5 1100 > esp.txt
+./census pmin 5 1100 > pmin.txt
+python3 other_families.py

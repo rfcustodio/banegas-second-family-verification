@@ -96,13 +96,16 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Text | 25 degrees `≡ 0 mod 8` with members; 40, 126 and 384 XORs | quick: `checks/reproduce_tables.py` | reproduced |
 | Fig. 3 | cost per bit by degree (no-trinomial degrees), both constructions | `generator/make_figures.py` from `data/census_alg2.json` | regenerated |
 | Prop. 19 | irreducible special members: `f_{2,1}(x^(5^i))`, `f_{3,1}(x^(31^i))`, `f_{4,1}(x^(3^i 7^j))` | proof + check | quick: `checks/reproduce_tables.py` (the special members found by the census are exactly those predicted) | PASS |
-| Table 7 | the 15 irreducible special members with `5 <= m <= 1100`: closed form, strip bound, best generic member | quick: `checks/reproduce_tables.py`; `generator/strips.py --special 1100` | all entries reproduced |
-| Table 8 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7% | quick: `checks/reproduce_tables.py` | reproduced |
+| Table 1 (rows) | type I pentanomials `3m-2` and pentanomials with `k3 <= m/2` `4m-4` | literature (Reyhani-Masoleh and Hasan 2004, as tabulated in BCP 2019) | not computational |
+| Table 7 | comparison with type I, type II and general pentanomials over the 502 degrees without trinomials: degrees covered, XORs per bit, shared degrees, savings | quick: `checks/compare_other_families.py`; full: `verification/census.c` (`t1`, `t2`, `esp`, `pmin`) and `verification/other_families.py` | all entries reproduced |
+| Section IX-C | second family cheaper than every other family in all 288 degrees where it has members (5.6% to 33.2%, mean 11.7%); 484 degrees covered by the four families, 15 only by the second; no member of `x^m+x^(m-s)+x^(m-2s)+x^(m-3s)+1` in these degrees | same | reproduced |
+| Table 8 | the 15 irreducible special members with `5 <= m <= 1100`: closed form, strip bound, best generic member | quick: `checks/reproduce_tables.py`; `generator/strips.py --special 1100` | all entries reproduced |
+| Table 9 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7%; type I and type II members at the NIST degrees (text) | quick: `checks/reproduce_tables.py` | reproduced |
 
 ## Abstract
 
 Every number in the abstract appears in one of the rows above (Theorems 8 and 13,
-Proposition 9, Table 2, Table 6, Table 8, and the size of the verification).
+Proposition 9, Table 2, Table 6, Table 9, and the size of the verification).
 
 ## Not verified by code
 
