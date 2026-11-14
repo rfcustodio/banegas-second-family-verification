@@ -63,9 +63,10 @@ def main():
             w=csv.DictWriter(f,fieldnames=list(items[0]));w.writeheader();w.writerows(items)
     save("cross_family_measured_summary.csv",summary)
     save("cross_family_measured_pareto.csv",frontier)
-    fig,axes=plt.subplots(1,len(degrees),figsize=(4*len(degrees),4),layout="constrained")
-    if len(degrees)==1:axes=[axes]
-    for ax,m in zip(axes,degrees):
+    plotted=[m for m in (5,20,40,80,163,233,571) if m in degrees]
+    fig,axes=plt.subplots(2,4,figsize=(16,8),layout="constrained")
+    axes=axes.ravel()
+    for ax,m in zip(axes,plotted):
         for family,marker in [("F1","s"),("F2","o")]:
             ps=[r for r in rows[m] if r["family"]==family]
             ax.scatter([r["gates"] for r in ps],[r["depth"] for r in ps],
@@ -74,6 +75,7 @@ def main():
         ax.plot([r["gates"] for r in ps],[r["depth"] for r in ps],color="black",linewidth=1)
         ax.set(title=f"m={m}",xlabel="XOR gates",ylabel="XOR depth")
         ax.legend()
+    for ax in axes[len(plotted):]:ax.set_visible(False)
     fig.savefig(OUT/"cross_family_measured_pareto.pdf")
     plt.close(fig)
     meta=dict(degrees=degrees,f1_circuits=len(f1),
