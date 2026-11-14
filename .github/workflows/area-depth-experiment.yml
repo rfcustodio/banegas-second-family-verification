@@ -41,6 +41,8 @@ jobs:
         run: python experiments/family_formula_comparison.py
       - name: Verify selected first-family Conta-XOR baseline circuits
         run: python experiments/f1_contaxor_baseline.py
+      - name: Validate exact BCP special-case regression oracle
+        run: python experiments/f1_bcp_special_oracle.py
       - name: Generate and verify original BCP 2019 Eq14 circuits
         run: python experiments/f1_bcp_measured.py
       - name: Compare measured cross-family Pareto frontiers on selected degrees
