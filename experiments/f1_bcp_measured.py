@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"generator"))
-from contaxor import verifica,profundidade
+from contaxor import verifica,profundidade,pmod
 OUT=ROOT/"experiments"/"results"
 
 def bcp_slp(b,c):
@@ -54,6 +54,29 @@ def bcp_slp(b,c):
     assert all(len(row)==1 for row in rows)
     return prog,[set(row) for row in rows],n
 
+def verify_exact(prog,rows,f,n):
+    """Prove equality of linear maps over GF(2), for every possible input."""
+    m=f.bit_length()-1
+    masks={j:1<<j for j in range(n)}
+    for w,u,v in prog:
+        assert w not in masks and u in masks and v in masks
+        masks[w]=masks[u]^masks[v]
+    actual=[]
+    for row in rows:
+        acc=0
+        for v in row:acc^=masks[v]
+        actual.append(acc)
+    expected=[0]*m
+    for j in range(n):
+        reduced=pmod(1<<j,f)
+        while reduced:
+            bit=reduced&-reduced
+            i=bit.bit_length()-1
+            expected[i]^=1<<j
+            reduced^=bit
+    assert actual==expected,("BCP symbolic mismatch",m)
+    return True
+
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     data=[]
@@ -67,6 +90,7 @@ def main():
         depth=profundidade(prog,rows,n)
         assert gates==3*m-2,(m,b,c,gates,3*m-2)
         assert depth<=3,(m,b,c,depth)
+        assert verify_exact(prog,rows,f,n),(m,b,c)
         assert verifica(prog,rows,f,testes=20),(m,b,c)
         data.append(dict(m=m,b=b,c=c,method="F1 BCP 2019 Eq14",
                          gates=gates,depth=depth,verified=True))
