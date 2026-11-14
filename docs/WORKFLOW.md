@@ -17,7 +17,7 @@ keep the paper and the evidence for it in step.
 
 Open an **Issue** on GitHub with:
 
-* the statement (for example "Observation 12 (d)" or "Table 2, row m = 233");
+* the statement (for example "Observation 18 (d)" or "Table 2, row m = 233");
 * the command you ran and its output;
 * what you expected.
 
