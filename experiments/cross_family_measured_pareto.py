@@ -58,9 +58,11 @@ def main():
         min_f1_depth=min(r["depth"] for r in first)
         min_f2_depth=min(r["depth"] for r in second)
         nondominated=[r for r in candidates if not any(dominates(other,r) for other in candidates)]
+        # Keep one representative per family at each Pareto coordinate.
+        # A tied F1/F2 point belongs to both families, not only to F1.
         unique={}
         for r in sorted(nondominated,key=lambda r:(r["gates"],r["depth"],r["family"],r["method"])):
-            unique.setdefault((r["gates"],r["depth"]),r)
+            unique.setdefault((r["gates"],r["depth"],r["family"]),r)
         frontier.extend(unique.values())
         summary.append(dict(m=m,f1_best_gates=best_f1["gates"],
             f1_best_depth=min_f1_depth,f2_best_gates=best_f2["gates"],
