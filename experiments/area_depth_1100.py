@@ -73,20 +73,27 @@ def main():
     rows=[]
     for (m,method),(cost,b,c) in sorted(best.items()):
         generated, d = depth(method,b,c)
-        if generated is not None and generated != cost:
-            raise AssertionError((m,method,b,c,generated,cost))
+        # The generator deduplicates coincident linear forms. For special
+        # parameter ratios this can yield fewer gates than the stated bound.
+        # Preserve both numbers rather than claiming that they must agree.
+        if generated is not None and generated > cost:
+            raise AssertionError(("SLP exceeds formula",m,method,b,c,generated,cost))
         rows.append(dict(m=m,method=method,b=b,c=c,xors=cost,
                          xors_per_bit=round(cost/m,9),
+                         generated_xors="" if generated is None else generated,
+                         gate_saving="" if generated is None else cost-generated,
                          depth="" if d is None else d,
                          depth_status=("measured from generated SLP" if d is not None
                                        else "not available; requires matching SLP")))
-    fields=["m","method","b","c","xors","xors_per_bit","depth","depth_status"]
+    fields=["m","method","b","c","xors","xors_per_bit","generated_xors","gate_saving","depth","depth_status"]
     with (OUT/"best_by_method.csv").open("w",newline="") as f:
         writer=csv.DictWriter(f,fieldnames=fields)
         writer.writeheader();writer.writerows(rows)
     (OUT/"metadata.json").write_text(json.dumps({
         "range":[5,1100],"selection":"minimum XOR per method per degree",
         "depth":"actual SLP depth for F2 algorithms 1 and 2 only",
+        "xors":"published construction formula or special SAT strip cost",
+        "generated_xors":"actual SLP gate count; may be smaller because duplicate linear forms are shared",
         "missing":"F1 BCP and SAT-optimal special strip SLP depth",
         "note":"minimum-depth polynomials may differ from minimum-XOR polynomials"
     },indent=2)+"\n")
