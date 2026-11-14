@@ -30,7 +30,7 @@ def main():
              "special_heuristic_improve_area":14,
              "special_heuristic_improve_depth":13,
              "first_family_heuristic_slps_tested":len(baseline),
-             "important":"F1 formula vs F2 formula area; F1 Conta-XOR depth is not BCP depth"}
+             "important":"Formula comparison is distinct from measured SLPs; BCP Eq14 measured for b!=2c, optimized Algorithm 3 remains unmeasured"}
     (OUT/"consolidated_checks.json").write_text(json.dumps(summary,indent=2)+"\n")
     print(json.dumps(summary,indent=2))
 if __name__=="__main__":main()
