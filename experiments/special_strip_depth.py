@@ -25,12 +25,17 @@ def depth(prog,k,top):
         if not row:
             depths.append(0)
             continue
-        # Deterministic left-to-right final XOR chain, matching gate accounting.
-        ordered=sorted(row)
-        acc=d[ordered[0]]
-        for v in ordered[1:]:
-            acc=max(acc,d[v])+1
-        depths.append(acc)
+        # Depth-minimizing binary association for the same output XOR count.
+        # Reassociate only the final row, leaving the shared intermediate SLP fixed.
+        levels=sorted(d[v] for v in row)
+        while len(levels)>1:
+            a,b=levels.pop(0),levels.pop(0)
+            nxt=max(a,b)+1
+            pos=0
+            while pos<len(levels) and levels[pos]<nxt:
+                pos+=1
+            levels.insert(pos,nxt)
+        depths.append(levels[0])
     return max(depths)
 
 def best_program(bp,cp,top,runs=20):
