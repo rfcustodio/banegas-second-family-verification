@@ -43,6 +43,8 @@ jobs:
         run: python experiments/f1_contaxor_baseline.py
       - name: Compare measured cross-family Pareto frontiers on selected degrees
         run: python experiments/cross_family_measured_pareto.py
+      - name: Audit cross-family effect sizes and Pareto membership
+        run: python experiments/cross_family_statistics.py
       - name: Cross-check consolidated experimental statistics
         run: python experiments/consolidated_checks.py
       - name: Upload reproducible results
