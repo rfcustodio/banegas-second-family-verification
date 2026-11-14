@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"generator"))
 from contaxor import matriz_reducao,conta_xor,profundidade,verifica
 OUT=ROOT/"experiments"/"results"
-DEGREES={163,233,409,571}
+DEGREES={5,8,9,11,12,13,16,23,24,25,27,29,30,36,37,40,45,46,47,48,52,53,55,60,62,63,65,72,76,80,81,83,85,89,90,93,94,95,97,99,163,233,409,571}
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
