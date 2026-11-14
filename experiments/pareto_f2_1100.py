@@ -63,6 +63,15 @@ def main():
     write("all_f2_slps.csv",members,["m","b","c","method","gates","depth"])
     write("pareto_f2.csv",pareto,["m","b","c","method","gates","depth"])
     write("f2_area_depth_summary.csv",summary,list(summary[0]))
+    # Check each computed frontier: no selected point is dominated, and
+    # every generated SLP is dominated or has a matching Pareto point.
+    by_degree={}
+    for r in pareto: by_degree.setdefault(r["m"],[]).append(r)
+    for m,rs in groups.items():
+        front=by_degree[m]
+        assert all(not any(dominates(q,p) for q in rs) for p in front)
+        assert all(any((q["gates"]==p["gates"] and q["depth"]==p["depth"])
+                       or dominates(q,p) for q in front) for p in rs)
     metadata={"degrees":len(groups),"irreducible_members":len(members)//2,
               "slps":len(members),"pareto_points":len(pareto),
               "degrees_with_tradeoff":sum(r["pareto_points"]>1 for r in summary),
