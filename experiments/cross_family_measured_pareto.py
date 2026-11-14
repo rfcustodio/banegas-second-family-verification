@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cross-family Pareto analysis using measured, concrete circuits only.
 
-F1 is the selected Conta-XOR/Paar baseline, NOT the BCP implementation.
+F1 includes verified BCP 2019 Eq14 circuits and the Conta-XOR/Paar baseline.\nThe BCP optimized special b=2c Algorithm 3 is not yet implemented.
 F2 includes both algorithms and verified heuristic special strips.
 No SAT area bound is assigned an unmeasured depth.
 """
@@ -38,6 +38,13 @@ def main():
             b=int(r["b"]),c=int(r["c"]),gates=int(r["gates"]),depth=int(r["depth"])))
     f1_degrees={int(r["m"]) for r in f1}
     f2_degrees={m for m,items in rows.items() if any(r["family"]=="F2" for r in items)}
+    bcp=load("f1_bcp_measured.csv")
+    for r in bcp:
+        assert r["verified"]=="True"
+        m=int(r["m"])
+        rows[m].append(dict(m=m,family="F1",method="F1 BCP 2019 Eq14",
+            b=int(r["b"]),c=int(r["c"]),gates=int(r["gates"]),depth=int(r["depth"])))
+    f1_degrees |= {int(r["m"]) for r in bcp}
     degrees=sorted(f1_degrees & f2_degrees)
     assert degrees, "No common degrees for measured cross-family circuits"
     summary=[];frontier=[]
@@ -84,9 +91,11 @@ def main():
     meta=dict(degrees=degrees,f1_circuits=len(f1),
         f1_only_degrees=sorted(f1_degrees-f2_degrees),
         f1_circuits_at_common_degrees=sum(int(r["m"]) in degrees for r in f1),
+        bcp_verified_circuits=len(bcp),
+        bcp_degrees_at_common=sum(int(r["m"]) in degrees for r in bcp),
         f1_on_joint_frontier=sum(r["f1_contributes_to_joint_frontier"] for r in summary),
         f2_on_joint_frontier=sum(r["f2_contributes_to_joint_frontier"] for r in summary),
-        limitation="F1 Conta-XOR/Paar only; BCP depth unmeasured")
+        limitation="BCP 2019 Eq14 verified for b!=2c; optimized special BCP Algorithm 3 not yet implemented")
     (OUT/"cross_family_measured_metadata.json").write_text(json.dumps(meta,indent=2)+"\n")
     print(json.dumps(meta))
 if __name__=="__main__":main()
