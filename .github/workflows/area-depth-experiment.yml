@@ -7,6 +7,10 @@ on:
     paths:
       - 'experiments/**'
       - '.github/workflows/area-depth-experiment.yml'
+  pull_request:
+    paths:
+      - 'experiments/**'
+      - '.github/workflows/area-depth-experiment.yml'
   workflow_dispatch:
 
 permissions:
