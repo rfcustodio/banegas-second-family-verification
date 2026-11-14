@@ -5,6 +5,41 @@
 > `data/` and `checks/`. Run the commands below from inside this folder
 > (`cd independent`), or prefix the script names with `independent/`.
 
+> **Note (November 2026): this page describes the draft of October 2026.** The text below
+> and the scripts are kept as they were written, so that the suite stays independent of
+> the later work. The paper has since been retitled *Efficient Closed-Form Reduction for
+> Banegas' Second Family of Pentanomials* (M. Tomaszewski, R. F. Custódio, G. Banegas and
+> D. Panario) and its statements were renumbered. To read this page against the current
+> version (`paper/main.pdf`), use the table below.
+>
+> | In this page (draft of October 2026) | In the current paper |
+> |---|---|
+> | Theorem 5 (closed-form quotient) | Theorem 7 |
+> | Theorem 6 (main result, `3m − c − 3`) | Theorem 8 |
+> | Proposition 7 (depth) | Proposition 9 |
+> | Corollary 10 (word-level reduction) | Corollary 16 |
+> | Proposition 11 (low-depth variant) | Proposition 17 |
+> | Observation 12, Section 7 (comparison with Conta-XOR) | Observation 18, Section VIII |
+> | Table 2 (members at the NIST degrees) | Table 4 |
+> | Table 3, Section 8 (irreducibility census) | Table 6, Section IX |
+>
+> Three figures quoted below were superseded, because the current paper adds the chain
+> construction (Algorithm 2, Theorem 13) and the optimal strip programs for special
+> members (Proposition 4, Table 2), which this suite does not implement:
+>
+> * the paper now reports symbolic verification of all 201,117 members with `m ≤ 1100`
+>   (see `verification/`), where the draft cited 14,850 members with `m ≤ 300`;
+> * the second family now has the lower bound in all 405 common degrees, by 9.7% on
+>   average. The values reproduced here (403 of 405 degrees, mean saving 7.3%) are the
+>   ones for Theorem 8 alone, and the paper still quotes 7.3% for that case. The two
+>   remaining degrees, `m = 5` and `m = 155`, are now decided by special members
+>   (`f_{3,1}` with 10 gates, and `f_{93,31} = f_{3,1}(x^31)` with 370 gates);
+> * the mean cost per bit of the best generic member is now 2.70. The value 2.77
+>   reproduced here is the one the paper gives for Theorem 8 alone (Table 6).
+>
+> Everything else on this page (Algorithm 1, its gate count and depth, the Conta-XOR
+> comparison for `m ≤ 150`, the census counts) is unchanged in the current paper.
+
 This repository contains an **independent, from-scratch verification suite** for the
 results in:
 
