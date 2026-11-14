@@ -47,17 +47,17 @@ def main():
         best_f2=min(second,key=lambda r:(r["gates"],r["depth"]))
         min_f1_depth=min(r["depth"] for r in first)
         min_f2_depth=min(r["depth"] for r in second)
+        nondominated=[r for r in candidates if not any(dominates(other,r) for other in candidates)]
         unique={}
-        for r in sorted(candidates,key=lambda r:(r["gates"],r["depth"],r["family"],r["method"])):
-            if not any(dominates(other,r) for other in candidates):
-                unique.setdefault((r["gates"],r["depth"]),r)
+        for r in sorted(nondominated,key=lambda r:(r["gates"],r["depth"],r["family"],r["method"])):
+            unique.setdefault((r["gates"],r["depth"]),r)
         frontier.extend(unique.values())
         summary.append(dict(m=m,f1_best_gates=best_f1["gates"],
             f1_best_depth=min_f1_depth,f2_best_gates=best_f2["gates"],
             f2_best_depth=min_f2_depth,
             f2_area_saving_percent=round(100*(best_f1["gates"]-best_f2["gates"])/best_f1["gates"],4),
-            f1_contributes_to_joint_frontier=any(r["family"]=="F1" for r in unique.values()),
-            f2_contributes_to_joint_frontier=any(r["family"]=="F2" for r in unique.values())))
+            f1_contributes_to_joint_frontier=any(r["family"]=="F1" for r in nondominated),
+            f2_contributes_to_joint_frontier=any(r["family"]=="F2" for r in nondominated)))
     def save(name,items):
         with (OUT/name).open("w",newline="") as f:
             w=csv.DictWriter(f,fieldnames=list(items[0]));w.writeheader();w.writerows(items)
