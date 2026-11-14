@@ -31,6 +31,8 @@ jobs:
         run: python experiments/area_depth_1100.py
       - name: Enumerate all F2 circuits and Pareto frontiers
         run: python experiments/pareto_f2_1100.py
+      - name: Validate Pareto summary and render degree-228 example
+        run: python experiments/analyze_pareto.py
       - name: Upload reproducible results
         if: always()
         uses: actions/upload-artifact@v4
