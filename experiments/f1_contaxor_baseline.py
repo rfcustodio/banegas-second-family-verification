@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent first-family Conta-XOR/Paar baseline on selected degrees.
+"""Independent first-family Conta-XOR/Paar baseline on all m<=200 plus selected larger degrees.
 
 IMPORTANT: This is NOT the BCP circuit. BCP is represented by a published
 area formula only, with no depth estimate until its exact SLP is implemented.
@@ -11,7 +11,8 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"generator"))
 from contaxor import matriz_reducao,conta_xor,profundidade,verifica
 OUT=ROOT/"experiments"/"results"
-DEGREES={5,8,9,11,12,13,16,23,24,25,27,29,30,36,37,40,45,46,47,48,52,53,55,60,62,63,65,72,76,80,81,83,85,89,90,93,94,95,97,99,163,233,409,571}
+DEGREES={233,409,571}
+MAX_EXHAUSTIVE_DEGREE=200
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
@@ -19,7 +20,7 @@ def main():
     for line in (ROOT/"data"/"fam1_irr.txt").read_text().splitlines():
         if not line.strip() or line.startswith("#"):continue
         m,b,c=map(int,line.split())
-        if m not in DEGREES:continue
+        if m not in DEGREES and m>MAX_EXHAUSTIVE_DEGREE:continue
         assert m==2*b+c
         f=(1<<m)|(1<<(b+c))|(1<<b)|(1<<c)|1
         rows,n=matriz_reducao(f)
