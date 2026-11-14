@@ -28,7 +28,7 @@ def main():
         m=int(r["m"])
         q=[p for p in pareto if int(p["m"])==m]
         assert q
-        assert bool(r["f1_contributes_to_joint_frontier"]=="True")==any(p["family"]=="F1" for p in q) or m==155
+        assert (r["f1_contributes_to_joint_frontier"]=="True")==any(p["family"]=="F1" for p in q)
     savings=[100*v/int(r["f1_best_gates"]) for v,r in zip(a,s)]
     stats=dict(
         basis="Verified SLPs: F1 Conta-XOR/Paar heuristic vs F2 algorithms and heuristic strips; NOT BCP",
