@@ -36,7 +36,10 @@ def main():
         m=int(r["m"])
         rows[m].append(dict(m=m,family="F1",method="F1 Conta-XOR/Paar heuristic",
             b=int(r["b"]),c=int(r["c"]),gates=int(r["gates"]),depth=int(r["depth"])))
-    degrees=sorted({int(r["m"]) for r in f1})
+    f1_degrees={int(r["m"]) for r in f1}
+    f2_degrees={m for m,items in rows.items() if any(r["family"]=="F2" for r in items)}
+    degrees=sorted(f1_degrees & f2_degrees)
+    assert degrees, "No common degrees for measured cross-family circuits"
     summary=[];frontier=[]
     for m in degrees:
         candidates=rows[m]
@@ -79,6 +82,8 @@ def main():
     fig.savefig(OUT/"cross_family_measured_pareto.pdf")
     plt.close(fig)
     meta=dict(degrees=degrees,f1_circuits=len(f1),
+        f1_only_degrees=sorted(f1_degrees-f2_degrees),
+        f1_circuits_at_common_degrees=sum(int(r["m"]) in degrees for r in f1),
         f1_on_joint_frontier=sum(r["f1_contributes_to_joint_frontier"] for r in summary),
         f2_on_joint_frontier=sum(r["f2_contributes_to_joint_frontier"] for r in summary),
         limitation="F1 Conta-XOR/Paar only; BCP depth unmeasured")
