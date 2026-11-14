@@ -41,6 +41,8 @@ jobs:
         run: python experiments/family_formula_comparison.py
       - name: Verify selected first-family Conta-XOR baseline circuits
         run: python experiments/f1_contaxor_baseline.py
+      - name: Cross-check consolidated experimental statistics
+        run: python experiments/consolidated_checks.py
       - name: Upload reproducible results
         if: always()
         uses: actions/upload-artifact@v4
