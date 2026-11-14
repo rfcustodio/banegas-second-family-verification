@@ -13,6 +13,10 @@ on:
       - '.github/workflows/area-depth-experiment.yml'
   workflow_dispatch:
 
+concurrency:
+  group: area-depth-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -39,7 +43,7 @@ jobs:
         run: python experiments/compare_special_frontiers.py
       - name: Compare full first- and second-family area formulas
         run: python experiments/family_formula_comparison.py
-      - name: Verify selected first-family Conta-XOR baseline circuits
+      - name: Verify all first-family Conta-XOR baseline circuits through degree 1100
         run: python experiments/f1_contaxor_baseline.py
       - name: Validate exact BCP special-case regression oracle
         run: python experiments/f1_bcp_special_oracle.py
@@ -47,7 +51,7 @@ jobs:
         run: python experiments/f1_bcp_measured.py
       - name: Compare BCP and Conta-XOR on identical first-family polynomials
         run: python experiments/f1_bcp_vs_paar_paired.py
-      - name: Compare measured cross-family Pareto frontiers on selected degrees
+      - name: Compare measured cross-family Pareto frontiers
         run: python experiments/cross_family_measured_pareto.py
       - name: Audit cross-family effect sizes and Pareto membership
         run: python experiments/cross_family_statistics.py
