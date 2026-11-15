@@ -1909,6 +1909,27 @@ degree.  The dashed line denotes the unweighted mean across degrees.}
 \label{fig:measuredsaving}
 \end{figure*}}{}
 
+A representative joint-frontier plot is generated from
+\texttt{cross\_family\_measured\_pareto.csv} for degrees
+$m=155,163,228,571$ (\cref{fig:jointpareto} when available).
+At $m=228$, the measured joint frontier contains six nondominated
+circuits: five second-family constructions, ranging from $606$ gates
+at depth $152$ to $620$ gates at depth $4$, and one first-family
+BCP circuit with $682$ gates at depth $3$.  This example shows why
+neither the smallest gate count nor the smallest depth alone describes
+the available implementation choices.
+
+\IfFileExists{fig_joint_pareto_selected.pdf}{%
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{fig_joint_pareto_selected.pdf}
+\caption{Measured joint area--depth Pareto frontiers for representative
+degrees $155$, $163$, $228$, and $571$.  Points are symbolically
+verified reduction SLPs.  These are nondominated among the evaluated
+candidates, not necessarily among all possible circuits.}
+\label{fig:jointpareto}
+\end{figure*}}{}
+
 The result demonstrates a systematic area--depth tradeoff among the
 measured constructions: the family with fewer gates typically has
 greater minimum depth.  It does not prove that this ordering holds
