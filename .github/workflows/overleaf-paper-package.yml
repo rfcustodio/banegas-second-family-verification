@@ -1,0 +1,64 @@
+name: Build revised paper and Overleaf ZIP
+
+on:
+  push:
+    branches:
+      - paper/experimental-area-depth-revision
+    paths:
+      - 'paper/**'
+      - '.github/workflows/overleaf-paper-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install figure dependencies
+        run: python -m pip install --disable-pip-version-check pandas matplotlib
+      - name: Retrieve verified experimental data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p paper/experimental_data
+          gh run download 43631263668 --repo "${{ github.repository }}" --name area-depth-1100 --dir paper/experimental_data
+          test -s paper/experimental_data/cross_family_measured_summary.csv
+          test -s paper/experimental_data/cross_family_measured_pareto.csv
+      - name: Generate vector figures
+        run: |
+          python paper/plot_measured_comparison.py --data paper/experimental_data --out paper
+          python paper/plot_measured_pareto.py --data paper/experimental_data --out paper
+          for f in fig_measured_area fig_measured_depth fig_measured_saving fig_joint_pareto_selected; do test -s "paper/${f}.pdf"; done
+      - name: Compile IEEE Access manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper
+          latexmk_use_xelatex: false
+          args: -pdf -bibtex -interaction=nonstopmode -halt-on-error -file-line-error
+      - name: Assemble Overleaf-ready ZIP
+        run: |
+          test -s paper/main.pdf
+          mkdir -p dist/banegas-overleaf
+          cp paper/main.tex paper/refs.bib paper/ieeeaccess.cls paper/IEEEtran.cls dist/banegas-overleaf/
+          cp paper/logo.png paper/notaglinelogo.png paper/bullet.png dist/banegas-overleaf/
+          cp paper/*.jpg paper/fig_*.pdf dist/banegas-overleaf/
+          cp paper/OVERLEAF.md paper/plot_measured_comparison.py paper/plot_measured_pareto.py dist/banegas-overleaf/
+          cp paper/main.pdf dist/banegas-overleaf/compiled-preview.pdf
+          (cd dist/banegas-overleaf && zip -q -r ../banegas-overleaf-complete.zip .)
+          test -s dist/banegas-overleaf-complete.zip
+      - name: Publish Overleaf ZIP and compiled preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: banegas-overleaf-complete
+          path: |
+            dist/banegas-overleaf-complete.zip
+            paper/main.pdf
+          retention-days: 30
