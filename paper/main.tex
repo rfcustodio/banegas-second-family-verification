@@ -1818,6 +1818,60 @@ generated from those checked outputs.
 
 % ==================================================================
 
+\subsection{Measured comparison of verified circuits}\label{sec:measuredcomparison}
+
+The GitHub Actions experimental run associated with commit
+\texttt{e80e57f} produced a symbolically verified comparison over the
+$405$ field degrees, up to $m=1100$, for which both Banegas families have
+irreducible members.  For each degree and family, the measured area and
+depth values are the minima among the verified candidate SLPs available
+in that experiment.  The best-area circuit and the best-depth circuit
+need not be the same circuit.
+
+\Cref{tab:measuredfamily} summarizes the comparison.  The second family
+has the lower measured minimum XOR count in all $405$ shared degrees,
+with a mean relative saving of $9.652358\%$ and a median of $10.0\%$,
+where the relative saving for degree $m$ is computed against the
+first-family minimum for that same degree.  The saving ranges from
+$0.269542\%$ to $13.636364\%$.  Conversely, the first family has a
+lower measured minimum XOR depth in $404$ degrees; at $m=155$ the two
+families tie at depth $3$.  At this degree, the observed minimum
+area is $371$ XOR gates for the first family and $370$ for the second.
+Both families contribute at least one nondominated circuit to the
+joint measured Pareto frontier in $404$ of the $405$ degrees.  At
+$m=155$, only the second family contributes to that frontier.
+
+\begin{table}[t]
+\centering\small
+\caption{Measured comparison on $405$ shared irreducible degrees
+($m\le1100$). Results are for verified candidate SLPs, not
+globally optimal circuits. The optimized BCP first-family special
+construction for $b=2c$ is not included as a measured SLP.}
+\label{tab:measuredfamily}
+\begin{tabular}{@{}l r@{}}
+\toprule
+Metric & Result\\
+\midrule
+Degrees with lower second-family XOR area & $405$\\
+Mean second-family area saving & $9.652358\%$\\
+Median second-family area saving & $10.0\%$\\
+Minimum / maximum area saving & $0.269542\%$ / $13.636364\%$\\
+Degrees with lower first-family XOR depth & $404$\\
+Degrees with equal minimum XOR depth & $1$ ($m=155$)\\
+Degrees with both families on joint frontier & $404$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The result demonstrates a systematic area--depth tradeoff among the
+measured constructions: the family with fewer gates typically has
+greater minimum depth.  It does not prove that this ordering holds
+for globally optimal circuits, and the missing optimized special
+BCP implementation must be resolved before claiming exhaustive
+coverage of all published first-family constructions.  These measured
+comparisons supplement, rather than replace, the formula-based
+census of \cref{sec:comparison}.
+
 \subsection{Parameter selection}
 
 The bound of \cref{thm:main} decreases as $c$ increases, while the bound of
