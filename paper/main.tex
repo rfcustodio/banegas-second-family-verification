@@ -1933,11 +1933,64 @@ candidates, not necessarily among all possible circuits.}
 The result demonstrates a systematic area--depth tradeoff among the
 measured constructions: the family with fewer gates typically has
 greater minimum depth.  It does not prove that this ordering holds
-for globally optimal circuits, and the missing optimized special
-BCP implementation must be resolved before claiming exhaustive
-coverage of all published first-family constructions.  These measured
+for globally optimal circuits, and the independently reconstructed special-case BCP SLP described
+below has not yet been incorporated into the full cross-family
+experimental census.  These measured
 comparisons supplement, rather than replace, the formula-based
 census of \cref{sec:comparison}.
+
+\subsection{An independently verified BCP special-case circuit}
+\label{sec:bcpspecial}
+
+For the first Banegas family at $b=2c$, the modulus is
+\[
+f(x)=x^{5c}+x^{3c}+x^{2c}+x^c+1,\qquad m=5c.
+\]
+We reconstructed a binary XOR straight-line program directly from the
+coefficient identities of the original special-case reduction, rather
+than relying on the published pseudocode's indexing conventions.
+For each residue class $j$ modulo $c$, let
+$a_k=d_{j+kc}$, where $0\leq k\leq8$ and, when $j<c-1$,
+$a_9=d_{j+9c}$.  Introduce
+\[
+t=a_5\oplus a_6,\qquad
+u=\begin{cases}
+a_7\oplus a_9,&j<c-1,\\
+a_7,&j=c-1.
+\end{cases}
+\]
+The five reduced coefficients at positions $j,j+c,\ldots,j+4c$
+are obtained by
+\begin{align}
+y_0&=(a_0\oplus a_8)\oplus(a_5\oplus a_7),\\
+y_1&=a_1\oplus(t\oplus u),\\
+y_2&=a_2\oplus t,\\
+y_3&=a_3\oplus(t\oplus a_8),\\
+y_4&=a_4\oplus(a_6\oplus u).
+\end{align}
+For $j<c-1$, the two temporaries and five outputs require,
+respectively, $2$ and $10$ XORs, for $12$ gates per
+full strip.  For $j=c-1$, the coefficient $a_9$ is absent,
+so $u=a_7$ requires no gate, and the final strip uses $11$
+XORs.  Thus the circuit has exactly
+\[
+12(c-1)+11=12c-1
+\]
+two-input XOR gates.  With the indicated parenthesization,
+every output has depth at most three.  The generated SLP was
+independently compared, coefficient by coefficient, with
+polynomial long division over $\mathbb F_2$ for
+$1\le c\le100$, including $c=31$ ($m=155$).
+The executable symbolic verifier is
+\texttt{experiments/f1\_bcp\_special\_slp.py} in the
+reproducibility repository.
+
+This reconstruction verifies the claimed special-case circuit
+complexity independently of the source pseudocode.  The $405$-degree
+cross-family statistics and figures above were generated before
+this implementation and have \emph{not} yet been recomputed with
+these circuits included.  Accordingly, they remain explicitly
+identified as results for their original candidate set.
 
 \subsection{Parameter selection}
 
@@ -2388,9 +2441,8 @@ XOR depth in $404$ degrees.  Both families therefore contribute to the
 joint measured area--depth Pareto frontier in $404$ degrees.  This
 tradeoff matters when selecting a modulus under simultaneous gate-count
 and depth constraints.  It concerns the measured candidate programs,
-not all possible linear circuits; in particular, the optimized published
-BCP special-case construction for $b=2c$ remains to be implemented as
-a separately verified SLP.
+not all possible linear circuits; in particular, the independently verified special-case BCP SLP
+for $b=2c$ is not part of the original cross-family CSV snapshot.
 
 Several questions remain open. The chain construction matches the best programs
 found with a SAT solver for the small members with $c=1$, but for members
