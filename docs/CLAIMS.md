@@ -107,11 +107,12 @@ reduction matrix, so they prove correctness for all inputs of that `(b, c)`.
 | Section IX-E (text) | all 15 degrees of Table 8 have irreducible trinomials; the trinomial cost `2m-2` is lower in 12 of them; at `m = 20, 100, 500` the equally spaced members need 34, 174, 874 against 38, 198, 998 | quick and full: `checks/review_checks.py` | PASS |
 | Table 10 | full multiplier (schoolbook and recursive Karatsuba product) and squaring at 163 and 571, for every irreducible member of the two families and the NIST pentanomial; Karatsuba product 12,001 / 90,703 XOR and 6,203 / 47,916 AND; Karatsuba multiplier saving against NIST 1.04% / 0.51%; squaring minimized separately in each family: 173 (second), 162 (first), 246 (NIST) at 163, so the second family needs 6.8% more gates than the first; 570 (second, `c = 106` and `c = 22`), 679 (first), 861 (NIST) at 571, savings 16.1% and 33.8%; 649 for `f_{207,182}`; with 20 randomized runs only the member with `c = 106` improves, to 549 | quick: `checks/compare_multiplier.py`; full: `verification/multiplier.py` (`karatsuba.py`, `greedy sq`) | reproduced |
 | Table 9 | costs at the NIST degrees; savings 22.9%, 23.7%, 9.7%, 10.7%; type I and type II members at the NIST degrees (text) | quick: `checks/reproduce_tables.py` | reproduced |
+| Section IX-F, Table 11 | depth: first family 3 in all 755 irreducible members; second family, smallest depth 3 / 4 / 5 / 6 to 11 in 2 / 292 / 69 / 42 of the 405 common degrees; fewest-gates circuit has depth at most 4 in 189 degrees (median 7); with depth at most 3, 4, 5, 6, 8, 12 the second family has a circuit in 2, 294, 363, 384, 402, 405 degrees and fewer gates than the first in 2, 292, 346, 363, 373, 391 (mean saving 4.7%, 8.9%, 8.2%, 8.0%, 8.5%, 8.7%); examples `m = 228`, 163, 571, 975 | quick: `checks/compare_depth.py` (from `data/depth_members.csv`, `data/depth_census.csv`); full: `verification/depth_census.py` (`make depth`), which builds the 4,554 + 755 circuits and checks each one symbolically | reproduced |
 
 ## Abstract
 
 Every number in the abstract appears in one of the rows above (Theorems 8 and 13,
-Proposition 9, Table 2, Table 6, Table 9, and the size of the verification).
+Proposition 9, Table 2, Table 6, Table 9, Table 11, and the size of the verification).
 
 ## Not verified by code
 

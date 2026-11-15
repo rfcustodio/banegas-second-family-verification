@@ -31,4 +31,5 @@ verification/esp.txt
 verification/pmin.txt
 verification/other_families.json
 verification/multiplier.json
+verification/depth_output.txt
 build-sat/

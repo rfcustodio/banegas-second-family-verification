@@ -86,20 +86,21 @@ In polynomial-basis arithmetic over \(\F_{2^m}\), the defining irreducible polyn
 determines the cost of modular reduction. Using a greedy XOR-counting heuristic, Banegas
 identified two families of pentanomials with low reduction cost. The first has since been
 analyzed, but the second,
-\(f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1\) with \(b>c\ge1\), was left open. This paper
-closes that gap. For \(m=b+2c\), we derive a closed form for the quotient of the polynomial
+\(f_{b,c}(x)=x^{b+2c}+x^{b+c}+x^b+x^c+1\) with \(b>c\ge1\), was left open. For \(m=b+2c\), we derive a closed form for the quotient of the polynomial
 division, in terms of comb sums of stride \(3c\), and turn it into a reduction circuit with
 at most \(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). A second
 construction splits the reduction into \(c\) independent chains and uses \(3m-3-N(b,c)\)
 XOR gates, where \(N(b,c)\approx(m-c)/3\); it is shorter whenever \(b\ge4c+1\). Both
 approach \(8m/3\) gates, at opposite ends of the range of \(c\). Members built from five
 small base pentanomials split into independent strips, and strip programs proved optimal
-by a SAT solver give even shorter circuits. We verified both constructions symbolically
-for all 201,117 members with \(m\le1100\). An irreducibility census for \(5\le m\le1100\)
-found irreducible members in 720 degrees, 288 of which have no irreducible trinomial. In
+by a SAT solver give shorter circuits. We verified both constructions symbolically
+for all 201,117 members with \(m\le1100\). A census in this range
+found irreducible members in 720 degrees, 288 of them without irreducible trinomials. In
 the 405 degrees where both families have irreducible members, the reduction bounds of the
-second family are lower, by \(9.7\%\) on average. At the NIST degrees 163 and 571, the best
-members need 440 and 1,528 XOR gates for the reduction, against 571 and 2,003 for the NIST
+second family are lower, by \(9.7\%\) on average. The first family has depth 3; with
+depth at most 4, the second still needs fewer gates in 292 of these degrees. At the NIST
+degrees 163 and 571, the best
+members need 440 and 1,528 XOR gates, against 571 and 2,003 for the NIST
 pentanomials.
 \end{abstract}
 
@@ -230,7 +231,9 @@ reported by Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
 up to $1100$, evaluate both constructions on it, characterize the irreducible
 special members, and compare the resulting polynomials with those of the first
 family, with type I and type II pentanomials, with irreducible trinomials and
-with the NIST pentanomials (\cref{sec:comparison}).
+with the NIST pentanomials. Against the first family, whose reduction has
+depth $3$, we also compare the depth of the circuits
+(\cref{sec:comparison}).
 
 \end{enumerate}
 
@@ -1877,7 +1880,8 @@ the better of \cref{thm:main,thm:chain}.
 The dashed line indicates
 the asymptotic limit
 $\tfrac83$ of both general
-bounds for the second family.}
+bounds for the second family. No special member appears: the $15$ irreducible
+special members (\cref{tab:specirr}) have degrees with irreducible trinomials.}
 \label{fig:census}
 \end{figure*}
 
@@ -2164,6 +2168,77 @@ $m$ & polynomial & reduction & schoolb. & Karatsuba & square\\
 \end{tabular}
 \end{table}
 
+\subsection{Depth of the reduction circuits}\label{sec:depth}
+
+The comparisons above count XOR gates. In depth, the first family has the
+advantage. We built the reduction circuits of the $755$ irreducible members of
+the first family with $m\le1100$, with the gate counts of \cite{BCP2019}
+($3m-2$, and $\tfrac{12}{5}m-1$ for the two members with $b=2c$, of degrees $5$
+and $155$), and checked them symbolically: all of them have depth $3$. For the
+second family, the bound of \cref{prop:depth} equals $4$ only when $3c>m-2$,
+and it grows as $c$ decreases, while the members with the fewest gates often
+have small $c$ (\cref{thm:chain}).
+
+To quantify this, we built, for each of the $1508$ irreducible members of the
+second family, the circuits of \cref{alg:main}, of \cref{alg:chain} and of the
+low-depth variant of \cref{prop:lowdepth}. For the $15$ special members of
+\cref{tab:specirr} we also built the strip programs of \cref{tab:base} and the
+strip programs found by the greedy search of \cref{sec:family}, which have
+depth at most $3$ but, for the base polynomial $f_{4,1}$, more gates. All
+$4554$ circuits were checked symbolically, and their depths were computed
+from the circuits, not from the bounds.
+
+In the $405$ degrees with irreducible members of both families, the smallest
+depth available in the second family is $3$ in two degrees ($m=5$ and
+$m=155$, with special members), $4$ in $292$ degrees, $5$ in $69$, and between
+$6$ and $11$ in the remaining $42$. The circuit with the fewest gates is often
+much deeper: its depth is at most $4$ in $189$ degrees, and its median is $7$.
+\Cref{tab:depth} restricts the comparison to circuits of bounded depth. With
+depth at most $4$, one level more than the first family, the second family
+still has fewer gates in $292$ of the $405$ degrees, by $8.9\%$ on average,
+against $9.7\%$ in all $405$ degrees without a limit on the depth. In the
+other $113$ degrees, a second-family circuit with fewer gates than the first
+family has depth $5$ or more.
+
+\begin{table}[t]
+\centering\small
+\caption{Second family against the first under a limit $D$ on the depth of
+the reduction circuit, in the $405$ degrees with irreducible members of both
+families. The first family has depth $3$ in all of them. Saving: mean
+relative difference in gates to the best member of the first family, over the
+degrees of the third column.}
+\label{tab:depth}
+\begin{tabular}{@{}c r r r@{}}
+\toprule
+    & degrees with a & of which with fewer gates & mean\\
+$D$ & circuit of depth $\le D$ & than the first family & saving\\
+\midrule
+$3$  & $2$   & $2$   & $4.7\%$\\
+$4$  & $294$ & $292$ & $8.9\%$\\
+$5$  & $363$ & $346$ & $8.2\%$\\
+$6$  & $384$ & $363$ & $8.0\%$\\
+$8$  & $402$ & $373$ & $8.5\%$\\
+$12$ & $405$ & $391$ & $8.7\%$\\
+none & $405$ & $405$ & $9.7\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Within the second family, a small increase in gates usually removes most of
+the depth. At $m=228$, for example, the circuits that are not dominated in
+gates and depth are the chain construction with $c=1$, $9$, $11$ and $21$
+($606$, $609$, $615$ and $618$ gates, with depths $152$, $20$, $16$ and $10$)
+and \cref{alg:main} with $(b,c)=(106,61)$, with $620$ gates and depth $4$; the
+first family needs $682$ gates at depth $3$. At the NIST degrees $163$ and
+$571$, the members with the fewest gates, $(71,46)$ and $(207,182)$, already
+have depth $4$. The low-depth variant is useful only when no member with large
+$c$ is irreducible: at $m=975$, where the only irreducible member has $c=1$,
+it reaches depth $11$ with $9183$ gates, against $2923$ gates at depth $3$ for
+the first family. The choice between the two families is therefore, in most
+degrees, an exchange of one XOR level for about $9\%$ of the gates of the
+reduction, in a multiplier whose product alone has XOR depth
+$\lceil\log_2 m\rceil$.
+
 
 % ==================================================================
 \section{Discussion and conclusion}\label{sec:conclusion}
@@ -2197,7 +2272,12 @@ alternatives to previously studied pentanomials. Among the degrees examined, it
 contains irreducible members in cases where the first family does not, including
 degrees for which irreducible trinomials are unavailable, and wherever it has
 members in those degrees its reduction bounds are lower than those of the first
-family and of type I and type II pentanomials. At degrees $163$ and
+family and of type I and type II pentanomials. The first family keeps the
+advantage in depth: its reduction circuits have depth $3$, while those of the
+second family have depth $4$ or more in all but two of the degrees in which
+both have irreducible members, and in $292$ of these degrees the second family
+still has fewer gates when its depth is limited to $4$ (\cref{sec:depth}). At
+degrees $163$ and
 $571$, the proposed construction gives lower XOR counts for polynomial reduction
 than the corresponding NIST pentanomials and the available members of the first
 family. The word-level formulation and the low-depth variant further show how

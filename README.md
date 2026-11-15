@@ -82,6 +82,11 @@ Over all degrees `5 ≤ m ≤ 1100`, the second family has irreducible members i
 degrees; in all 405 degrees where both families have irreducible members it is cheaper,
 by 9.7% on average. The chain construction improves the best member in 379 degrees.
 
+**Depth.** The first family has reduction depth 3. In the second family the smallest
+depth is 4 in 292 of the 405 common degrees (3 in two, 5 or more in 111). With depth at
+most 4, the second family still has fewer gates in 292 degrees, by 8.9% on average
+(Section IX-F, Table 11).
+
 ---
 
 ## 2. Check everything
@@ -123,6 +128,7 @@ Both run automatically on GitHub after every push (tab **Actions**).
 | Table 6 (census up to degree 1100) and agreement of the two censuses | `python3 checks/compare_censuses.py` | 1 s |
 | Table 7 (type I, type II and general pentanomials) | `python3 checks/compare_other_families.py` | 1 s |
 | Table 10 (full multiplier and squaring) | `python3 checks/compare_multiplier.py` (recomputed by `python3 verification/multiplier.py`, 2 min) | 1 s |
+| Section IX-F and Table 11 (depth of the circuits of both families) | `python3 checks/compare_depth.py` (recomputed by `make depth`, 4 min) | 1 s |
 | Lemma 19, equation (9), special members versus trinomials, word-level steps (added after the review) | `python3 checks/review_checks.py` | 45 s |
 | Table 2 and Table 5 (SAT) | `cd verification && python3 exact_small.py && python3 exact_base.py && python3 compose_sat.py && python3 heuristic_small.py` | 2 min |
 | Proposition 17 (low-depth variant) | `python3 generator/lowdepth.py --all 260` | 45 s |
@@ -138,7 +144,7 @@ The complete list, statement by statement, is in **[docs/CLAIMS.md](docs/CLAIMS.
 ```
 .
 ├── README.md            this page
-├── Makefile             shortcuts: make check | check-full | verify-all | figures | paper | data
+├── Makefile             shortcuts: make check | check-full | verify-all | depth | figures | paper | data
 ├── run_quick_checks.sh  runs all quick checks
 ├── docs/                explanations: GUIDE, CLAIMS, WORKFLOW, GLOSSARY
 ├── paper/               the paper (LaTeX source in the IEEE Access template, figures, PDF)
