@@ -36,6 +36,8 @@ jobs:
           python paper/plot_measured_comparison.py --data paper/experimental_data --out paper
           python paper/plot_measured_pareto.py --data paper/experimental_data --out paper
           for f in fig_measured_area fig_measured_depth fig_measured_saving fig_joint_pareto_selected; do test -s "paper/${f}.pdf"; done
+      - name: Verify reconstructed special BCP SLP
+        run: python experiments/f1_bcp_special_slp.py --max-c 100 --json
       - name: Compile IEEE Access manuscript
         uses: xu-cheng/latex-action@v3
         with:
