@@ -1772,6 +1772,50 @@ $f_{9,1}$ & $11$ & $29$ & $27$ & $29$ & $\le27$\\
 
 % ==================================================================
 \section{Comparison with the first family and with other polynomials}\label{sec:comparison}
+% Experimental extension: verified circuit metrics and scope.
+\subsection{Experimental area--depth methodology}\label{sec:areadepth}
+
+In addition to the analytic XOR-count bounds, we compare explicit linear
+straight-line programs (SLPs) for the two Banegas families.  An SLP gate
+computes the XOR of two previously available signals.  Its area proxy is the
+number of XOR gates, and its depth is the longest input-to-output chain of
+dependent XOR gates.  These are technology-independent circuit metrics; they
+are not measurements of silicon area, timing, energy, or software throughput.
+
+For each irreducible modulus in the experimental census, we construct the
+available reduction programs and check their outputs symbolically against
+the exact polynomial-reduction map over $\F_2$.  Symbolic equivalence is
+required in addition to any randomized tests.  The first-family candidates
+include the explicit general BCP construction of \cite{BCP2019}, where
+$b\ne2c$, and a separately measured Conta-XOR/Paar heuristic.  The optimized
+BCP special-case construction for $b=2c$ is not included in the measured
+BCP SLP set until an independently verified implementation is available.
+For the second family we consider the closed-form and chain constructions,
+together with available strip-based heuristic circuits.  We do not equate a
+greedy circuit with the BCP construction merely because their XOR counts
+happen to agree.
+
+At a fixed degree $m$, let $\mathcal{C}_m$ be the set of verified candidate
+circuits for irreducible members of the families under comparison.  A
+candidate with gate count $A$ and depth $D$ is \emph{dominated} if another
+candidate has $A'\le A$ and $D'\le D$, with at least one strict inequality.
+The \emph{measured Pareto frontier} consists of the nondominated candidates
+in $\mathcal{C}_m$.  When candidates from different families have identical
+$(A,D)$, both family labels are retained.  This frontier is relative to the
+tested constructions and is not asserted to be the globally optimal frontier
+over all possible XOR circuits.
+
+We distinguish three comparisons throughout: (i) analytic bounds obtained
+from published or proved constructions; (ii) gate counts and depths of
+symbolically verified SLPs; and (iii) exact gate-count minima for small
+instances supported by independently checked SAT unsatisfiability
+certificates.  An area certificate alone does not certify minimum depth or
+global area--depth Pareto optimality.  The experimental scripts, parameter
+lists, and machine-readable summaries are maintained with the repository,
+and numerical statements in the final figures and tables are to be
+generated from those checked outputs.
+
+
 % ==================================================================
 
 \subsection{Parameter selection}
