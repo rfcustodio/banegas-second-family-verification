@@ -4,7 +4,7 @@
 |---|---|
 | `main.tex` | LaTeX source in the IEEE Access template (a copy of the Overleaf master). |
 | `refs.bib` | Bibliography (BibTeX, style `IEEEtran`). |
-| `main.pdf` | Compiled paper (v26, 20 pages). This copy was compiled with a substitute bibliography style (`IEEEtran-doi.bst`), so the reference list may differ in formatting details from the Overleaf build; replace it with the Overleaf PDF when convenient. |
+| `main.pdf` | Compiled paper (v26, 20 pages). |
 | `ieeeaccess.cls`, `IEEEtran.cls`, `logo.png`, `notaglinelogo.png`, `bullet.png` | IEEE Access template files (do not edit). |
 | `fig_comb.pdf`, `fig_comb.tex` | Figure 1 (comb sums) and its TikZ source (`pdflatex fig_comb`). |
 | `fig_gain.pdf` | Figure 2: greedy count minus closed form; made by `generator/make_figures.py` from `data/paar150.txt`. |
