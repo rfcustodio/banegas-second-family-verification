@@ -2,7 +2,7 @@ SHELL := /bin/bash
 # Shortcuts for the co-authors. Run from the repository root.
 PY ?= python3
 
-.PHONY: check check-full verify-all sat-proofs greedy-beyond150 figures paper data clean
+.PHONY: check check-full verify-all sat-proofs greedy-beyond150 depth figures paper data clean
 
 check:            ## fast checks of every statement (about 15 s)
 	./run_quick_checks.sh
@@ -28,6 +28,11 @@ sat-proofs:       ## build CaDiCaL and drat-trim at the recorded commits, regene
 greedy-beyond150: ## regenerate data/greedy_beyond150.txt (greedy beyond m = 150; about 4 min) and check it
 	sh verification/greedy_beyond150.sh
 
+depth:            ## rebuild and check every circuit of Section IX-F, regenerate data/depth_*.csv (about 4 min)
+	cd verification && $(PY) depth_census.py > depth_output.txt
+	diff verification/depth_output.txt verification/expected_depth_census.txt && echo "depth census matches expected_depth_census.txt"
+	$(PY) checks/compare_depth.py
+
 figures:          ## regenerate Figures 2 and 3 (needs matplotlib)
 	$(PY) generator/make_figures.py
 
@@ -49,4 +54,4 @@ clean:            ## remove LaTeX and build by-products
 	rm -rf build-sat
 	cd paper && rm -f *.aux *.blg *.log *.out *.run.xml *-blx.bib *.bcf
 	rm -f xorred
-	cd verification && rm -f alg1verify alg2verify census greedy sec.txt fst.txt tri.txt g150.txt output.txt census_verified.json greedy_beyond150.txt t1.txt t2.txt esp.txt pmin.txt other_families.json multiplier.json
+	cd verification && rm -f alg1verify alg2verify census greedy sec.txt fst.txt tri.txt g150.txt output.txt census_verified.json greedy_beyond150.txt t1.txt t2.txt esp.txt pmin.txt other_families.json multiplier.json depth_output.txt
