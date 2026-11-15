@@ -98,7 +98,7 @@ by a SAT solver give even shorter circuits. We verified both constructions symbo
 for all 201,117 members with \(m\le1100\). An irreducibility census for \(5\le m\le1100\)
 found irreducible members in 720 degrees, 288 of which have no irreducible trinomial. In
 the 405 degrees where both families have irreducible members, the reduction bounds of the
-second family are lower, by \(9.7\%\) on average. At the NIST degrees 163 and 571, the best
+second family are lower, by \(9.7\%\) on average. A separate comparison of symbolically verified reduction circuits in these 405 degrees finds lower measured XOR area for the second family in every degree, with a mean saving of \(9.65\%\). The first family, however, has lower measured minimum XOR depth in 404 degrees, with a tie at degree 155. These observations establish an area--depth tradeoff among the tested constructions, not global circuit optimality. At the NIST degrees 163 and 571, the best
 members need 440 and 1,528 XOR gates for the reduction, against 571 and 2,003 for the NIST
 pentanomials.
 \end{abstract}
@@ -225,6 +225,15 @@ greedy Conta-XOR algorithm. For the generic members in the evaluated range, the
 closed-form construction is never more expensive; it accounts for the counts
 reported by Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
 (\cref{sec:greedy}).
+
+\item We compare symbolically verified linear straight-line programs from both
+families using XOR gate count and XOR depth.  Over the $405$ degrees with
+irreducible members in both families, the second family has lower measured
+area in every degree (mean saving $9.65\%$), while the first has lower
+measured minimum depth in $404$ degrees.  We characterize the resulting
+measured joint area--depth Pareto frontiers, carefully separating the
+published BCP construction from Conta-XOR/Paar heuristic circuits
+(\cref{sec:areadepth,sec:measuredcomparison}).
 
 \item We perform an irreducibility census for degrees
 up to $1100$, evaluate both constructions on it, characterize the irreducible
@@ -1863,6 +1872,43 @@ Degrees with both families on joint frontier & $404$\\
 \end{tabular}
 \end{table}
 
+The following figures visualize the same per-degree measured SLP
+statistics.  They are generated from the checked
+\texttt{cross\_family\_measured\_summary.csv} file using the accompanying
+\texttt{plot\_measured\_comparison.py} script.  The figures are included
+when the corresponding generated PDF files are present; their absence
+does not affect the stated numerical results.
+
+\IfFileExists{fig_measured_area.pdf}{%
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{fig_measured_area.pdf}
+\caption{Minimum observed XOR gates by degree among verified candidate
+reduction SLPs of each Banegas family, on the $405$ degrees with
+irreducible members of both families ($m\le1100$).}
+\label{fig:measuredarea}
+\end{figure*}}{}
+
+\IfFileExists{fig_measured_depth.pdf}{%
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{fig_measured_depth.pdf}
+\caption{Minimum observed XOR depth by degree, using a logarithmic
+vertical scale. The first family has lower minimum depth in $404$
+of the $405$ shared degrees; degree $155$ is tied.}
+\label{fig:measureddepth}
+\end{figure*}}{}
+
+\IfFileExists{fig_measured_saving.pdf}{%
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{fig_measured_saving.pdf}
+\caption{Relative area saving of the best measured second-family
+circuit against the best measured first-family circuit at each shared
+degree.  The dashed line denotes the unweighted mean across degrees.}
+\label{fig:measuredsaving}
+\end{figure*}}{}
+
 The result demonstrates a systematic area--depth tradeoff among the
 measured constructions: the family with fewer gates typically has
 greater minimum depth.  It does not prove that this ordering holds
@@ -2312,6 +2358,18 @@ better: by the greedy count, a member of the first family has the cheapest
 squaring at degree $163$ and two members of the second family at degree $571$.
 The gain in inversion therefore depends on the modulus and on the sequence of
 operations, not only on the family.
+
+The verified circuit comparison adds an important qualification to the
+area-oriented results.  In the $405$ degrees where both families have
+irreducible members, the tested second-family circuits use fewer XOR gates,
+on average by $9.65\%$, but the first family has a lower measured minimum
+XOR depth in $404$ degrees.  Both families therefore contribute to the
+joint measured area--depth Pareto frontier in $404$ degrees.  This
+tradeoff matters when selecting a modulus under simultaneous gate-count
+and depth constraints.  It concerns the measured candidate programs,
+not all possible linear circuits; in particular, the optimized published
+BCP special-case construction for $b=2c$ remains to be implemented as
+a separately verified SLP.
 
 Several questions remain open. The chain construction matches the best programs
 found with a SAT solver for the small members with $c=1$, but for members
