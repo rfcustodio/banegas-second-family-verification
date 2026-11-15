@@ -2172,7 +2172,7 @@ $m$ & polynomial & reduction & schoolb. & Karatsuba & square\\
 
 The comparisons above count XOR gates. In depth, the first family has the
 advantage. We built the reduction circuits of the $755$ irreducible members of
-the first family with $m\le1100$, with the gate counts of \cite{BCP2019}
+the first family with $m\le1100$, with the gate counts of \cite{BCP2019}\footnote{The pseudocode of Algorithms 2 and 3 of \cite{BCP2019} contains index errors, which are corrected in the circuits used here. In Algorithm 2, $T_1$ must be defined with $d_{i+2b+c}$ instead of $d_{i+2b+1}$, and the last line must read $D_{red}[2b+c-1]\leftarrow d_{2b+c-1}\oplus d_{3b+c-1}\oplus d_{3b+2c-1}$. In Algorithm 3, $T_1$ must be defined for $0\le i\le c-1$, and $D_{red}[c-1]$ must also contain $d_{8c-1}$. With these corrections both algorithms compute the reduction with the stated numbers of XORs, $3m-2$ and $12c-1$.}
 ($3m-2$, and $\tfrac{12}{5}m-1$ for the two members with $b=2c$, of degrees $5$
 and $155$), and checked them symbolically: all of them have depth $3$. For the
 second family, the bound of \cref{prop:depth} equals $4$ only when $3c>m-2$,
