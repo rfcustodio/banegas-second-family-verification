@@ -232,8 +232,9 @@ up to $1100$, evaluate both constructions on it, characterize the irreducible
 special members, and compare the resulting polynomials with those of the first
 family, with type I and type II pentanomials, with irreducible trinomials and
 with the NIST pentanomials. Against the first family, whose reduction has
-depth $3$, we also compare the depth of the circuits
-(\cref{sec:comparison}).
+depth $3$, we also compare the depth of the circuits. Finally, we measure a
+software implementation of the word-level formulation at degrees $163$ and
+$571$ (\cref{sec:comparison}).
 
 \end{enumerate}
 
@@ -1449,7 +1450,8 @@ When $b\le4c+1$, we have $\nu\le1$, and the reduction requires at most six
 shift-and-XOR operations. This includes the selected members of degrees $163$
 and $571$ discussed in \cref{sec:comparison}. The formulation can be used after
 carry-less polynomial multiplication, for example with \texttt{PCLMULQDQ}, or in
-bitsliced implementations.
+bitsliced implementations. \Cref{sec:software} reports measurements of an
+implementation of the first kind.
 
 Zhou and Zhang \cite{ZhouZhang2026} recently gave a general reduction for every
 monic binary modulus, in which the feedback recurrence is inverted by a product
@@ -2239,6 +2241,26 @@ degrees, an exchange of one XOR level for about $9\%$ of the gates of the
 reduction, in a multiplier whose product alone has XOR depth
 $\lceil\log_2 m\rceil$.
 
+\subsection{Software measurement}\label{sec:software}
+
+The comparisons above count gates. To demonstrate in a 
+more pratical matter, we
+implemented the word-level reduction of Corollary~\ref{cor:word} in C for the
+irreducible members of the second family at degrees $163$ and $571$. For the
+NIST pentanomials, and for the irreducible trinomials of degrees $233$ and
+$409$, we implemented a reduction in two rounds; for the pentanomials, the
+second round acts on a single machine word. As a baseline for the second
+family we
+also implemented serial folding, which applies the congruence $x^m\equiv g$
+of Proposition~\ref{prop:basic}(i) to the high part until it vanishes. 
+Polynomials are stored in $64$-bit words, products are computed with 
+\texttt{PCLMULQDQ}, and every routine was checked against a 
+bit-by-bit reference.
+
+We measured core cycles with the hardware performance counters, on a
+performance core of an Intel Core i7-1365U, with clang~23.1.5 and gcc~16.2.1
+at \texttt{-O3 -march=native} running Arch Linux Kernel~7.3.4-1. Each value 
+is the minimum over nine runs of $200\,000$ operations. 
 
 % ==================================================================
 \section{Discussion and conclusion}\label{sec:conclusion}
@@ -2285,7 +2307,12 @@ the algebraic result can be adapted to different implementation models. These
 comparisons concern reduction costs and do not, by themselves, establish an
 advantage in overall hardware area, energy consumption or software execution
 time; the best modulus depends on the architecture and on the operation
-\cite{Scott2007}. In a full multiplier the saving is small in relative terms,
+\cite{Scott2007}. The software measurements of \cref{sec:software} illustrate
+this. At degree $571$, the word-level reduction modulo $f_{207,182}$ needs
+$13\%$ to $33\%$ fewer cycles than the reduction modulo the NIST pentanomial in
+scalar code, and as many when the compiler vectorizes the latter; within the
+family, the cost follows the number of word operations and not the number of
+gates. In a full multiplier the saving is small in relative terms,
 between $0.5\%$ and $1.0\%$ against the NIST pentanomials with a Karatsuba
 product (\cref{tab:mult}). The reduction matters most where it dominates, as in
 squaring and therefore in inversion, but there the best modulus is not always
@@ -2315,8 +2342,9 @@ evaluating the resulting circuits under realistic area and delay constraints
 would help determine their practical advantages.
 
 The generators for both reduction algorithms, the symbolic verification code,
-the SAT models, the optimal programs, the irreducibility census and the scripts
-used to produce the experimental results are available at
+the SAT models, the optimal programs, the irreducibility census, the C
+implementation measured in \cref{sec:software} and the scripts used to produce
+the experimental results are available at
 \url{https://github.com/rfcustodio/banegas-second-family-verification}. The DRAT
 certificates are a release asset of the same repository. These materials support
 independent verification and reproduction of the reported results.
