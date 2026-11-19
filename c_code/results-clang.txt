@@ -1,0 +1,47 @@
+# CPU: 13th Gen Intel(R) Core(TM) i7-1365U
+# compiler: clang 23.1.5 
+# flags: -O3 -march=native -mpclmul -Wall -Wextra -fomit-frame-pointer -fno-vectorize -fno-slp-vectorize
+# cpu 2, iters=200000 trials=9, minimum over trials
+# unit: core cycles/op (perf_event, user space)
+# raw event: 0x8203, per op
+# clmul self-test ok
+# test 128 GCM                      ok
+# test 163 second(71,46) COMB       ok
+# test 163 second(71,46) fold       ok
+# test 163 first(63,37)             ok
+# test 163 first(74,15)             ok
+# test 163 NIST                     ok
+# test 233 trinomial(74)            ok
+# test 233 second(83,75) COMB       ok
+# test 283 NIST                     ok
+# test 283 first(111,61)            ok
+# test 409 trinomial(87)            ok
+# test 409 second(179,115) COMB     ok
+# test 571 second(207,182) COMB     ok
+# test 571 second(207,182) fold     ok
+# test 571 second(359,106) COMB     ok
+# test 571 second(527,22) COMB      ok
+# test 571 second(527,22) fold      ok
+# test 571 first(218,135)           ok
+# test 571 NIST                     ok
+
+field                           m  gates      mul  mul+red  red(tp)  red=sub  sqr+red  m+r med  red:ins  red:raw  sqr:ins  sqr:raw
+128 GCM                       128      0     57.1     59.9     10.3      2.8     22.7     65.2     56.0     0.00     66.0     0.00
+163 second(71,46) COMB        163    440    138.4    151.5     11.5     13.1     32.2    154.7     60.0     0.00     73.0     0.00
+163 second(71,46) fold        163    440    137.5    226.3     63.2     88.8     79.1    227.1    284.0     0.00    297.0     0.00
+163 first(63,37)              163    487    136.6    210.1     46.9     73.6     62.6    235.6    229.0     0.00    242.0     0.00
+163 first(74,15)              163    487    136.8    183.0     37.4     46.1     57.2    184.0    174.0     0.00    187.0     0.00
+163 NIST                      163    571    137.8    170.6     13.5     32.9     30.0    173.3     76.0     0.00     89.0     0.00
+233 trinomial(74)             233    464    174.4    197.5     12.1     23.1     30.0    198.3     70.0     0.00     85.0     0.00
+233 second(83,75) COMB        233    621    176.1    206.7     13.9     30.6     32.6    221.0     75.0     0.00     90.0     0.00
+283 NIST                      283    862    359.3    383.0     20.1     23.7     34.6    392.2    115.0     0.00    133.0     0.00
+283 first(111,61)             283    847    358.2    411.4     48.8     53.2     63.7    424.5    245.0     0.00    263.0     0.00
+409 trinomial(87)             409    816    541.9    557.0     18.0     15.1     28.0    617.3    106.0     0.00    129.0     0.00
+409 second(179,115) COMB      409   1109    544.0    565.3     21.0     21.3     42.1    627.6    122.0     0.00    145.0     0.00
+571 second(207,182) COMB      571   1528    950.1    975.1     30.4     25.0     39.6   1085.0    148.0     0.00    176.0     0.00
+571 second(207,182) fold      571   1528    946.8   1082.0    138.3    135.2    150.4   1206.2    549.0     0.00    577.0     0.00
+571 second(359,106) COMB      571   1604    945.6    972.3     34.1     26.7     44.4   1045.7    161.0     0.00    189.0     0.00
+571 second(527,22) COMB       571   1688    947.1    988.5     45.5     41.4     57.2   1085.1    202.0     0.00    230.0     0.00
+571 second(527,22) fold       571   1688    948.6   2015.3   1033.0   1066.6   1047.8   2237.0   3637.0     0.00   3665.0     0.00
+571 first(218,135)            571   1711   1042.2   1154.8    102.0    112.5    109.9   1175.6    427.0     0.00    455.0     0.00
+571 NIST                      571   2003   1043.3   1084.9     45.1     41.6     48.6   1089.5    189.0     0.00    217.0     0.00
