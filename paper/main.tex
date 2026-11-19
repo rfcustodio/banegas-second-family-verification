@@ -2255,7 +2255,8 @@ family we
 also implemented serial folding, which applies the congruence $x^m\equiv g$
 of Proposition~\ref{prop:basic}(i) to the high part until it vanishes. 
 Polynomials are stored in $64$-bit words, products are computed with 
-\texttt{PCLMULQDQ}, and every routine was checked against a 
+\texttt{PCLMULQDQ}\footnote{\url{https://www.felixcloutier.com/x86/pclmulqdq
+}}, and every routine was checked against a 
 bit-by-bit reference.
 
 We measured core cycles with the hardware performance counters, on a
