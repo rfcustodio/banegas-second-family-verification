@@ -16,7 +16,7 @@ ok=True
 for ln in open(sys.argv[1]):
     t=ln.split()
     #print("t = {}".format(t))
-    if t[0]!='V': continue
+    if not t or t[0]!='V': continue
     m,ne=int(t[1]),int(t[2]); e=[int(x) for x in t[3:3+ne]]; W=(m+63)//64
     o=3+ne; a=pack([int(x,16) for x in t[o:o+W]])
     b=pack([int(x,16) for x in t[o+W:o+2*W]]); r=pack([int(x,16) for x in t[o+2*W:o+3*W]])

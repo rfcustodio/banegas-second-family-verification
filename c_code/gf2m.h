@@ -1,7 +1,8 @@
 /* gf2m.h — PCLMULQDQ carry-less multiply + reduction kernels.
  * Bit i of poly = limb[i>>6] bit (i&63).
  * Elements: uint64_t[EL].  Products: uint64_t[PL].  m <= 640.
- * Reduction: r may alias p; r needs EL limbs, p needs PL limbs.
+ * Reduction: r may alias p; r needs EL limbs, p needs PL limbs. Only the
+ * first LIMBS(m) limbs of r form the result; higher limbs may retain data.
  * Build: -O3 -march=native -mpclmul, with auto-vectorization off (see the
  * Makefile): vectorized, these loops read with wide loads what they have just
  * written with narrow stores, and the blocked store-to-load forwards cost
@@ -19,6 +20,13 @@
 #define PL 24
 #define AI static inline __attribute__((always_inline))
 #define LIMBS(m) (((m)+63)/64)
+
+/* Optional throughput experiment for f_{527,22}; the paper's main table uses
+ * the default doubling comb. The descending recurrence reduces passes but
+ * extends the dependency chain between words. */
+#ifndef GF2M_DESCENDING_COMB_571_22
+#  define GF2M_DESCENDING_COMB_571_22 0
+#endif
 
 #if defined(__clang__)
 #  define UNROLL8 _Pragma("unroll 8")
@@ -67,7 +75,10 @@ AI void xshl(uint64_t *d, const uint64_t *s, unsigned k, int nd, int ns){
   unsigned w=k>>6, b=k&63;
   for(int i=0;i<nd;i++){
     int j=i-(int)w; uint64_t v=0;
-    if(j>=0 && j<ns){ v = s[j]<<b; if(b && j>0) v |= s[j-1]>>(64-b); }
+    if(j>=0){
+      if(j<ns) v = s[j]<<b;
+      if(b && j>0 && j-1<ns) v |= s[j-1]>>(64-b);
+    }
     d[i]^=v;
   }
 }
@@ -104,26 +115,58 @@ static void NAME(uint64_t *p, const uint64_t *a){ \
   for(int i=2*(W);i<PL;i++) p[i]=0; }
 
 /* =========================================================================
- * COMB — Corollary 16:  f_{b,c} = x^{b+2c}+x^{b+c}+x^b+x^c+1
- *   C = sum_l (H >> 3c*l)      (doubling)
- *   Q = C ^ (C>>c) ^ (H>>(b+c))
- *   U = Q ^ (Q<<c)
- *   R = (L ^ U ^ (U<<b)) mod x^m
- * Final op is a pure truncation, so L need not be masked early here.
+ * The two families share x^m = (x^b+1)(x^c+1) mod f, so both reductions end
+ * with U = Q ^ (Q<<c) and R = (L ^ U ^ (U<<b)) mod x^m, where L = D mod x^m,
+ * H = D>>m (degree <= n = m-2) and Q = floor(D/f). The final operation is a
+ * truncation, so L need not be masked early. Every pass touches only the
+ * limbs its operand can occupy.
  * ========================================================================= */
+
+/* COMB — second family f_{b,c} = x^{b+2c}+x^{b+c}+x^b+x^c+1, Corollary 16:
+ *   C = sum_l (H >> 3c*l)      (doubling: nu passes)
+ *   Q = C ^ (C>>c) ^ (H>>(b+c))
+ * nu+5 shift-and-XOR passes in all. */
 #define COMB_RED(NAME,M,B,C) \
 static void NAME(uint64_t *r, const uint64_t *p){ \
-  enum{ W=LIMBS(M), N=(M)-2, S3=3*(C) }; \
+  enum{ W=LIMBS(M), N=(M)-2, S3=3*(C), NQ=((M)-1-(C)+63)/64, NH=((C)-1+63)/64 }; \
+  _Static_assert((M)==(B)+2*(C) && (B)>(C), "COMB_RED needs m=b+2c, b>c"); \
   uint64_t h[W+1], q[W+1], u[W+1], cb[W+1]; \
   zro(h,W+1); zro(q,W+1); zro(u,W+1); zro(cb,W+1); \
   shr_(h,p,(M),W,2*W); \
   cpy(q,h,W); \
-  UNROLL8 \
-  for(unsigned s=S3; s<=(unsigned)N; s<<=1){ \
-    int nd=(int)(((M)-1-s+63)/64); if(nd>0) xshr(q,q,s,nd,W); } \
+  if(GF2M_DESCENDING_COMB_571_22 && (M)==571 && (C)==22){ \
+    for(int i=W-1;i>=0;i--){ \
+      int j=i+(S3>>6); unsigned z=S3&63; \
+      uint64_t v=(j<W)?q[j]>>z:0; \
+      if(z && j+1<W) v^=q[j+1]<<(64-z); \
+      q[i]^=v; \
+    } \
+  } else { \
+    UNROLL8 \
+    for(unsigned s=S3; s<=(unsigned)N; s<<=1){ \
+      int nd=(int)(((M)-1-s+63)/64); if(nd>0) xshr(q,q,s,nd,W); } \
+  } \
   cpy(cb,q,W); \
-  xshr(q,cb,(C),W,W); \
-  { int nd=(int)(((C)-1+63)/64); if(nd>0) xshr(q,h,(B)+(C),nd,W); } \
+  xshr(q,cb,(C),NQ,W); \
+  if(NH>0) xshr(q,h,(B)+(C),NH,W); \
+  cpy(u,q,W); xshl(u,q,(C),W,W); \
+  cpy(r,p,W); xr(r,u,W); \
+  { unsigned w=(B)>>6; xshl(r+w,u,(B)&63,W-(int)w,W); } \
+  r[W-1]&=topmask(M); r[W]=0; r[W+1]=0; }
+
+/* FIRST — first family F = x^{2b+c}+x^{b+c}+x^b+x^c+1, b>c [BCP2019]:
+ *   Q = H ^ (H>>b) ^ (H>>(b+c))
+ * By the division identities, h_j = q_j+q_{j+b}+q_{j+b+c}+q_{j+2b}; with the
+ * stride 3b > n every comb sum is a single coefficient, so this is
+ * Corollary 16 with C = H (nu = 0): five shift-and-XOR passes. */
+#define FIRST_RED(NAME,M,B,C) \
+static void NAME(uint64_t *r, const uint64_t *p){ \
+  enum{ W=LIMBS(M), NB=((B)+(C)-1+63)/64, NBC=((B)-1+63)/64 }; \
+  _Static_assert((M)==2*(B)+(C) && (B)>(C), "FIRST_RED needs m=2b+c, b>c"); \
+  uint64_t h[W+1], q[W+1], u[W+1]; \
+  zro(h,W+1); zro(q,W+1); zro(u,W+1); \
+  shr_(h,p,(M),W,2*W); \
+  cpy(q,h,W); xshr(q,h,(B),NB,W); xshr(q,h,(B)+(C),NBC,W); \
   cpy(u,q,W); xshl(u,q,(C),W,W); \
   cpy(r,p,W); xr(r,u,W); \
   { unsigned w=(B)>>6; xshl(r+w,u,(B)&63,W-(int)w,W); } \
@@ -133,7 +176,7 @@ static void NAME(uint64_t *r, const uint64_t *p){ \
  * L MUST be masked to m bits before folding.
  * H = D>>m has at most m-1 bits and fits in W limbs. The first round
  * L^H^(H<<e1)^(H<<e2)^(H<<e3) has degree at most m-2+e3, so it needs X=1
- * extra limb only when that reaches bit 64W (128 and 571; not 163 or 283).
+ * extra limb only when that reaches bit 64W (571; not 163 or 283).
  * What it leaves above x^m has fewer than e3 bits: the second round is one
  * limb, and no pass runs over more limbs than the field needs. */
 #define SMALL_RED(NAME,M,E1,E2,E3) \
@@ -148,54 +191,45 @@ static void NAME(uint64_t *r, const uint64_t *p){ \
   r[W-1]&=topmask(M); r[W]=0; \
   r[0]^=t^(t<<(E1))^(t<<(E2))^(t<<(E3)); }
 
-/* TRI — x^m+x^E+1 with 2E<m */
+/* TRI — x^m+x^E+1 with 2E<m. Two rounds. The first leaves at most E-1 bits
+ * above x^m (WT limbs); the second, T^(T<<E), has degree at most 2E-2 < m
+ * and touches only W2 limbs. */
 #define TRI_RED(NAME,M,E) \
 static void NAME(uint64_t *r, const uint64_t *p){ \
-  enum{ W=LIMBS(M) }; \
-  uint64_t h[W+2], t[W+2]; zro(h,W+2); zro(t,W+2); \
-  shr_(h,p,(M),W+2,2*W); \
+  enum{ W=LIMBS(M), X=((M)-2+(E) >= 64*LIMBS(M)), \
+        WT=((E)-1+63)/64, W2=(2*(E)-1+63)/64 }; \
+  _Static_assert(2*(E)<(M), "TRI_RED needs 2E < m"); \
+  uint64_t h[W+1], t[WT+1]; \
+  shr_(h,p,(M),W,2*W); h[W]=0; \
   cpy(r,p,W); r[W-1]&=topmask(M); r[W]=0; r[W+1]=0; \
-  xr(r,h,W+2); xshl(r,h,(E),W+2,W+2); \
-  shr_(t,r,(M),W+2,W+2); \
-  r[W-1]&=topmask(M); r[W]=0; r[W+1]=0; \
-  xr(r,t,W+2); xshl(r,t,(E),W+2,W+2); \
-  r[W-1]&=topmask(M); r[W]=0; r[W+1]=0; }
+  xr(r,h,W); xshl(r,h,(E),W+X,W+1); \
+  shr_(t,r,(M),WT,W+1); t[WT]=0; \
+  r[W-1]&=topmask(M); r[W]=0; \
+  xr(r,t,WT); xshl(r,t,(E),W2,WT+1); }
 
-/* FOLD — naive serial folding baseline */
-#define FOLD_RED(NAME,M,E1,E2,E3) \
-static void NAME(uint64_t *r, const uint64_t *p){ \
-  enum{ W=LIMBS(M), NB=2*W+1 }; \
-  uint64_t buf[NB], h[NB]; zro(buf,NB); cpy(buf,p,2*W); \
-  for(int it=0; it<64; it++){ \
-    zro(h,NB); shr_(h,buf,(M),NB,NB); \
-    uint64_t nz=0; for(int i=0;i<NB;i++) nz|=h[i]; if(!nz) break; \
-    buf[W-1]&=topmask(M); for(int i=W;i<NB;i++) buf[i]=0; \
-    xr(buf,h,NB); xshl(buf,h,(E1),NB,NB); xshl(buf,h,(E2),NB,NB); xshl(buf,h,(E3),NB,NB); } \
-  cpy(r,buf,W); r[W]=0; r[W+1]=0; }
+/* ---- instantiations: every irreducible member of the two families at the
+ * NIST degrees, the NIST pentanomials and the irreducible trinomials ---- */
+GEN_MUL(mul3,3) GEN_MUL(mul4,4) GEN_MUL(mul5,5) GEN_MUL(mul7,7) GEN_MUL(mul9,9)
+GEN_SQR(sqr3,3) GEN_SQR(sqr4,4) GEN_SQR(sqr5,5) GEN_SQR(sqr7,7) GEN_SQR(sqr9,9)
 
-/* ---- instantiations ---- */
-GEN_MUL(mul2,2) GEN_MUL(mul3,3) GEN_MUL(mul4,4)
-GEN_MUL(mul5,5) GEN_MUL(mul7,7) GEN_MUL(mul9,9)
-GEN_SQR(sqr2,2) GEN_SQR(sqr3,3) GEN_SQR(sqr4,4)
-GEN_SQR(sqr5,5) GEN_SQR(sqr7,7) GEN_SQR(sqr9,9)
-
-SMALL_RED(red_128_gcm,       128,  1,  2,  7)
 COMB_RED (red_163_s7146,     163, 71, 46)
-FOLD_RED (red_163_s7146_f,   163, 46, 71,117)
-FOLD_RED (red_163_f6337,     163, 37, 63,100)
-FOLD_RED (red_163_f7415,     163, 15, 74, 89)
+FIRST_RED(red_163_f7415,     163, 74, 15)
+FIRST_RED(red_163_f6337,     163, 63, 37)
 SMALL_RED(red_163_nist,      163,  3,  6,  7)
-TRI_RED  (red_233_t74,       233, 74)
 COMB_RED (red_233_s8375,     233, 83, 75)
+COMB_RED (red_233_s20116,    233,201, 16)
+FIRST_RED(red_233_f9543,     233, 95, 43)
+FIRST_RED(red_233_f7975,     233, 79, 75)
+TRI_RED  (red_233_t74,       233, 74)
+FIRST_RED(red_283_f12337,    283,123, 37)
+FIRST_RED(red_283_f11161,    283,111, 61)
 SMALL_RED(red_283_nist,      283,  5,  7, 12)
-FOLD_RED (red_283_f11161,    283, 61,111,172)
-TRI_RED  (red_409_t87,       409, 87)
 COMB_RED (red_409_s179115,   409,179,115)
+COMB_RED (red_409_s26572,    409,265, 72)
+TRI_RED  (red_409_t87,       409, 87)
 COMB_RED (red_571_s207182,   571,207,182)
-FOLD_RED (red_571_s207182_f, 571,182,207,389)
 COMB_RED (red_571_s359106,   571,359,106)
 COMB_RED (red_571_s52722,    571,527, 22)
-FOLD_RED (red_571_s52722_f,  571, 22,527,549)
-FOLD_RED (red_571_f218135,   571,135,218,353)
+FIRST_RED(red_571_f218135,   571,218,135)
 SMALL_RED(red_571_nist,      571,  2,  5, 10)
 #endif
