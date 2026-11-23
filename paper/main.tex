@@ -233,9 +233,9 @@ up to $1100$, evaluate both constructions on it, characterize the irreducible
 special members, and compare the resulting polynomials with those of the first
 family, with type I and type II pentanomials, with irreducible trinomials and
 with the NIST pentanomials. Against the first family, whose reduction has
-depth $3$, we also compare the depth of the circuits. Finally, we measure a
-software implementation of the word-level formulation at degrees $163$ and
-$571$ (\cref{sec:comparison}).
+depth $3$, we also compare the depth of the circuits. Finally, we measure
+software implementations of the word-level formulation for both families at
+the NIST degrees (\cref{sec:comparison}).
 
 \end{enumerate}
 
@@ -1392,7 +1392,7 @@ corresponding to $\lfloor A/x^k\rfloor$, while $A\ll k$ denotes multiplication
 by $x^k$.
 
 \begin{corollary}[Word-level reduction]
-\label{cor:word}
+\label[corollary]{cor:word}
 With $L$ and $H$ as defined in \eqref{eq:split}, let
 \begin{align*}
   C &= \textstyle\sum_{\ell\ge0}(H\gg 3c\ell),\\
@@ -2241,69 +2241,110 @@ the first family. The choice between the two families is therefore, in most
 degrees, an exchange of one XOR level for about $9\%$ of the gates of the
 reduction, in a multiplier whose product alone has XOR depth
 $\lceil\log_2 m\rceil$.
+\subsection{Software measurements}\label{sec:software}
 
-\subsection{Software measurement}\label{sec:software}
+We implemented in C the word-level reduction of \cref{cor:word} for
+the irreducible members of the second family at the NIST degrees. For
+the first family, with $F=x^{2b+c}+x^{b+c}+x^b+x^c+1$,
+\eqref{eq:high} gives
+\[
+Q=H\xor(H\gg b)\xor\bigl(H\gg(b+c)\bigr).
+\]
+Since $3b>n$, the comb sums reduce to $C=H$. The first family thus uses
+five shift-and-XOR operations, and the second uses $\nu+5$. For both
+families, we compute the remainder using
+$x^m\equiv(x^b+1)(x^c+1)\pmod F$, with $F$ denoting the modulus.
+For the NIST pentanomials and trinomials, we use a two-round reduction.
+All routines work on $64$-bit words and were checked against a bit-by-bit
+reference.
 
-The comparisons above count gates. To demonstrate in a 
-more pratical matter, we
-implemented the word-level reduction of Corollary~\ref{cor:word} in C for the
-irreducible members of the second family at degrees $163$ and $571$. For the
-NIST pentanomials, and for the irreducible trinomials of degrees $233$ and
-$409$, we implemented a reduction in two rounds; for the pentanomials, the
-second round acts on a single machine word. As a baseline for the second
-family we
-also implemented serial folding, which applies the congruence $x^m\equiv g$
-of Proposition~\ref{prop:basic}(i) to the high part until it vanishes. 
-Polynomials are stored in $64$-bit words, products are computed with 
-\texttt{PCLMULQDQ}\footnote{\url{https://www.felixcloutier.com/x86/pclmulqdq
-}}, and every routine was checked against a 
-bit-by-bit reference.
-
-We measured core cycles with the hardware performance counters, on a
-performance core of an Intel Core i7-1365U, with clang~23.1.5 and gcc~16.2.1
-at \texttt{-O3 -march=native} running Arch Linux Kernel~7.3.4-1. Each value 
-is the minimum over nine runs of $200\,000$ operations. 
-\Cref{tab:software} reports two quantities: 
-the cost of one reduction when the reduced products are independent, and the 
-cost of one step of a chain
-of squarings, in which each result is the input of the next, as in the
-inversion method of Itoh and Tsujii \cite{ItohTsujii1988}. A squaring consists
-of $\lceil m/64\rceil$ carry-less multiplications followed by the same
-reduction as for a product; the implementation does not exploit the fact that
-a square has only even-degree terms, so it does not test the squaring counts
-of \cref{tab:mult}.
-
+We measured cycles on a performance core of an Intel Core i7-1365U
+under Linux~7.3.4, using Clang~23.1.5 and GCC~16.2.1 with
+\texttt{-O3 -march=native} and auto-vectorization disabled.
+We measured independent reductions and chains of squarings and
+multiplications. Squaring uses $\lceil m/64\rceil$ carry-less
+multiplications followed by the same reduction as a product.
+Multiplication uses the same recursive Karatsuba routine for all moduli
+of a given degree. Both use \texttt{PCLMULQDQ}
+\cite{GueronKounavis2010}. Each trial consists of $200\,000$
+reductions or squarings, or $25\,000$ multiplications.
+\Cref{tab:software} reports the median across eight code placements
+of the minimum over $21$ trials per placement. The minima varied by
+up to $4.4\%$ for reduction and squaring, and by up to $8.3\%$ with
+Clang and $14\%$ with GCC for multiplication.
 
 \begin{table}[t]
 \centering\small
-\caption{Core cycles of the software reduction at degrees $163$ and $571$, on
-a performance core of an Intel Core i7-1365U, without auto-vectorization.
-Members of the second family are identified by $(b,c)$. Word-level:
-\cref{cor:word}, with $\nu+5$ shift-and-XOR operations. Folding: serial
-folding with $x^m\equiv g$. Reduction: one reduction, for independent
-products. Squaring: one step of a chain of squarings.}
+\caption{Core cycles per independent reduction and per step of a
+squaring chain at the NIST degrees. Gate counts are as in
+\cref{tab:nist}. The word-level reduction uses $\nu+5$
+shift-and-XOR operations. The lowest cycle count for each operation,
+compiler, and degree is in bold.}
 \label{tab:software}
 \setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{@{}r l l c r r r r@{}}
+\begin{tabular}{@{}r l r c r r r r@{}}
 \toprule
  & & & & \multicolumn{2}{c}{reduction} & \multicolumn{2}{c}{squaring}\\
 \cmidrule(lr){5-6}\cmidrule(l){7-8}
-$m$ & polynomial & method & $\nu$ & clang & gcc & clang & gcc\\
+$m$ & polynomial & gates & $\nu$ & clang & gcc & clang & gcc\\
 \midrule
-163 & $(71,46)$   & word-level & 1 & 11.5 & 10.8 & 32.2 & 34.0\\
-    & NIST        & two rounds &   & 13.5 & 12.8 & 30.0 & 28.0\\
-    & $(71,46)$   & folding    &   & 63.2 & 62.3 & 79.1 & 95.8\\
+163 & second $(71,46)$   &  440 & 1 & \textbf{10.6} & \textbf{10.2} & 32.3 & 33.3\\
+    & first $(74,15)$    &  487 & 0 & 10.7 & 10.3 & 31.2 & 33.6\\
+    & first $(63,37)$    &  487 & 0 & \textbf{10.6} & 10.4 & 32.4 & 35.4\\
+    & NIST               &  571 &   & 13.2 & 12.7 & \textbf{30.0} & \textbf{28.0}\\
 \midrule
-571 & $(207,182)$ & word-level & 1 & 30.4 & 29.7 & 39.6 & 45.7\\
-    & $(359,106)$ & word-level & 1 & 34.1 & 31.0 & 44.4 & 49.8\\
-    & $(527,22)$  & word-level & 4 & 45.5 & 42.0 & 57.2 & 65.8\\
-    & NIST        & two rounds &   & 45.1 & 34.0 & 48.6 & 43.5\\
-    & $(207,182)$ & folding    &   & 138.3 & 1223.8 & 150.4 & 1232.1\\
-    & $(527,22)$  & folding    &   & 1033.0 & 5608.1 & 1047.8 & 5589.9\\
+233 & second $(83,75)$   &  621 & 1 & 13.9 & 15.5 & 32.5 & 35.3\\
+    & second $(201,16)$  &  632 & 3 & 18.1 & 17.0 & 38.7 & 41.8\\
+    & first $(95,43)$    &  697 & 0 & 13.8 & 14.5 & 33.1 & 35.9\\
+    & first $(79,75)$    &  697 & 0 & 13.8 & 13.9 & 32.8 & 34.6\\
+    & trinomial          &  464 &   & \textbf{10.2} & \textbf{12.0} & \textbf{29.5} & \textbf{30.8}\\
+\midrule
+283 & first $(123,37)$   &  847 & 0 & \textbf{15.3} & \textbf{17.0} & 35.6 & 36.1\\
+    & first $(111,61)$   &  847 & 0 & \textbf{15.3} & \textbf{17.0} & 35.6 & 36.1\\
+    & NIST               &  862 &   & 19.4 & 18.5 & \textbf{34.4} & \textbf{33.2}\\
+\midrule
+409 & second $(179,115)$ & 1109 & 1 & 19.9 & 22.6 & 41.6 & 43.2\\
+    & second $(265,72)$  & 1152 & 1 & 23.0 & 23.1 & 39.7 & 42.3\\
+    & trinomial          &  816 &   & \textbf{15.9} & \textbf{17.9} & \textbf{26.6} & \textbf{27.4}\\
+\midrule
+571 & second $(207,182)$ & 1528 & 1 & \textbf{30.3} & 29.1 & \textbf{39.6} & 45.4\\
+    & second $(359,106)$ & 1604 & 1 & 34.2 & 31.0 & 44.4 & 49.9\\
+    & second $(527,22)$  & 1534 & 4 & 45.6 & 42.0 & 57.2 & 65.7\\
+    & first $(218,135)$  & 1711 & 0 & 31.2 & \textbf{28.9} & 41.0 & 45.5\\
+    & NIST               & 2003 &   & 45.0 & 34.0 & 48.3 & \textbf{43.4}\\
 \bottomrule
 \end{tabular}
 \end{table}
 
+For independent reductions, the two families have similar costs at
+$m=163$ and $m=571$. At $m=163$, they use $18$--$20\%$ fewer
+cycles than the NIST pentanomial. At $m=571$, the fastest member of
+each family saves $14$--$33\%$, depending on the compiler. At
+$m=283$, the first family saves $8$--$21\%$. The trinomials are
+fastest at $m=233$ and $m=409$. Within the second family, the cost
+depends on both $\nu$ and the number of words touched by each shift.
+The gate counts in \cref{tab:software} describe bit-level circuits,
+while the cycle counts measure the packed-word implementation.
+
+For chained squarings, the NIST moduli are fastest at $m=163$,
+$233$, $283$, and $409$ with both compilers. At $m=571$,
+$f_{207,182}$ is fastest with Clang ($39.6$ cycles), and the NIST
+pentanomial is fastest with GCC ($43.4$ cycles). This is consistent
+with the shorter dependency chain of the NIST reduction, whose
+shifted copies of $H$ can be computed independently. These timings
+use the generic reduction after squaring. In chained multiplication,
+the polynomial product dominates, and the differences between moduli
+are comparable to the variation across code placements.
+
+For $f_{527,22}$, computing the comb sums in one high-to-low pass
+reduces the cost of an independent reduction from $45.6$ to $36.7$
+cycles with Clang and from $42.0$ to $33.0$ with GCC. In the
+squaring chain, the same change increases the cost with Clang and
+decreases it with GCC. Auto-vectorization can also change the
+ranking. At $m=571$, it brings the NIST reduction to about $30$
+cycles with Clang, close to $f_{207,182}$. With GCC, store-to-load
+forwarding stalls increase the cost of all the reductions, and the
+NIST pentanomial becomes the fastest at this degree.
 
 
 % ==================================================================
@@ -2352,11 +2393,16 @@ comparisons concern reduction costs and do not, by themselves, establish an
 advantage in overall hardware area, energy consumption or software execution
 time; the best modulus depends on the architecture and on the operation
 \cite{Scott2007}. The software measurements of \cref{sec:software} illustrate
-this. At degree $571$, the word-level reduction modulo $f_{207,182}$ needs
-$13\%$ to $33\%$ fewer cycles than the reduction modulo the NIST pentanomial in
-scalar code, and as many when the compiler vectorizes the latter; within the
-family, the cost follows the number of word operations and not the number of
-gates. In a full multiplier the saving is small in relative terms,
+this. In the throughput of the reduction, the word-level formulations of both
+families need $14\%$ to $33\%$ fewer cycles than the reductions modulo the
+NIST pentanomials at degrees $163$ and $571$ in scalar code, but the two
+families are equivalent to each other: the first needs one word operation
+fewer, which offsets its larger number of gates. In latency, as in a chain of
+squarings, the results are mixed and depend on the compiler, with the NIST
+pentanomial often the fastest; in a chain of full multiplications the product
+dominates and the modulus makes no significant difference; and with
+auto-vectorization the ranking follows the code generated by the compiler
+rather than the polynomial. In a full multiplier the saving is small in relative terms,
 between $0.5\%$ and $1.0\%$ against the NIST pentanomials with a Karatsuba
 product (\cref{tab:mult}). The reduction matters most where it dominates, as in
 squaring and therefore in inversion, but there the best modulus is not always
