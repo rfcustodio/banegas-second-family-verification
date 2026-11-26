@@ -6,7 +6,8 @@
 | `refs.bib` | Bibliography (BibTeX, style `IEEEtran`). |
 | `main.pdf` | Compiled paper (v26, 20 pages). |
 | `ieeeaccess.cls`, `IEEEtran.cls`, `logo.png`, `notaglinelogo.png`, `bullet.png` | IEEE Access template files (do not edit). |
-| `fig_comb.pdf`, `fig_comb.tex` | Figure 1 (comb sums) and its TikZ source (`pdflatex fig_comb`). |
+| `fig_strips.pdf` | Figure 1 (strip decomposition for $f_{6,3}$); made by `make_fig_strips.py`. |
+| `fig_comb.pdf`, `fig_comb.tex` | Figure 2 (comb sums) and its TikZ source (`pdflatex fig_comb`). |
 | `fig_gain.pdf` | Figure 2: greedy count minus closed form; made by `generator/make_figures.py` from `data/paar150.txt`. |
 | `fig_census.pdf` | Figure 3: cost per bit by degree, with both constructions; made by `generator/make_figures.py` from `data/census_alg2.json`. |
 | `*.jpg` | Author photographs for the biographies. |
