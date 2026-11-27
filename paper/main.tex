@@ -93,8 +93,8 @@ at most \(3m-c-3\) XOR gates and depth at most \(\lfloor (m-2)/(3c)\rfloor+4\). 
 construction splits the reduction into \(c\) independent chains and uses \(3m-3-N(b,c)\)
 XOR gates, where \(N(b,c)\approx(m-c)/3\); it is shorter whenever \(b\ge4c+1\). Both
 approach \(8m/3\) gates, at opposite ends of the range of \(c\). Members built from five
-small base pentanomials split into independent strips, and strip programs proved optimal
-by a SAT solver give shorter circuits. We verified both constructions symbolically
+small base pentanomials split into independent strips, and strip programs that a SAT solver
+proves optimal give shorter circuits. We verified both constructions symbolically
 for all 201,117 members with \(m\le1100\). A census in this range
 found irreducible members in 720 degrees, 288 of them without irreducible trinomials. In
 the 405 degrees where both families have irreducible members, the reduction bounds of the
@@ -187,9 +187,9 @@ The present work addresses this open problem. We show that the second family
 admits an algebraic structure that makes it possible to describe polynomial
 reduction in closed form. The central observation is the identity
 \[
-(x^c+1)f=x^{b+3c}+x^b+x^{2c}+1,
+(x^c+1)f(x)=x^{b+3c}+x^b+x^{2c}+1,
 \]
-which provides a sparse multiple of the defining polynomial. Using this
+which, by \cref{prop:basic}(ii), provides a sparse multiple of the defining polynomial. Using this
 identity, we derive an explicit expression for the quotient in polynomial
 division and obtain a reduction algorithm whose XOR cost and circuit depth can
 be bounded analytically.
@@ -201,8 +201,8 @@ The main contributions of this paper are:
 family of pentanomials, including the sparse-multiple identity used throughout
 the analysis, and show that reduction splits into independent strips modulo a
 base polynomial $G$ with $f_{b,c}(x)=G(x^{\gcd(b,c)})$. This explains why the
-members built from five small base polynomials are cheaper, and we give
-optimal strip programs for them (\cref{sec:family}).
+special members (built from the five small base polynomials of \cref{def:special}) are
+cheaper, and we give optimal strip programs for them (\cref{sec:family}).
 
 \item We derive a closed-form expression for the quotient
 $\lfloor D/f\rfloor$ using comb sums with stride $3c$ (\cref{thm:quotient}).
@@ -214,7 +214,8 @@ XOR gates (\cref{thm:main,prop:depth,cor:mult}).
 
 \item We show that this construction is not optimal and give a second one, based
 on identities between sums of comb sums, which splits the reduction into $c$
-independent chains. It uses exactly $3m-3-N(b,c)$ XOR gates, improves on
+independent chains. It uses exactly $3m-3-N(b,c)$ XOR gates, where $N(b,c)$ counts the integers
+$u\le b+c-1$ with $\lfloor u/c\rfloor\equiv2\pmod 3$ (\cref{thm:chain}); it improves on
 $3m-c-3$ whenever $b\ge4c+1$, and approaches $\tfrac83m$ when $c$ is small. For
 several small members it matches the exact minima, or the best programs, found
 with a SAT solver (\cref{thm:chain,tab:exact}).
@@ -223,7 +224,7 @@ with a SAT solver (\cref{thm:chain,tab:exact}).
 operations and a gate-level variant of lower depth (\cref{sec:word}).
 
 \item We compare the proposed reduction with the
-greedy Conta-XOR algorithm. For the generic members in the evaluated range, the
+greedy Conta-XOR algorithm \cite{Banegas2015}. For the generic members in the evaluated range, the
 closed-form construction is never more expensive; it accounts for the counts
 reported by Banegas and improves them by exactly $2c-b$ XOR gates when $b<2c$
 (\cref{sec:greedy}).
@@ -254,15 +255,16 @@ Comparisons with Conta-XOR and other polynomial families are presented in
 \section{Background}\label{sec:background}
 % ==================================================================
 
-Let $f=x^m+g$, where $g(0)=1$ and $\deg g<m$. The product of two elements of
-$\Ftm$ is a polynomial $D=\sum_{j=0}^{2m-2}d_jx^j$, which can be written as
+Let $f(x)=x^m+g(x)$, where $g(0)=1$ and $\deg g<m$. The product of two elements of
+$\Ftm$ is a polynomial $D(x)=\sum_{j=0}^{2m-2}d_jx^j$, which can be written as
 \begin{equation}\label{eq:split}
 \begin{gathered}
-  D=L+x^mH,\qquad L=\sum_{i=0}^{m-1}d_ix^i,\\
-  H=\sum_{s=0}^{m-2}h_sx^s,\qquad h_s=d_{m+s}.
+  D(x)=L(x)+x^mH(x),\qquad L(x)=\sum_{i=0}^{m-1}d_ix^i,\\
+  H(x)=\sum_{s=0}^{m-2}h_sx^s.
 \end{gathered}
 \end{equation}
-Reduction modulo $f$ produces $R=D\bmod f$. Since reduction is a fixed
+Here $h_s=d_{m+s}$ are the coefficients of the high part $H$. Reduction modulo $f$
+produces $R(x)=D(x)\bmod f(x)$. Since reduction is a fixed
 $\F_2$-linear map, it can be represented by a matrix
 $R_f\in\F_2^{m\times(2m-1)}$. Column $j$ of this matrix contains the
 coefficients of $x^j\bmod f$. Thus, $R=R_f(d_0,\dots,d_{2m-2})^{\top}$, and each
@@ -399,10 +401,10 @@ exponents are distinct. In particular, $c<b<b+c<b+2c$.
 \begin{proposition}\label{prop:basic}
 Let $f=f_{b,c}$. Then:
 \begin{enumerate}[label=(\roman*),itemsep=1pt]
-  \item $x^m\equiv(x^b+1)(x^c+1)\pmod f$.
+  \item $x^m\equiv(x^b+1)(x^c+1)\pmod{f(x)}$.
 
-  \item $(x^c+1)f=x^{b+3c}+x^b+x^{2c}+1$.
-  Consequently, $x^b(x^{3c}+1)\equiv(x^c+1)^2\pmod f$.
+  \item $(x^c+1)f(x)=x^{b+3c}+x^b+x^{2c}+1$.
+  Consequently, $x^b(x^{3c}+1)\equiv(x^c+1)^2\pmod{f(x)}$.
 
   \item $1\le c\le\lfloor(m-1)/3\rfloor$ and
   $b\equiv m\pmod 2$.
@@ -418,21 +420,21 @@ Let $f=f_{b,c}$. Then:
 \end{proposition}
 
 \begin{proof}
-(i) Writing $f=x^m+g$, we have
+(i) Writing $f(x)=x^m+g(x)$, we have
 \[
-  g=x^{b+c}+x^b+x^c+1=(x^b+1)(x^c+1).
+  g(x)=x^{b+c}+x^b+x^c+1=(x^b+1)(x^c+1).
 \]
-Thus $x^m\equiv g\pmod f$.
+Thus $x^m\equiv g(x)\pmod{f(x)}$.
 
 (ii) Multiplication by $x^c+1$ gives
 \[
-  (x^c+1)f=x^{b+3c}+x^b+x^{2c}+1,
+  (x^c+1)f(x)=x^{b+3c}+x^b+x^{2c}+1,
 \]
 since the remaining terms cancel in characteristic $2$. Reducing this identity
 modulo $f$ yields
 \[
   x^b(x^{3c}+1)\equiv x^{2c}+1
-  =(x^c+1)^2\pmod f.
+  =(x^c+1)^2\pmod{f(x)}.
 \]
 
 (iii) Since $b\ge c+1$, we have $m=b+2c\ge3c+1$, which gives
@@ -452,7 +454,7 @@ $G(x^{\gamma})=G(x^{\gamma/2})^2$ shows that $f$ is reducible.
 The identity in \cref{prop:basic}(ii) is central to the reduction method
 developed in this paper. To obtain it, write
 \[
-  f=x^b(x^{2c}+x^c+1)+(x^c+1).
+  f(x)=x^b(x^{2c}+x^c+1)+(x^c+1).
 \]
 Since
 \[
@@ -462,7 +464,7 @@ over $\F_2$, multiplication by $x^c+1$ produces a multiple of $f$ containing
 only four nonzero terms. The resulting congruence can be expressed as
 \[
   x^{s+b+3c}\equiv
-  x^{s+b}+x^{s+2c}+x^s\pmod f,
+  x^{s+b}+x^{s+2c}+x^s\pmod{f(x)},
   \qquad s\ge0.
 \]
 This relation allows a high-degree term to be replaced by three lower-degree
@@ -470,24 +472,24 @@ terms, with a reduction step of $3c$ in the leading exponent.
 
 For example, taking $b=11$ and $c=2$ gives
 \[
-  f=x^{15}+x^{13}+x^{11}+x^2+1
+  f(x)=x^{15}+x^{13}+x^{11}+x^2+1
 \]
 and
 \[
-  (x^2+1)f=x^{17}+x^{11}+x^4+1.
+  (x^2+1)f(x)=x^{17}+x^{11}+x^4+1.
 \]
 Therefore,
 \[
-  x^{17}\equiv x^{11}+x^4+1\pmod f.
+  x^{17}\equiv x^{11}+x^4+1\pmod{f(x)}.
 \]
 
 A similar identity holds for Banegas' first family:
 \[
-  (x^b+1)f=x^{3b+c}+x^{2b}+x^c+1.
+  (x^b+1)f(x)=x^{3b+c}+x^{2b}+x^c+1.
 \]
-Both families are regions of one expression: with
+Both families are the two cases of one expression: with
 $F_{u,v}=x^{2u+v}+x^{u+v}+x^u+x^v+1$, the first family is $F_{u,v}$ with $u>v$
-and the second is $f_{b,c}=F_{c,b}$, with $u<v$. Exchanging the parameters does
+and the second is $f_{b,c}=F_{c,b}$, with $u<v$ (that is, $c<b$). Exchanging the parameters does
 not carry the earlier analysis over, because the spacing between the leading
 exponents changes. For the first family, the corresponding stride is $3b$, which exceeds the field degree
 $m=2b+c$. For the second family, the stride is $3c<m$. Consequently, reduction
@@ -524,7 +526,7 @@ $\gamma>1$, reduction modulo $f$ splits into independent reductions modulo $G$,
 and \cref{alg:main} respects this splitting.
 
 \begin{proposition}[Strip decomposition]\label{rem:strips}
-Let $f=f_{b,c}=G(x^\gamma)$ with $\gamma=\gcd(b,c)$, $G=f_{b',c'}$ and
+Let $f(x)=f_{b,c}(x)=G(x^\gamma)$ with $\gamma=\gcd(b,c)$, $G=f_{b',c'}$ and
 $\kappa=\deg G$, so that $m=\gamma\kappa$. For $0\le\rho<\gamma$, call the set of indices
 congruent to $\rho$ modulo $\gamma$ the \emph{strip} $\rho$.
 \begin{enumerate}[label=(\roman*),itemsep=1pt]
@@ -550,12 +552,14 @@ powers of $x^\gamma$,
 \[
   D\bmod f=\sum_{\rho=0}^{\gamma-1}x^\rho\bigl(D_\rho\bmod G\bigr)(x^\gamma),
 \]
-because every term on the right has degree less than $m$. The polynomial $D$ has
+because every term on the right-hand side has degree less than $m$. The polynomial $D$ has
 degree at most $2m-2=2\gamma\kappa-2$. Counting the indices $j\le2\gamma\kappa-2$ with
 $j\equiv \rho\pmod\gamma$ shows that $D_\rho$ has degree at most $2\kappa-1$ for
 $\rho\le\gamma-2$ and at most $2\kappa-2$ for $\rho=\gamma-1$.
 
-(ii) All index shifts used in \cref{alg:main} are $c$, $b$, $b+c$ and $3c$,
+(ii) \cref{alg:main} is presented in \cref{sec:program}; its gate count $3m-c-3$ is proved in
+\cref{thm:main}, and the argument below uses only that count and the structure of the program.
+All index shifts used in \cref{alg:main} are $c$, $b$, $b+c$ and $3c$,
 which are multiples of $\gamma$, and the high coefficient $h_s$ is the input
 $d_{m+s}$ with $m\equiv0\pmod\gamma$. Hence every gate stays within one strip.
 On strip $\gamma-1$, write each index as $\gamma-1+\gamma i'$. A direct check
@@ -569,6 +573,16 @@ programs up to relabeling. Since \cref{alg:main} has exactly
 $3m-c-3=\gamma(3\kappa-c')-3$ gates (proof of \cref{thm:main}), each of these strips
 uses $3\kappa-c'$ gates.
 \end{proof}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_strips.pdf}
+\caption{Strips for $f_{6,3}(x)=G(x^3)$, with $G=f_{2,1}$ and $m=12$. Each coefficient
+$d_j$ belongs to strip $j\bmod\gamma$ with $\gamma=3$. All exponents of $f$ are
+multiples of $3$ (hatched), so the reduction splits into three independent reductions
+modulo $G$, one per strip.}
+\label{fig:strips}
+\end{figure*}
 
 \Cref{rem:strips}(ii) says that the closed form for $f$ is the closed form for
 $G$ applied once per strip. For a program that respects this decomposition, any
@@ -585,6 +599,9 @@ imply optimality of their composition. Writing
 \begin{equation}\label{eq:specialbound}
   \Red(f)\le 3m-c-3-(\gamma-1)\,\delta_1(G)-\delta_2(G).
 \end{equation}
+Substituting $R_1(G)=3\kappa-c'-\delta_1(G)$ and $R_2(G)=3\kappa-c'-3-\delta_2(G)$ into
+$(\gamma-1)R_1(G)+R_2(G)$, and using $\gamma(3\kappa-c')=3m-c$, gives exactly this
+expression. The term $3m$ therefore comes from $\gamma(3\kappa-c')$, not from an extra term.
 The saving grows linearly with $\gamma$, and hence with $m$, along each ratio
 $b/c$.
 
@@ -651,11 +668,14 @@ we have provably optimal strip programs for them.
 
 
 Polynomial division can be expressed in terms of the coefficients of the
-dividend, quotient and remainder.
+dividend, quotient and remainder. Throughout Sections~\ref{sec:quotient} and
+\ref{sec:program}, $d_i$ are the coefficients of $D$, $h_j$ are those of its high part
+$H$ (see \eqref{eq:split}), $q_j$ are those of the quotient $Q$, and $r_i$ are those of
+the remainder $R$. The comb sums $C_t$ and the auxiliary sums $U_k$ are defined below.
 
 \begin{lemma}[Division identities]\label{lem:division}
-Let $f=x^m+\sum_{e\in S}x^e+1$, with $S\subseteq\{1,\dots,m-1\}$, and let
-$Q=\lfloor D/f\rfloor=\sum_{j=0}^{n}q_jx^j$. Then
+Let $f(x)=x^m+\sum_{e\in S}x^e+1$, with $S\subseteq\{1,\dots,m-1\}$, and let
+$Q(x)=\lfloor D(x)/f(x)\rfloor=\sum_{j=0}^{n}q_jx^j$. Then
 \begin{align}
   h_j &= q_j+\sum_{e\in S} q_{j+m-e},
     && 0\le j\le n, \label{eq:high}\\
@@ -676,7 +696,7 @@ Equation \eqref{eq:high} is triangular: each $q_j$ depends only on $h_j$ and
 quotient coefficients with indices greater than $j$. It can therefore be solved
 in descending order, starting with $q_n=h_n$. Once the quotient is known,
 \eqref{eq:low} determines the remainder. In particular, the quotient depends
-only on the high part $H$ of the dividend.
+only on the high part $H$ of the dividend, that is, on the coefficients $h_j$.
 
 For example, consider $f_{3,1}=x^5+x^4+x^3+x+1$. Here $m=5$, $S=\{1,3,4\}$ and
 $n=3$. Equation \eqref{eq:high} becomes
@@ -689,7 +709,7 @@ Solving from the highest index yields
   q_1&=h_1+h_2, & q_0&=h_0+h_1+h_3 .
 \end{align*}
 
-For the second family, $S=\{c,b,b+c\}$ and $m-S=\{b+c,2c,c\}$. Thus,
+For the second family, $S=\{c,b,b+c\}$ and $\{m-e:e\in S\}=\{b+c,\,2c,\,c\}$. Thus,
 \eqref{eq:high} takes the form
 \begin{equation}\label{eq:rec}
   h_j=q_j+q_{j+c}+q_{j+2c}+q_{j+b+c}.
@@ -711,6 +731,7 @@ of $3c$. The additional term $y^{b+c}$ in \eqref{eq:rec} will be accounted for
 separately.
 
 \begin{definition}[Comb sums]
+\label{def:comb}
 For $t\ge0$, define
 \[
   C_t=\sum_{\ell\ge0,\ t+3c\ell\le n}h_{t+3c\ell}.
@@ -723,7 +744,7 @@ $C_t=0$ for $t>n$, and
 \]
 \end{definition}
 
-The coefficients are partitioned into $3c$ residue classes, each forming a
+The indices are partitioned into the $3c$ residue classes modulo $3c$, each forming a
 sequence with stride $3c$. Within each sequence, the comb sums can be computed
 recursively, reusing previously obtained values.
 
@@ -739,6 +760,20 @@ comb sums are
   C_2&=h_2+h_5.
 \end{aligned}
 \]
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{fig_comb.pdf}
+\caption{Comb sums and the closed-form expression
+\eqref{eq:Uclosed} for $b=11$, $c=2$
+($m=15$, $n=13$, stride $3c=6$).
+Top: the comb sum $C_1$, formed by coefficients
+at intervals of $6$.
+Bottom: $U_2=C_0+C_4+h_{13}$, comprising
+two comb sums (green and orange) and one
+additional high coefficient (blue).}
+\label{fig:comb}
+\end{figure*}
 
 \begin{theorem}[Closed-form quotient]
 \label{thm:quotient}
@@ -759,12 +794,9 @@ $U_k=q_k+q_{k-c}$, satisfies
       & k\ge c,
   \end{cases}
 \end{equation}
-and the remainder is
+and, for $0\le i\le m-1$ with $U_{i-b}=0$ if $i<b$, the remainder is
 \begin{equation}\label{eq:rU}
-  r_i=d_i+U_i+U_{i-b}
-  \qquad
-  (0\le i\le m-1;\
-   U_{i-b}=0\text{ if }i<b).
+  r_i=d_i+U_i+U_{i-b}.
 \end{equation}
 \end{theorem}
 
@@ -794,8 +826,9 @@ therefore cancel over $\F_2$.
 Furthermore, $C_{j+b+c}=h_{j+b+c}$, since $j+b+4c>n$. These two terms also
 cancel, leaving
 \[
-  C_j+C_{j+3c}=h_j.
+  C_j+C_{j+3c}=h_j,
 \]
+which is the relation $C_j=h_j+C_{j+3c}$ of \cref{def:comb}.
 Hence $\tilde q_j$ satisfies \eqref{eq:rec}. As the recurrence is triangular and
 has a unique solution with $q_j=0$ for $j>n$, we obtain $\tilde q_j=q_j$,
 proving \eqref{eq:qclosed}.
@@ -803,14 +836,19 @@ proving \eqref{eq:qclosed}.
 For \eqref{eq:Uclosed}, consider first $0\le k<c$. Since $q_{k-c}=0$, we have
 $U_k=q_k$, giving the first case.
 
-For $k\ge c$,
+For $k\ge c$, \eqref{eq:qclosed} applied to $j=k$ and to $j=k-c$ gives
+\begin{align*}
+ q_k&=C_k+C_{k+c}+h_{k+b+c},\\
+ q_{k-c}&=C_{k-c}+C_k+h_{k+b}.
+\end{align*}
+Hence
 \begin{align*}
  U_k
  &=q_k+q_{k-c}\\
  &=(C_k+C_{k+c}+h_{k+b+c})\\
  &\quad +(C_{k-c}+C_k+h_{k+b}).
 \end{align*}
-The two occurrences of $C_k$ cancel. Moreover, $k+b+c\ge b+2c=m>n$, so
+The two occurrences of $C_k$ cancel, and $k+b+c\ge b+2c=m>n$, so
 $h_{k+b+c}=0$. Therefore,
 \[
   U_k=C_{k-c}+C_{k+c}+h_{k+b}.
@@ -832,15 +870,16 @@ of the reciprocal polynomial
 \[
   f^*(y)=y^mf(y^{-1})=1+y^c+y^{2c}+y^{b+c}+y^m.
 \]
-Write $P^*(y)=y^kP(y^{-1})$ for a polynomial $P$ of degree at most $k$, with
-$k=n$ for $H$ and $Q$. Reversing $D=Qf+R$ shows that $Q^*\equiv H^*\,(f^*)^{-1}
-\pmod{y^{m-1}}$, and
+Write $P^*(y)=y^kP(y^{-1})$ for a polynomial $P(x)$ of degree at most $k$, with
+$k=n$ for $H$ and $Q$, so that $H^*(y)$ and $Q^*(y)$ are polynomials in $y$. Reversing
+$D=Qf+R$ shows that $Q^*(y)\equiv H^*(y)\,(f^*(y))^{-1}\pmod{y^{m-1}}$, where the modulus
+$y^{m-1}=y^{n+1}$ covers all coefficients of $Q^*$ and $H^*$, since both have degree at most $n$. Hence
 \begin{equation}\label{eq:recip}
   (f^*)^{-1}\equiv\frac{1+y^c}{1+y^{3c}}+y^{b+c}\pmod{y^{m-1}}.
 \end{equation}
 Indeed, with $A=1+y^c+y^{2c}$ and $T=y^{b+c}$, the term $y^m$ vanishes modulo
 $y^{m-1}$, and $T^2$ does too because $2(b+c)\ge m-1$, so
-$(A+T)^{-1}\equiv A^{-1}+TA^{-2}$. Over $\F_2$, $A^2=1+y^{2c}+y^{4c}$, hence
+$(A+T)^{-1}\equiv A^{-1}+TA^{-2}\pmod{y^{m-1}}$. Over $\F_2$, $A^2=1+y^{2c}+y^{4c}$, hence
 $A^{-2}\equiv1\pmod{y^{2c}}$ and $TA^{-2}\equiv T$ because $b+3c\ge m-1$;
 finally $A^{-1}=(1+y^c)/(1+y^{3c})$. The rational term of \eqref{eq:recip}
 produces the periodic pattern of stride $3c$, that is, $C_j+C_{j+c}$ in
@@ -852,12 +891,13 @@ form translates into circuits with shared intermediate sums.
 For reduction, however, it is not necessary to compute $Q$ explicitly. By
 \cref{prop:basic}(i),
 \[
-  f=x^m+(x^b+1)(x^c+1).
+  f(x)=x^m+(x^b+1)(x^c+1).
 \]
-Consequently,
+Consequently, using $L(x)$ from \eqref{eq:split} and reducing modulo $x^m$, which keeps
+only the coefficients of degree below $m$,
 \[
-  R=D-Qf
-   \equiv L+(x^b+1)(x^c+1)Q
+  R(x)=D(x)-Q(x)f(x)
+   \equiv L(x)+(x^b+1)(x^c+1)Q(x)
    \pmod{x^m}.
 \]
 Writing $U=(x^c+1)Q$ gives \eqref{eq:rU} directly.
@@ -877,19 +917,6 @@ and therefore
   U_2=q_2+q_0=C_0+C_4+h_{13}.
 \]
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.8\textwidth]{fig_comb.pdf}
-\caption{Comb sums and the closed-form expression
-\eqref{eq:Uclosed} for $b=11$, $c=2$
-($m=15$, $n=13$, stride $3c=6$).
-Top: the comb sum $C_1$, formed by coefficients
-at intervals of $6$.
-Bottom: $U_2=C_0+C_4+h_{13}$, comprising
-two comb sums (green and orange) and one
-additional high coefficient (blue).}
-\label{fig:comb}
-\end{figure*}
 
 % ==================================================================
 \section{The closed-form reduction program}\label{sec:program}
@@ -1024,7 +1051,7 @@ longer. In our verification up to $m=1100$, this happens only for the equally
 spaced members $b=2c$.
 \end{proof}
 
-We verified \cref{alg:main} symbolically for all $201\,117$ members of the family
+We verified \cref{alg:main} symbolically for all $201,117$ members of the family
 with $m\le1100$: in every case, the program computes $D\bmod f_{b,c}$ exactly,
 as a linear map on the $2m-1$ input coefficients, and uses exactly $3m-c-3$ XOR
 gates.
@@ -1065,7 +1092,7 @@ If $b\le4c+1$, then $n=b+2c-2<6c$, so $\theta\le1$. The depth is therefore at
 most $5$.
 \end{proof}
 
-For the $14\,748$ parameter pairs with $7\le m<300$, the measured depth equals
+For the $14,748$ parameter pairs with $7\le m<300$, the measured depth equals
 $\lfloor n/(3c)\rfloor+3$ in $97\%$ of the cases. When $b$ is large relative to
 $c$, the longer comb-sum chains become the main source of circuit depth.
 
@@ -1313,9 +1340,9 @@ regimes contain irreducible members of arbitrarily large degree is a separate
 question, which we do not settle: for members with $\gcd(b,c)=1$, the census of
 \cref{sec:comparison} provides finite evidence only.
 
-We verified \cref{alg:chain} symbolically for all $201\,117$ members with
+We verified \cref{alg:chain} symbolically for all $201,117$ members with
 $m\le1100$: it computes $D\bmod f_{b,c}$ exactly and uses exactly
-$3m-3-N(b,c)$ gates. It improves on \cref{thm:main} for $100\,284$ of them.
+$3m-3-N(b,c)$ gates. It improves on \cref{thm:main} for $100,284$ of them.
 The construction also explains several entries of \cref{tab:exact}. For
 $f_{6,1}$ it gives $19$ gates, which is optimal, and for $f_{5,1}$ it gives
 $16$, the optimum of \cref{tab:base}. For $f_{7,1}$, $f_{8,1}$ and $f_{9,1}$ it
@@ -1514,7 +1541,7 @@ We verified the low-depth variant symbolically for all members with $m\le1100$,
 including its gate count and depth bound. As
 an illustration, consider
 \[
-  f=x^{571}+x^{549}
+  f(x)=x^{571}+x^{549}
     +x^{527}+x^{22}+1,
 \]
 where $b=527$, $c=22$, $n=569$ and the stride is $66$.
@@ -1540,11 +1567,11 @@ $b/c\in\{\tfrac32,2,3,4,5\}$ are considered special, while all others are
 generic.
 
 \begin{observation}\label{obs:greedy}
-We evaluated $\CX(f_{b,c})$ for all $3\,674$ parameter pairs with $5\le
+We evaluated $\CX(f_{b,c})$ for all $3,674$ parameter pairs with $5\le
 m\le150$. For each pair, we also performed $20$ additional greedy runs with
 randomized tie-breaking, following the approach of \cite{TanPeyrin2020}.
 
-Among the $3\,541$ generic members, we observed the following:
+Among the $3,541$ generic members, we observed the following:
 \begin{enumerate}[label=(\alph*),itemsep=1pt]
   \item The closed-form construction was
   never more expensive than either greedy result.
@@ -1553,12 +1580,12 @@ Among the $3\,541$ generic members, we observed the following:
   $\CX(f)=2m+3c-3$. The closed-form construction therefore used exactly $2c-b$
   fewer XOR gates.
 
-  \item For all $1\,312$ members satisfying
+  \item For all $1,312$ members satisfying
   $2c<b<6c$, the greedy count was $\CX(f)=3m-c-3$, equal to the closed-form
   count.
 
   \item For $b\ge6c$, the greedy count
-  exceeded the closed-form count in $392$ of the $1\,350$ cases, with
+  exceeded the closed-form count in $392$ of the $1,350$ cases, with
   differences of up to $112$ XOR gates.
 \end{enumerate}
 
@@ -1607,11 +1634,11 @@ relevant. The curves extending toward larger ratios correspond to fixed small
 values of $c$, such as $c=1$ and $c=2$, with increasing $m$.
 
 The same regularities hold beyond the range of \cref{obs:greedy}. We ran the
-greedy algorithm, with lexicographic tie-breaking, on all $11\,175$ members with
+greedy algorithm, with lexicographic tie-breaking, on all $11,175$ members with
 $151\le m\le300$ and on all members of degrees $500$, $800$ and $1100$. For every
 generic member, the closed form was never more expensive; the greedy count was
 exactly $2m+3c-3$ when $b<2c$ and exactly $3m-c-3$ when $2c<b<6c$. For $b\ge6c$,
-the greedy algorithm needed more gates in $598$ of the $4\,163$ members with
+the greedy algorithm needed more gates in $598$ of the $4,163$ members with
 $151\le m\le300$ and in $36$ of the $299$ members of the three larger degrees, by
 up to $248$ and $994$ XOR gates, respectively. The fraction of such members
 decreases as $m$ grows, but the excess, when it occurs, becomes larger.
@@ -1629,7 +1656,7 @@ member of its degree.
 
 For example,
 \[
-  f=x^{163}+x^{117}+x^{71}+x^{46}+1
+  f(x)=x^{163}+x^{117}+x^{71}+x^{46}+1
 \]
 has $b=71$ and $c=46$. Its greedy count is $461$, whereas the closed-form
 construction requires $440$ gates, a reduction of $21=2\cdot46-71$ XOR gates.
@@ -1639,7 +1666,7 @@ construction requires $440$ gates, a reduction of $21=2\cdot46-71$ XOR gates.
 \includegraphics[width=0.85\textwidth]{fig_gain.pdf}
 \caption{Difference between the Conta-XOR
 count and the closed-form count,
-$\CX(f)-(3m-c-3)$, for the $3\,541$
+$\CX(f)-(3m-c-3)$, for the $3,541$
 generic members with $m\le150$.
 Color indicates the degree $m$,
 and the dotted line marks $b/c=2$.
@@ -1843,7 +1870,7 @@ instead of $2921$.
 \begin{table*}[t]
 \centering\small
 \caption{Irreducibility census for
-$5\le m\le1100$ ($1\,096$ degrees).
+$5\le m\le1100$ ($1,096$ degrees).
 The comparison uses the better of \cref{thm:main,thm:chain}
 for generic members of the second family
 and the strip bound \eqref{eq:specialbound}
@@ -1853,7 +1880,7 @@ first family \cite{BCP2019}.}
 \label{tab:census}
 \begin{tabular}{@{}l r@{}}
 \toprule
-irreducible members of the second family & $1\,508$\\
+irreducible members of the second family & $1,508$\\
 degrees with at least one member: second family / first family & $720$ / $502$\\
 degrees with members of both families & $405$\\
 \quad of which the second family has the lower bound & $405$ (mean saving $9.7\%$)\\
@@ -2039,10 +2066,10 @@ $126$ & $f_{4,1}$ & $21$  & $354$     & $\mathbf{314}$     & none\\
 $155$ & $f_{3,1}$ & $31$  & $431$     & $\mathbf{370}$     & $411$\\
 $162$ & $f_{4,1}$ & $27$  & $456$     & $\mathbf{404}$     & $439$\\
 $294$ & $f_{4,1}$ & $49$  & $830$     & $\mathbf{734}$     & none\\
-$378$ & $f_{4,1}$ & $63$  & $1\,068$  & $\mathbf{944}$    & $1\,026$\\
-$486$ & $f_{4,1}$ & $81$  & $1\,374$  & $\mathbf{1\,214}$  & $1\,333$\\
-$500$ & $f_{2,1}$ & $125$ & $1\,372$  & $\mathbf{874}$     & $1\,342$\\
-$882$ & $f_{4,1}$ & $147$ & $2\,496$  & $\mathbf{2\,204}$  & none\\
+$378$ & $f_{4,1}$ & $63$  & $1,068$  & $\mathbf{944}$    & $1,026$\\
+$486$ & $f_{4,1}$ & $81$  & $1,374$  & $\mathbf{1,214}$  & $1,333$\\
+$500$ & $f_{2,1}$ & $125$ & $1,372$  & $\mathbf{874}$     & $1,342$\\
+$882$ & $f_{4,1}$ & $147$ & $2,496$  & $\mathbf{2,204}$  & none\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2077,8 +2104,8 @@ these savings in context at degrees $163$ and $571$. The polynomial product does
 not depend on $f$. For it we use the schoolbook product, with $(m-1)^2$ XOR
 gates, and a recursive Karatsuba multiplier \cite{KaratsubaOfman1963} that, at
 each size, takes the cheapest of the schoolbook product, the Karatsuba split and
-Bernstein's refined split \cite{Bernstein2009}; it needs $12\,001$ XOR and
-$6\,203$ AND gates for $m=163$, and $90\,703$ XOR and $47\,916$ AND gates for
+Bernstein's refined split \cite{Bernstein2009}; it needs $12,001$ XOR and
+$6,203$ AND gates for $m=163$, and $90,703$ XOR and $47,916$ AND gates for
 $m=571$. The absolute saving of the reduction carries over to the multiplier
 unchanged, but in relative terms it becomes small: with Karatsuba, the best
 member of the second family saves $1.04\%$ and $0.51\%$ against the NIST
@@ -2157,16 +2184,16 @@ tie-breaking. The lowest value of each column and degree is in bold.}
 \toprule
 $m$ & polynomial & reduction & schoolb. & Karatsuba & square\\
 \midrule
-163 & second $(71,46)$ & \textbf{440} & \textbf{26\,684} & \textbf{12\,441} & 173\\
-    & first $(74,15)$  & 487 & 26\,731 & 12\,488 & 199\\
-    & first $(63,37)$  & 487 & 26\,731 & 12\,488 & \textbf{162}\\
-    & NIST             & 571 & 26\,815 & 12\,572 & 246\\
+163 & second $(71,46)$ & \textbf{440} & \textbf{26,684} & \textbf{12,441} & 173\\
+    & first $(74,15)$  & 487 & 26,731 & 12,488 & 199\\
+    & first $(63,37)$  & 487 & 26,731 & 12,488 & \textbf{162}\\
+    & NIST             & 571 & 26,815 & 12,572 & 246\\
 \midrule
-571 & second $(207,182)$ & \textbf{1\,528} & \textbf{326\,428} & \textbf{92\,231} & 649\\
-    & second $(359,106)$ & 1\,604 & 326\,504 & 92\,307 & \textbf{570}\\
-    & second $(527,22)$  & 1\,534 & 326\,434 & 92\,237 & \textbf{570}\\
-    & first $(218,135)$  & 1\,711 & 326\,611 & 92\,414 & 679\\
-    & NIST               & 2\,003 & 326\,903 & 92\,706 & 861\\
+571 & second $(207,182)$ & \textbf{1,528} & \textbf{326,428} & \textbf{92,231} & 649\\
+    & second $(359,106)$ & 1,604 & 326,504 & 92,307 & \textbf{570}\\
+    & second $(527,22)$  & 1,534 & 326,434 & 92,237 & \textbf{570}\\
+    & first $(218,135)$  & 1,711 & 326,611 & 92,414 & 679\\
+    & NIST               & 2,003 & 326,903 & 92,706 & 861\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2266,8 +2293,8 @@ multiplications. Squaring uses $\lceil m/64\rceil$ carry-less
 multiplications followed by the same reduction as a product.
 Multiplication uses the same recursive Karatsuba routine for all moduli
 of a given degree. Both use \texttt{PCLMULQDQ}
-\cite{GueronKounavis2010}. Each trial consists of $200\,000$
-reductions or squarings, or $25\,000$ multiplications.
+\cite{GueronKounavis2010}. Each trial consists of $200,000$
+reductions or squarings, or $25,000$ multiplications.
 \Cref{tab:software} reports the median across eight code placements
 of the minimum over $21$ trials per placement. The minima varied by
 up to $4.4\%$ for reduction and squaring, and by up to $8.3\%$ with
